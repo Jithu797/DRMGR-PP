@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python × Real World — Ultimate Workshop 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060609;--surface:#0c0c14;--card:#12121c;--border:rgba(255,255,255,.06);
+  --accent:#8b7cf7;--accent2:#f76c8a;--accent3:#5cf5b5;--accent4:#f5c95c;--accent5:#5cb8f5;
+  --text:#f0f0f8;--muted:#6e6e88;--code-bg:#09090f;
+  --glow-p:rgba(139,124,247,.12);--glow-g:rgba(92,245,181,.1);--glow-r:rgba(247,108,138,.1);--glow-y:rgba(245,201,92,.1);--glow-b:rgba(92,184,245,.1);
+  --radius:14px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:56px}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;overflow-x:hidden;line-height:1.6;padding-bottom:60px}
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:99px}
+
+/* === NAV === */
+nav{position:sticky;top:0;z-index:200;background:rgba(6,6,9,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 1rem;gap:0}
+.nav-logo{font-weight:900;font-size:15px;color:var(--accent);margin-right:1.2rem;white-space:nowrap;letter-spacing:-.03em}
+.nav-logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:1px;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-btn{background:none;border:none;color:var(--muted);font-size:11px;font-family:'Outfit';padding:6px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:.2s;font-weight:500}
+.nav-btn:hover,.nav-btn.active{color:var(--text);background:var(--glow-p)}
+.nav-btn.active{color:var(--accent);font-weight:600}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.nav-right button{background:none;border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.nav-right button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* === HERO === */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 1.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(139,124,247,.07) 0%,rgba(247,108,138,.03) 40%,transparent 70%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(139,124,247,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(139,124,247,.03) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 60% 50% at 50% 40%,black 20%,transparent 100%)}
+.hero-particles{position:absolute;inset:0;pointer-events:none}
+.particle{position:absolute;width:3px;height:3px;border-radius:50%;animation:float-up linear infinite;opacity:0}
+@keyframes float-up{0%{opacity:0;transform:translateY(100vh) scale(0)}10%{opacity:1}90%{opacity:1}100%{opacity:0;transform:translateY(-10vh) scale(1)}}
+.hero-tag{font-size:11px;font-family:'JetBrains Mono';color:var(--accent3);background:rgba(92,245,181,.06);border:1px solid rgba(92,245,181,.12);padding:5px 16px;border-radius:99px;margin-bottom:1.8rem;display:inline-block;animation:fadeup .6s ease both;letter-spacing:.04em;font-weight:600}
+.hero h1{font-size:clamp(2.4rem,7vw,4.8rem);font-weight:900;line-height:1.05;animation:fadeup .6s .1s ease both;letter-spacing:-.04em}
+.hero h1 .grad{background:linear-gradient(135deg,var(--accent),#c084fc,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:grad-shift 4s ease infinite}
+@keyframes grad-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero h1 em{color:var(--accent3);font-style:normal}
+.hero-sub{font-size:1.05rem;color:var(--muted);margin-top:1rem;max-width:520px;animation:fadeup .6s .2s ease both;line-height:1.8;font-weight:400}
+.hero-pills{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:1.5rem;animation:fadeup .6s .3s ease both}
+.pill{font-size:10px;padding:4px 12px;border-radius:99px;border:1px solid var(--border);color:var(--muted);font-weight:500;transition:.3s;letter-spacing:.02em}
+.pill:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.hero-cta{margin-top:2.5rem;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;animation:fadeup .6s .4s ease both}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#6050d8);color:#fff;border:none;padding:13px 30px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit';transition:.3s;box-shadow:0 4px 24px rgba(139,124,247,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,124,247,.4)}
+.btn-ghost{background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--text);padding:13px 30px;border-radius:12px;font-size:14px;cursor:pointer;font-family:'Outfit';transition:.2s;font-weight:500}
+.btn-ghost:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.05)}
+.scroll-hint{margin-top:3rem;animation:bounce 2s infinite;color:var(--muted);font-size:20px}
+
+/* === SECTIONS === */
+section{padding:5rem 1.5rem;max-width:900px;margin:0 auto}
+.section-label{font-size:10px;font-family:'JetBrains Mono';color:var(--accent);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.4rem;font-weight:700}
+.section-title{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:900;margin-bottom:.7rem;letter-spacing:-.03em;line-height:1.15}
+.section-title .pink{color:var(--accent2)}.section-title .green{color:var(--accent3)}.section-title .blue{color:var(--accent5)}.section-title .gold{color:var(--accent4)}
+.section-desc{color:var(--muted);line-height:1.8;max-width:540px;margin-bottom:2.5rem;font-size:15px}
+
+/* === MODULE === */
+.module{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:2.5rem;transition:.3s}
+.module:hover{border-color:rgba(139,124,247,.15)}
+.module-header{padding:1.2rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.module-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.module-header h3{font-size:1rem;font-weight:700}
+.module-header p{font-size:11px;color:var(--muted);margin-top:1px}
+.module-badge{margin-left:auto;font-size:9px;padding:3px 9px;border-radius:99px;font-family:'JetBrains Mono';flex-shrink:0;font-weight:700;letter-spacing:.04em}
+.module-body{border-top:1px solid var(--border)}
+
+/* === EDITOR === */
+.editor-wrap{margin:1.2rem;border-radius:11px;overflow:hidden;border:1px solid var(--border)}
+.editor-topbar{background:#13131d;padding:7px 12px;display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%}
+.editor-filename{font-size:10px;font-family:'JetBrains Mono';color:var(--muted);margin-left:4px;font-weight:600}
+.editor-run{margin-left:auto;background:var(--accent3);color:#060609;border:none;padding:4px 14px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Outfit';transition:.2s}
+.editor-run:hover{opacity:.85;transform:scale(1.03)}
+textarea.code-input{width:100%;background:var(--code-bg);color:#c9d1f4;font-family:'JetBrains Mono';font-size:12px;padding:1rem;border:none;outline:none;resize:vertical;min-height:130px;line-height:1.7;tab-size:4}
+.output-box{background:#060a06;padding:.7rem 1rem;font-family:'JetBrains Mono';font-size:11px;color:var(--accent3);min-height:40px;white-space:pre-wrap;border-top:1px solid var(--border)}
+.output-label{font-size:9px;color:var(--muted);padding:5px 12px 0;background:var(--code-bg);font-family:'JetBrains Mono';letter-spacing:.12em;font-weight:700}
+
+/* === EXPLAINER === */
+.explainer{padding:1.2rem 1.5rem}
+.concept-row{display:flex;align-items:flex-start;gap:1.5rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.concept-row:last-child{border-bottom:none}
+.concept-visual{width:155px;flex-shrink:0}
+.concept-label{font-size:9px;font-family:'JetBrains Mono';color:var(--accent);margin-bottom:5px;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.concept-telugu{font-size:11px;color:var(--muted);margin-top:5px;font-family:'Crimson Pro',serif;font-style:italic;line-height:1.6}
+
+/* === MOCK UIs === */
+.ig-mock,.chat-mock,.wa-mock,.spotify-mock,.li-mock{background:#0c0c14;border-radius:11px;padding:11px;border:1px solid rgba(255,255,255,.06);max-width:240px}
+.ig-header{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.ig-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f76c8a,#f5c95c);display:flex;align-items:center;justify-content:center;font-size:16px}
+.ig-name{font-size:12px;font-weight:700}.ig-verified{font-size:10px;color:#4a9eff}
+.ig-stats{display:flex;gap:12px;font-size:10px;text-align:center;color:#888;border-top:1px solid var(--border);padding-top:7px}
+.ig-stats b{display:block;color:#fff;font-size:13px}
+.wa-header-bar{background:#128C7E;padding:7px 11px;display:flex;align-items:center;gap:7px;border-radius:11px 11px 0 0;margin:-11px -11px 0}
+.wa-header-bar span{font-size:12px;font-weight:600;color:#fff}
+.wa-body{padding:8px 0 0}
+.wa-msg{background:#161620;border-radius:7px;padding:5px 9px;font-size:10px;color:#bbb;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.wa-tick{color:#4fc3f7;font-size:12px}
+.chat-bubble{display:inline-block;padding:5px 11px;border-radius:11px;font-size:11px;max-width:85%}
+.chat-user{background:var(--accent);color:#fff;border-radius:11px 11px 3px 11px}
+.chat-bot{background:#16161e;color:#c9d1f4;border-radius:11px 11px 11px 3px}
+.chat-msg{margin-bottom:6px}
+.chat-right{text-align:right}
+
+/* === QR SYSTEM === */
+.qr-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:1.5rem 0;position:relative;overflow:hidden}
+.qr-section::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:var(--glow-p);pointer-events:none}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:1rem}
+.qr-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;text-align:center;cursor:pointer;transition:.3s;position:relative}
+.qr-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.qr-card.completed{border-color:var(--accent3);background:var(--glow-g)}
+.qr-card .qr-unit{font-size:9px;font-family:'JetBrains Mono';color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.qr-card .qr-title{font-size:13px;font-weight:700;margin:4px 0}
+.qr-card .qr-score{font-family:'JetBrains Mono';font-size:12px;color:var(--accent3);font-weight:700;margin-top:4px}
+.qr-card .qr-icon{font-size:28px;margin-bottom:6px}
+.qr-badge{position:absolute;top:8px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--accent3);color:#060609;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;opacity:0;transition:.3s}
+.qr-card.completed .qr-badge{opacity:1}
+
+/* === QR MODAL === */
+.qr-modal-overlay{position:fixed;inset:0;background:rgba(6,6,9,.92);backdrop-filter:blur(16px);z-index:300;display:none;align-items:center;justify-content:center;padding:1rem}
+.qr-modal-overlay.show{display:flex}
+.qr-modal{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:2rem;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;position:relative;animation:modal-in .3s ease}
+@keyframes modal-in{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.qr-modal-close{position:absolute;top:12px;right:12px;background:none;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.qr-modal-close:hover{border-color:var(--accent2);color:var(--accent2)}
+.qr-modal h3{font-size:1.1rem;font-weight:800;margin-bottom:.3rem}
+.qr-modal .qr-modal-sub{font-size:12px;color:var(--muted);margin-bottom:1.2rem}
+.qr-canvas{width:180px;height:180px;margin:0 auto 1rem;border-radius:12px;background:#fff;padding:12px;display:flex;align-items:center;justify-content:center}
+.quiz-in-modal .q-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px}
+.quiz-in-modal .q-text{font-size:13px;font-weight:600;margin-bottom:8px}
+.quiz-in-modal .q-opts{display:flex;flex-direction:column;gap:5px}
+.quiz-in-modal .q-opt{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 12px;font-size:12px;cursor:pointer;transition:.2s;font-family:'JetBrains Mono';font-weight:500}
+.quiz-in-modal .q-opt:hover{border-color:var(--accent);color:var(--accent)}
+.quiz-in-modal .q-opt.correct{border-color:var(--accent3);color:var(--accent3);background:var(--glow-g)}
+.quiz-in-modal .q-opt.wrong{border-color:var(--accent2);color:var(--accent2);background:var(--glow-r)}
+.quiz-in-modal .q-opt.disabled{pointer-events:none;opacity:.5}
+.quiz-in-modal .q-feedback{font-size:11px;margin-top:5px;font-family:'JetBrains Mono';min-height:16px}
+.quiz-submit-wrap{text-align:center;margin-top:1rem}
+.quiz-result{text-align:center;padding:1.5rem;animation:fadeup .4s ease}
+.quiz-result .big-score{font-size:2.5rem;font-weight:900;margin:8px 0}
+.quiz-result .big-score.perfect{background:linear-gradient(135deg,var(--accent3),var(--accent4));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* === DASHBOARD === */
+.dashboard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin:2rem 0}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.dash-header h3{font-size:1.1rem;font-weight:800}
+.dash-total{font-family:'JetBrains Mono';font-size:1.4rem;font-weight:700;color:var(--accent3)}
+.dash-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1rem}
+.dash-unit{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;transition:.3s}
+.dash-unit.active{border-color:var(--accent3);background:var(--glow-g)}
+.dash-unit .du-label{font-size:9px;font-family:'JetBrains Mono';color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.dash-unit .du-score{font-size:1.1rem;font-weight:800;margin:3px 0;color:var(--text)}
+.dash-unit.active .du-score{color:var(--accent3)}
+.dash-unit .du-bar{height:4px;background:var(--bg);border-radius:99px;margin-top:5px;overflow:hidden}
+.dash-unit .du-fill{height:100%;border-radius:99px;transition:width .6s ease}
+.dash-progress{height:8px;background:var(--surface);border-radius:99px;overflow:hidden;margin-top:.8rem}
+.dash-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:99px;transition:width .8s ease}
+.dash-rank{margin-top:.8rem;display:flex;align-items:center;gap:8px;font-size:12px}
+.dash-rank .rank-icon{font-size:20px}
+.dash-rank .rank-text{color:var(--muted)}
+.dash-rank .rank-name{font-weight:700;color:var(--accent4)}
+
+/* === TYPING CHALLENGE === */
+.typing-challenge{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;margin:12px 0}
+.typing-prompt{font-family:'JetBrains Mono';font-size:12px;color:var(--muted);line-height:1.8;letter-spacing:.02em;margin-bottom:8px}
+.typing-prompt .highlight{color:var(--accent3);background:rgba(92,245,181,.08);padding:1px 4px;border-radius:3px}
+.typing-prompt .error-char{color:var(--accent2);background:rgba(247,108,138,.1);padding:1px 4px;border-radius:3px}
+.typing-input{width:100%;background:var(--code-bg);color:var(--accent3);font-family:'JetBrains Mono';font-size:12px;padding:10px;border:1px solid var(--border);border-radius:var(--radius-sm);outline:none;transition:.2s}
+.typing-input:focus{border-color:var(--accent)}
+.typing-stats{display:flex;gap:16px;margin-top:6px;font-size:11px;color:var(--muted);font-family:'JetBrains Mono'}
+
+/* === TIMER/COUNTDOWN === */
+.countdown-bar{position:fixed;top:52px;left:0;right:0;height:3px;z-index:199;background:var(--surface)}
+.countdown-fill{height:100%;background:linear-gradient(90deg,var(--accent3),var(--accent));transition:width 1s linear;border-radius:0 2px 2px 0}
+
+/* === INTERACTIVE ELEMENTS === */
+.var-box{background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius-sm);padding:7px 11px;font-family:'JetBrains Mono';font-size:11px;color:var(--accent);text-align:center;animation:pulse-border 2.5s infinite}
+.var-box small{display:block;color:var(--muted);font-size:9px;margin-top:2px}
+.loop-track{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin:6px 0}
+.loop-item{padding:4px 11px;border-radius:7px;font-size:11px;font-family:'JetBrains Mono';background:var(--surface);border:1px solid var(--border);transition:.3s;font-weight:600}
+.loop-item.active{background:var(--glow-p);border-color:var(--accent);color:var(--accent);transform:scale(1.08)}
+.loop-item.sent{background:var(--glow-g);border-color:var(--accent3);color:var(--accent3)}
+.loop-btn{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:6px;font-size:10px;cursor:pointer;font-family:'Outfit';margin-top:6px;transition:.2s;font-weight:600}
+.loop-btn:hover{border-color:var(--accent);color:var(--accent)}
+.fn-machine{display:flex;align-items:center;gap:6px;margin:8px 0;flex-wrap:wrap}
+.fn-input-box,.fn-box,.fn-output-box{border-radius:var(--radius-sm);padding:7px 11px;font-size:11px;font-family:'JetBrains Mono';text-align:center;min-width:72px;font-weight:600}
+.fn-input-box{background:var(--surface);border:1px solid var(--accent4);color:var(--accent4)}
+.fn-box{background:var(--glow-p);border:1px solid var(--accent);color:var(--accent)}
+.fn-output-box{background:var(--glow-g);border:1px solid var(--accent3);color:var(--accent3)}
+.fn-arrow{color:var(--muted);font-size:16px}
+.oop-blueprint{background:var(--surface);border:1px dashed rgba(139,124,247,.25);border-radius:11px;padding:.8rem}
+.oop-object{background:var(--card);border:1px solid var(--accent);border-radius:11px;padding:.8rem}
+.attr-row{display:flex;justify-content:space-between;font-size:11px;font-family:'JetBrains Mono';padding:2px 0;border-bottom:1px solid var(--border)}
+.attr-key{color:var(--muted)}.attr-val{color:var(--accent3)}
+.strength-bar-wrap{display:flex;gap:3px;margin:6px 0}
+.strength-seg{height:4px;flex:1;border-radius:99px;background:var(--surface);transition:.4s}
+
+/* === DRAG DROP === */
+.drag-zone{min-height:50px;border:2px dashed var(--border);border-radius:10px;padding:8px;display:flex;gap:5px;flex-wrap:wrap;align-items:center;transition:.3s}
+.drag-zone.drag-over{border-color:var(--accent);background:var(--glow-p)}
+.drag-item{padding:5px 12px;border-radius:7px;font-size:11px;font-family:'JetBrains Mono';cursor:grab;user-select:none;transition:.2s;font-weight:600}
+.drag-item:active{cursor:grabbing;transform:scale(1.06)}
+.drag-item.type-str{background:var(--glow-r);border:1px solid rgba(247,108,138,.25);color:var(--accent2)}
+.drag-item.type-int{background:var(--glow-y);border:1px solid rgba(245,201,92,.25);color:var(--accent4)}
+.drag-item.type-bool{background:var(--glow-g);border:1px solid rgba(92,245,181,.25);color:var(--accent3)}
+.drag-item.type-list,.drag-item.type-float{background:var(--glow-b);border:1px solid rgba(92,184,245,.25);color:var(--accent5)}
+
+/* === SPOTIFY MOCK === */
+.sp-now{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.sp-art{width:40px;height:40px;border-radius:6px;background:linear-gradient(135deg,#1db954,#191414);display:flex;align-items:center;justify-content:center;font-size:18px}
+.sp-track{font-size:12px;font-weight:700}.sp-artist{font-size:10px;color:#888}
+.sp-bar-wrap{height:3px;background:#222;border-radius:99px;margin-top:6px;overflow:hidden}
+.sp-bar{height:100%;width:0%;background:#1db954;border-radius:99px;animation:sp-prog 4s linear infinite}
+@keyframes sp-prog{0%{width:0}100%{width:100%}}
+.sp-controls{display:flex;justify-content:center;gap:16px;margin-top:7px;font-size:14px;color:#ccc}
+.sp-controls span{cursor:pointer;transition:.2s}
+.sp-controls span:hover{color:#1db954}
+
+/* === LINKEDIN MOCK === */
+.li-banner{height:44px;background:linear-gradient(135deg,#0077b5,#00a0dc);border-radius:11px 11px 0 0;margin:-11px -11px 0}
+.li-avatar-wrap{display:flex;margin-top:-20px;margin-left:10px}
+.li-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent3),var(--accent));border:3px solid #0c0c14;display:flex;align-items:center;justify-content:center;font-size:18px}
+.li-name{font-size:13px;font-weight:700;margin-top:5px}.li-headline{font-size:10px;color:#888;margin-top:1px}
+.li-skills{display:flex;gap:3px;flex-wrap:wrap;margin-top:6px}
+.li-skill{font-size:9px;padding:2px 7px;border-radius:99px;background:rgba(0,119,181,.12);border:1px solid rgba(0,119,181,.25);color:#0077b5;font-weight:600}
+
+/* === FEATURE GRID === */
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:1rem 0}
+.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:12px;transition:.3s}
+.feature-card:hover{border-color:rgba(139,124,247,.2);transform:translateY(-2px)}
+.feature-card .f-icon{font-size:20px;margin-bottom:4px}
+.feature-card .f-label{font-size:9px;color:var(--accent);font-family:'JetBrains Mono';font-weight:700;margin-bottom:2px;text-transform:uppercase;letter-spacing:.06em}
+.feature-card .f-name{font-size:12px;font-weight:700}.feature-card .f-desc{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* === PROJECT CARD === */
+.project-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.2rem}
+.project-title{font-size:1.05rem;font-weight:800;margin-bottom:.4rem}
+.step-list{list-style:none}
+.step-list li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start}
+.step-list li:last-child{border-bottom:none}
+.step-num-circle{width:22px;height:22px;border-radius:50%;background:var(--glow-p);border:1px solid var(--accent);color:var(--accent);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'JetBrains Mono'}
+.step-content{flex:1;line-height:1.5}
+.step-content .cmd{display:block;margin-top:4px;background:var(--code-bg);padding:5px 9px;border-radius:6px;font-family:'JetBrains Mono';font-size:11px;color:var(--accent3)}
+.step-content .note{font-size:11px;color:var(--muted);margin-top:2px;display:block}
+
+/* === ROADMAP === */
+.roadmap{position:relative;padding-left:28px}
+.roadmap::before{content:'';position:absolute;left:9px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--accent),var(--accent3),var(--accent4),var(--accent2));border-radius:2px}
+.roadmap-item{position:relative;margin-bottom:1.8rem}
+.roadmap-dot{position:absolute;left:-23px;top:3px;width:10px;height:10px;border-radius:50%;border:2px solid var(--accent);background:var(--bg)}
+.roadmap-item:nth-child(2) .roadmap-dot{border-color:var(--accent3)}
+.roadmap-item:nth-child(3) .roadmap-dot{border-color:var(--accent4)}
+.roadmap-item:nth-child(4) .roadmap-dot{border-color:var(--accent2)}
+.roadmap-sem{font-size:9px;font-family:'JetBrains Mono';color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.roadmap-title{font-size:.95rem;font-weight:800;margin:2px 0 3px}
+.roadmap-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.roadmap-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:5px}
+.roadmap-tag{font-size:9px;padding:2px 7px;border-radius:99px;background:var(--glow-p);border:1px solid rgba(139,124,247,.15);color:var(--accent);font-family:'JetBrains Mono';font-weight:600}
+
+/* === GIT === */
+.git-flow{display:flex;flex-direction:column;gap:6px}
+.git-step{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);transition:.2s}
+.git-step:hover{border-color:rgba(139,124,247,.15)}
+.git-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.git-cmd{font-family:'JetBrains Mono';font-size:11px;color:var(--accent3);font-weight:600}
+.git-desc{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* === CERT === */
+.cert-banner{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;text-align:center;position:relative;overflow:hidden}
+.cert-banner::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(139,124,247,.05)}
+.cert-emoji{font-size:2.8rem;display:block;margin-bottom:.6rem}
+.cert-skills{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:.8rem}
+.skill-tag{font-size:10px;padding:3px 10px;border-radius:99px;background:var(--glow-p);border:1px solid rgba(139,124,247,.2);color:var(--accent);font-family:'JetBrains Mono';font-weight:600}
+
+/* === CONFETTI === */
+.confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.confetti-piece{position:absolute;width:8px;height:8px;top:-10px;border-radius:2px;animation:confetti-fall linear forwards}
+@keyframes confetti-fall{0%{transform:translateY(0) rotateZ(0) scale(1);opacity:1}100%{transform:translateY(105vh) rotateZ(720deg) scale(.5);opacity:0}}
+
+/* === AGENT FLOW === */
+.agent-flow{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.agent-step{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);transition:.4s}
+.agent-step.active-agent{border-color:var(--accent);background:var(--glow-p)}
+.agent-step.done-agent{border-color:var(--accent3);background:var(--glow-g)}
+.agent-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.agent-label{font-size:9px;font-family:'JetBrains Mono';color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.agent-desc{font-size:12px;font-weight:600}
+
+/* === SCORE BAR === */
+.score-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(6,6,9,.96);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:7px 1.2rem;display:flex;align-items:center;justify-content:space-between;font-size:11px}
+.score-left{display:flex;align-items:center;gap:8px}
+.score-pts{font-family:'JetBrains Mono';color:var(--accent3);font-weight:700;font-size:13px}
+.xp-bar{width:100px;height:4px;background:var(--surface);border-radius:99px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:99px;transition:width .5s ease}
+.score-label{color:var(--muted);font-weight:600}
+.score-right{color:var(--muted);font-family:'JetBrains Mono';font-size:10px;font-weight:600}
+
+/* === NEW BADGE === */
+.new-badge{display:inline-block;font-size:8px;padding:1px 5px;border-radius:99px;background:linear-gradient(135deg,var(--accent2),#e84393);color:#fff;font-weight:700;font-family:'JetBrains Mono';letter-spacing:.04em;margin-left:4px;vertical-align:middle;animation:pulse-glow 2s infinite}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 6px rgba(247,108,138,.25)}50%{box-shadow:0 0 14px rgba(247,108,138,.45)}}
+
+/* === ANIMATIONS === */
+@keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+@keyframes pulse-border{0%,100%{border-color:var(--accent)}50%{border-color:rgba(139,124,247,.15)}}
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:12px;margin-bottom:40px}
+
+@media(max-width:640px){
+  .concept-row{flex-direction:column}.concept-visual{width:100%}
+  .fn-machine{justify-content:center}section{padding:3rem 1rem}
+  .dash-grid{grid-template-columns:repeat(3,1fr)}
+  .qr-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- CONFETTI CONTAINER -->
+<div class="confetti-container" id="confetti-container"></div>
+
+<!-- QR MODAL -->
+<div class="qr-modal-overlay" id="qr-modal-overlay">
+  <div class="qr-modal" id="qr-modal">
+    <button class="qr-modal-close" onclick="closeQRModal()">✕</button>
+    <div id="qr-modal-content"></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-logo">py<span>×</span>world</div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="navTo('hero')">Home</button>
+    <button class="nav-btn" onclick="navTo('dashboard-section')">Dashboard<span class="new-badge">LIVE</span></button>
+    <button class="nav-btn" onclick="navTo('variables')">Variables</button>
+    <button class="nav-btn" onclick="navTo('loops')">Loops</button>
+    <button class="nav-btn" onclick="navTo('functions')">Functions</button>
+    <button class="nav-btn" onclick="navTo('strings')">Strings</button>
+    <button class="nav-btn" onclick="navTo('oop')">OOP</button>
+    <button class="nav-btn" onclick="navTo('spotify')">Spotify</button>
+    <button class="nav-btn" onclick="navTo('linkedin')">LinkedIn</button>
+    <button class="nav-btn" onclick="navTo('agentic')">Agentic AI</button>
+    <button class="nav-btn" onclick="navTo('project')">Project</button>
+    <button class="nav-btn" onclick="navTo('github')">GitHub</button>
+    <button class="nav-btn" onclick="navTo('roadmap')">Roadmap</button>
+  </div>
+</nav>
+
+<!-- COUNTDOWN BAR -->
+<div class="countdown-bar"><div class="countdown-fill" id="countdown-fill" style="width:0%"></div></div>
+
+<!-- SCORE BAR -->
+<div class="score-bar">
+  <div class="score-left">
+    <span style="font-size:15px">🐍</span>
+    <span class="score-pts" id="score-pts">0 XP</span>
+    <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+    <span class="score-label" id="score-level">Beginner</span>
+  </div>
+  <div class="score-right" id="score-msg">Earn XP by completing activities</div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-particles" id="particles"></div>
+  <div class="hero-tag">// EBCS22ET2 · Python Workshop · 2026 · Ultimate Edition</div>
+  <h1>You already use<br><span class="grad">Python</span> every <em>day.</em></h1>
+  <p class="hero-sub">Instagram. WhatsApp. Spotify. ChatGPT. Every app runs on Python. Today you'll build them — and see your future in AI.</p>
+  <div class="hero-pills">
+    <span class="pill">Variables → Instagram</span>
+    <span class="pill">Loops → WhatsApp</span>
+    <span class="pill">Functions → Chatbot</span>
+    <span class="pill">OOP → Users</span>
+    <span class="pill" style="border-color:rgba(247,108,138,.2);color:var(--accent2)">Agentic AI</span>
+    <span class="pill" style="border-color:rgba(92,184,245,.2);color:var(--accent5)">LinkedIn</span>
+  </div>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="navTo('dashboard-section')">Open Dashboard →</button>
+    <button class="btn-ghost" onclick="navTo('variables')">Start Learning</button>
+  </div>
+  <div class="scroll-hint">↓</div>
+</div>
+
+<!-- ======== DASHBOARD + QR QUIZ SYSTEM ======== -->
+<section id="dashboard-section" class="fade-in">
+  <div class="section-label">// your progress</div>
+  <h2 class="section-title">Live Scoring <span class="green">Dashboard</span></h2>
+  <p class="section-desc">Scan QR codes after each unit, take the quiz, and track your score in real-time. Complete all 5 units to unlock the certificate!</p>
+
+  <!-- MAIN DASHBOARD -->
+  <div class="dashboard" id="main-dashboard">
+    <div class="dash-header">
+      <h3>📊 Your Score</h3>
+      <div class="dash-total" id="dash-total">0 / 500</div>
+    </div>
+    <div class="dash-grid" id="dash-grid">
+      <div class="dash-unit" data-unit="1"><div class="du-label">Unit I</div><div class="du-score" id="du-score-1">—</div><div style="font-size:9px;color:var(--muted)">Variables</div><div class="du-bar"><div class="du-fill" id="du-fill-1" style="width:0%;background:var(--accent2)"></div></div></div>
+      <div class="dash-unit" data-unit="2"><div class="du-label">Unit II</div><div class="du-score" id="du-score-2">—</div><div style="font-size:9px;color:var(--muted)">Strings</div><div class="du-bar"><div class="du-fill" id="du-fill-2" style="width:0%;background:var(--accent4)"></div></div></div>
+      <div class="dash-unit" data-unit="3"><div class="du-label">Unit III</div><div class="du-score" id="du-score-3">—</div><div style="font-size:9px;color:var(--muted)">Functions</div><div class="du-bar"><div class="du-fill" id="du-fill-3" style="width:0%;background:var(--accent)"></div></div></div>
+      <div class="dash-unit" data-unit="4"><div class="du-label">Unit IV</div><div class="du-score" id="du-score-4">—</div><div style="font-size:9px;color:var(--muted)">Lists</div><div class="du-bar"><div class="du-fill" id="du-fill-4" style="width:0%;background:var(--accent3)"></div></div></div>
+      <div class="dash-unit" data-unit="5"><div class="du-label">Unit V</div><div class="du-score" id="du-score-5">—</div><div style="font-size:9px;color:var(--muted)">OOP</div><div class="du-bar"><div class="du-fill" id="du-fill-5" style="width:0%;background:var(--accent5)"></div></div></div>
+    </div>
+    <div class="dash-progress"><div class="dash-progress-fill" id="dash-progress-fill" style="width:0%"></div></div>
+    <div class="dash-rank">
+      <span class="rank-icon" id="rank-icon">🌱</span>
+      <span class="rank-text">Rank:</span>
+      <span class="rank-name" id="rank-name">Seedling</span>
+      <span style="margin-left:auto;font-size:10px;color:var(--muted);font-family:'JetBrains Mono'" id="rank-next">Next: Coder (100+ XP)</span>
+    </div>
+  </div>
+
+  <!-- QR CARDS -->
+  <div class="qr-section">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <span style="font-size:20px">📱</span>
+      <h3 style="font-size:1rem;font-weight:800">Unit Quiz QR Codes</h3>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:4px">Click each unit card to open the quiz. Answer all questions to earn points!</p>
+    <div class="qr-grid" id="qr-grid">
+      <div class="qr-card" id="qr-card-1" onclick="openQRQuiz(1)">
+        <div class="qr-badge">✓</div>
+        <div class="qr-icon">📸</div>
+        <div class="qr-unit">Unit I</div>
+        <div class="qr-title">Variables & Types</div>
+        <div class="qr-score" id="qr-score-1">Tap to start</div>
+      </div>
+      <div class="qr-card" id="qr-card-2" onclick="openQRQuiz(2)">
+        <div class="qr-badge">✓</div>
+        <div class="qr-icon">🔐</div>
+        <div class="qr-unit">Unit II</div>
+        <div class="qr-title">Strings & Operators</div>
+        <div class="qr-score" id="qr-score-2">Tap to start</div>
+      </div>
+      <div class="qr-card" id="qr-card-3" onclick="openQRQuiz(3)">
+        <div class="qr-badge">✓</div>
+        <div class="qr-icon">🤖</div>
+        <div class="qr-unit">Unit III</div>
+        <div class="qr-title">Functions</div>
+        <div class="qr-score" id="qr-score-3">Tap to start</div>
+      </div>
+      <div class="qr-card" id="qr-card-4" onclick="openQRQuiz(4)">
+        <div class="qr-badge">✓</div>
+        <div class="qr-icon">💬</div>
+        <div class="qr-unit">Unit IV</div>
+        <div class="qr-title">Lists & Loops</div>
+        <div class="qr-score" id="qr-score-4">Tap to start</div>
+      </div>
+      <div class="qr-card" id="qr-card-5" onclick="openQRQuiz(5)">
+        <div class="qr-badge">✓</div>
+        <div class="qr-icon">🏗️</div>
+        <div class="qr-unit">Unit V</div>
+        <div class="qr-title">OOP</div>
+        <div class="qr-score" id="qr-score-5">Tap to start</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== MODULE 1: VARIABLES ======== -->
+<section id="variables" class="fade-in">
+  <div class="section-label">// module 01</div>
+  <h2 class="section-title">Instagram Profile <span class="pink">= Variables</span></h2>
+  <p class="section-desc">An Instagram profile is just data. Username = string, Followers = int, Verified = bool.</p>
+  <div class="module">
+    <div class="module-header">
+      <div class="module-icon" style="background:var(--glow-r)">📸</div>
+      <div><h3>What is a variable?</h3><p>Memory box — Instagram లో ప్రతి data ఒక variable</p></div>
+      <span class="module-badge" style="background:var(--glow-r);color:var(--accent2);border:1px solid rgba(247,108,138,.2)">Unit I</span>
+    </div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div class="concept-visual">
+            <div class="ig-mock">
+              <div class="ig-header"><div class="ig-avatar">👩</div><div><div class="ig-name" id="ig-name-display">@riya_codes</div><div class="ig-verified" id="ig-verified-display">✓ Verified</div></div></div>
+              <div class="ig-stats"><div><b id="ig-followers">15.2K</b>posts</div><div><b>42</b>followers</div><div><b>128</b>following</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="concept-label">// python behind this</div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin:6px 0">
+              <div class="var-box">username = <span style="color:var(--accent2)">"riya_codes"</span><small>str — text</small></div>
+              <div class="var-box">followers = <span style="color:var(--accent4)">15200</span><small>int — number</small></div>
+              <div class="var-box">is_verified = <span style="color:var(--accent3)">True</span><small>bool — yes/no</small></div>
+            </div>
+            <p class="concept-telugu">Variable = memory box. Profile = bunch of variables!</p>
+          </div>
+        </div>
+        <!-- Drag Drop Type Sorter -->
+        <div class="concept-row">
+          <div style="flex:1">
+            <div class="concept-label">// drag values to correct type bucket</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin:8px 0" id="drag-source">
+              <div class="drag-item type-str" draggable="true" data-type="str" ondragstart="dragStart(event)">"hello"</div>
+              <div class="drag-item type-int" draggable="true" data-type="int" ondragstart="dragStart(event)">42</div>
+              <div class="drag-item type-bool" draggable="true" data-type="bool" ondragstart="dragStart(event)">True</div>
+              <div class="drag-item type-float" draggable="true" data-type="float" ondragstart="dragStart(event)">3.14</div>
+              <div class="drag-item type-str" draggable="true" data-type="str" ondragstart="dragStart(event)">"MGR"</div>
+              <div class="drag-item type-int" draggable="true" data-type="int" ondragstart="dragStart(event)">1000</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+              <div><div style="font-size:9px;color:var(--accent2);font-family:'JetBrains Mono';font-weight:700;margin-bottom:3px">STR</div><div class="drag-zone" data-accept="str" ondrop="dropItem(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)"></div></div>
+              <div><div style="font-size:9px;color:var(--accent4);font-family:'JetBrains Mono';font-weight:700;margin-bottom:3px">INT</div><div class="drag-zone" data-accept="int" ondrop="dropItem(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)"></div></div>
+              <div><div style="font-size:9px;color:var(--accent3);font-family:'JetBrains Mono';font-weight:700;margin-bottom:3px">BOOL / FLOAT</div><div class="drag-zone" data-accept="bool,float" ondrop="dropItem(event)" ondragover="dragOver(event)" ondragleave="dragLeave(event)"></div></div>
+            </div>
+            <div style="font-size:11px;color:var(--accent3);margin-top:6px;font-family:'JetBrains Mono'" id="drag-feedback"></div>
+          </div>
+        </div>
+        <!-- Slider -->
+        <div class="concept-row">
+          <div style="flex:1">
+            <div class="concept-label">// slider: change followers → see verification</div>
+            <input type="range" min="0" max="100000" value="15200" id="followers-slider" style="width:100%;max-width:300px;accent-color:var(--accent)">
+            <div style="font-size:11px;color:var(--accent);font-family:'JetBrains Mono';margin-top:3px" id="followers-val">15,200 followers → is_verified = True</div>
+          </div>
+        </div>
+      </div>
+      <!-- Typing Challenge -->
+      <div style="padding:0 1.2rem 1.2rem">
+        <div class="typing-challenge">
+          <div class="concept-label">// typing challenge: type this code!</div>
+          <div class="typing-prompt" id="typing-prompt-1">username = "riya_codes"</div>
+          <input class="typing-input" id="typing-input-1" placeholder="Type the code above..." oninput="checkTyping(1)">
+          <div class="typing-stats"><span id="typing-status-1">Start typing...</span></div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">instagram_profile.py</span><button class="editor-run" onclick="runCode('code1','out1')">▶ Run</button></div>
+        <textarea class="code-input" id="code1">username = "your_name"
+followers = 15200
+is_verified = followers > 10000
+
+print("=== Instagram Profile ===")
+print("Username:", username)
+print("Followers:", followers)
+print("Verified:", is_verified)</textarea>
+        <div class="output-label">OUTPUT</div>
+        <div class="output-box" id="out1">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 2: LOOPS -->
+<section id="loops" class="fade-in">
+  <div class="section-label">// module 02</div>
+  <h2 class="section-title">WhatsApp Broadcast <span class="green">= Loops</span></h2>
+  <div class="module">
+    <div class="module-header">
+      <div class="module-icon" style="background:var(--glow-g)">💬</div>
+      <div><h3>Loops = repeat actions</h3><p>ఒకొక్కరికి message పంపడం — automatically!</p></div>
+      <span class="module-badge" style="background:var(--glow-g);color:var(--accent3);border:1px solid rgba(92,245,181,.2)">Unit IV</span>
+    </div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div class="concept-visual">
+            <div class="wa-mock"><div class="wa-header-bar"><span>💬</span><span>Broadcast</span></div><div class="wa-body"><div class="wa-msg"><span class="wa-tick">✓✓</span>Riya — Sent</div><div class="wa-msg"><span class="wa-tick">✓✓</span>Arjun — Sent</div><div class="wa-msg" style="opacity:.4">Priya — pending</div></div></div>
+          </div>
+          <div>
+            <div class="concept-label">// animate the loop</div>
+            <div class="loop-track" id="loop-contacts"><div class="loop-item">Riya</div><div class="loop-item">Arjun</div><div class="loop-item">Priya</div><div class="loop-item">Dev</div><div class="loop-item">Sneha</div></div>
+            <button class="loop-btn" onclick="animateLoop()">▶ Animate broadcast</button>
+            <div style="font-size:11px;color:var(--accent3);margin-top:5px;font-family:'JetBrains Mono'" id="loop-status">Click to see loop work...</div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">broadcast.py</span><button class="editor-run" onclick="runCode('code2','out2')">▶ Run</button></div>
+        <textarea class="code-input" id="code2">contacts = ["Riya", "Arjun", "Priya", "Dev", "Sneha"]
+blocked = ["Dev"]
+message = "Workshop at 10am 🚀"
+
+print("=== Sending Broadcast ===")
+for contact in contacts:
+    if contact in blocked:
+        print(f"  ✗ {contact} — Blocked")
+    else:
+        print(f"  ✓ {contact} — Sent!")
+print(f"\nTotal: {len(contacts)-len(blocked)}/{len(contacts)}")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out2">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 3: FUNCTIONS -->
+<section id="functions" class="fade-in">
+  <div class="section-label">// module 03</div>
+  <h2 class="section-title">Build a Chatbot <span class="pink">= Functions</span></h2>
+  <div class="module">
+    <div class="module-header">
+      <div class="module-icon" style="background:var(--glow-p)">🤖</div>
+      <div><h3>Function = reusable machine</h3><p>Input → process → output. ATM లాంటిది!</p></div>
+      <span class="module-badge" style="background:var(--glow-p);color:var(--accent);border:1px solid rgba(139,124,247,.2)">Unit III</span>
+    </div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div class="concept-visual">
+            <div class="chat-mock"><div class="chat-msg"><div class="chat-bubble chat-user">hello!</div></div><div class="chat-msg"><div class="chat-bubble chat-bot">Hey! 👋</div></div><div class="chat-msg chat-right"><div class="chat-bubble chat-user">python?</div></div><div class="chat-msg"><div class="chat-bubble chat-bot">Instagram + ChatGPT 🐍</div></div></div>
+          </div>
+          <div>
+            <div class="concept-label">// try the chatbot</div>
+            <div class="fn-machine"><div class="fn-input-box">msg</div><div class="fn-arrow">→</div><div class="fn-box">chatbot()</div><div class="fn-arrow">→</div><div class="fn-output-box">reply</div></div>
+            <input id="chat-input" type="text" placeholder="Type a message & press Enter" style="width:100%;padding:7px 10px;font-size:11px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'Outfit';margin-top:6px" onkeydown="if(event.key==='Enter')liveChatbot()">
+            <div style="font-size:11px;color:var(--accent3);margin-top:5px;font-family:'JetBrains Mono'" id="chat-reply">// type & Enter</div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">chatbot.py</span><button class="editor-run" onclick="runCode('code3','out3')">▶ Run</button></div>
+        <textarea class="code-input" id="code3">def chatbot_reply(msg):
+    msg = msg.lower()
+    if "hello" in msg or "hi" in msg:
+        return "Hey! 👋 I'm PythonBot!"
+    elif "python" in msg:
+        return "Python = Instagram + ChatGPT 🐍"
+    elif "college" in msg:
+        return "Dr. MGR University! 🎓"
+    else:
+        return f"I don't know '{msg}' yet!"
+
+for msg in ["hello", "python", "my college"]:
+    print(f"You: {msg}\nBot: {chatbot_reply(msg)}\n")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out3">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 4: STRINGS -->
+<section id="strings" class="fade-in">
+  <div class="section-label">// module 04</div>
+  <h2 class="section-title">Password Checker <span class="gold">= Strings</span></h2>
+  <div class="module">
+    <div class="module-header">
+      <div class="module-icon" style="background:var(--glow-y)">🔐</div>
+      <div><h3>Strings + Conditions</h3><p>Real security logic — like Instagram's checker</p></div>
+      <span class="module-badge" style="background:var(--glow-y);color:var(--accent4);border:1px solid rgba(245,201,92,.2)">Unit II</span>
+    </div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div style="flex:1">
+            <div class="concept-label">// live password tester</div>
+            <input type="text" id="pwd-input" placeholder="Type a password..." style="width:100%;max-width:300px;padding:7px 10px;font-size:13px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:'JetBrains Mono';margin:6px 0" oninput="checkPassword(this.value)">
+            <div class="strength-bar-wrap"><div class="strength-seg" id="seg1"></div><div class="strength-seg" id="seg2"></div><div class="strength-seg" id="seg3"></div><div class="strength-seg" id="seg4"></div></div>
+            <div style="font-size:12px;font-family:'JetBrains Mono';margin:3px 0" id="pwd-strength">type a password...</div>
+            <div style="font-size:11px;color:var(--muted)" id="pwd-checks"></div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">password_checker.py</span><button class="editor-run" onclick="runCode('code4','out4')">▶ Run</button></div>
+        <textarea class="code-input" id="code4">def check_password(pwd):
+    score = 0
+    if len(pwd) >= 8: score += 1
+    if any(c.isupper() for c in pwd): score += 1
+    if any(c.isdigit() for c in pwd): score += 1
+    if any(c in "!@#$%^&*" for c in pwd): score += 1
+    strengths = {0:"🔴 WEAK",1:"🔴 WEAK",2:"🟡 MEDIUM",3:"🟠 STRONG",4:"🟢 VERY STRONG"}
+    return strengths[score]
+
+for p in ["abc", "abc12345", "Abc@12345"]:
+    print(f"'{p}' → {check_password(p)}")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out4">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 5: OOP -->
+<section id="oop" class="fade-in">
+  <div class="section-label">// module 05</div>
+  <h2 class="section-title">Instagram User <span class="blue">= OOP</span></h2>
+  <div class="module">
+    <div class="module-header">
+      <div class="module-icon" style="background:var(--glow-b)">🏗️</div>
+      <div><h3>Class = Blueprint, Object = Real User</h3><p>Same template, different data!</p></div>
+      <span class="module-badge" style="background:var(--glow-b);color:var(--accent5);border:1px solid rgba(92,184,245,.2)">Unit V</span>
+    </div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div style="flex:1">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><div class="concept-label">// class (blueprint)</div><div class="oop-blueprint"><div style="font-size:10px;color:var(--accent);font-family:'JetBrains Mono';margin-bottom:6px">class InstagramUser:</div><div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono';line-height:1.8">&nbsp;&nbsp;.name<br>&nbsp;&nbsp;.followers<br><span style="color:var(--accent2)">&nbsp;&nbsp;def post()</span></div></div></div>
+              <div><div class="concept-label">// object (real user)</div><div class="oop-object"><div style="font-size:10px;color:var(--accent3);font-family:'JetBrains Mono';margin-bottom:6px">riya = InstagramUser()</div><div class="attr-row"><span class="attr-key">name</span><span class="attr-val">"riya_codes"</span></div><div class="attr-row"><span class="attr-key">followers</span><span class="attr-val">15200</span></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">instagram_oop.py</span><button class="editor-run" onclick="runCode('code5','out5')">▶ Run</button></div>
+        <textarea class="code-input" id="code5">class InstagramUser:
+    def __init__(self, name, followers=0):
+        self.name = name
+        self.followers = followers
+        self.posts = []
+    
+    def post(self, caption):
+        self.posts.append(caption)
+        print(f"@{self.name} posted: '{caption}'")
+    
+    def follow(self, other):
+        other.followers += 1
+        print(f"@{self.name} followed @{other.name}")
+
+riya = InstagramUser("riya_codes", 15200)
+arjun = InstagramUser("arjun_dev", 4500)
+riya.post("My first Python app!")
+arjun.follow(riya)
+print(f"\n@riya_codes: {riya.followers:,} followers")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out5">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 6: SPOTIFY -->
+<section id="spotify" class="fade-in">
+  <div class="section-label">// module 06</div>
+  <h2 class="section-title">Spotify Playlist <span class="green">= Dictionaries</span></h2>
+  <div class="module">
+    <div class="module-header"><div class="module-icon" style="background:rgba(29,185,84,.1)">🎵</div><div><h3>Dicts = structured data</h3><p>Every song = dict with keys</p></div><span class="module-badge" style="background:rgba(29,185,84,.08);color:#1db954;border:1px solid rgba(29,185,84,.2)">Unit IV</span></div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div class="concept-visual">
+            <div class="spotify-mock"><div class="sp-now"><div class="sp-art">🎶</div><div><div class="sp-track" id="sp-track">Blinding Lights</div><div class="sp-artist" id="sp-artist">The Weeknd</div></div></div><div class="sp-bar-wrap"><div class="sp-bar"></div></div><div class="sp-controls"><span onclick="prevTrack()">⏮</span><span style="font-size:18px">⏯</span><span onclick="nextTrack()">⏭</span></div></div>
+          </div>
+          <div>
+            <div class="concept-label">// click to play</div>
+            <div id="playlist-items" style="display:flex;flex-direction:column;gap:3px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">spotify.py</span><button class="editor-run" onclick="runCode('code-spotify','out-spotify')">▶ Run</button></div>
+        <textarea class="code-input" id="code-spotify">playlist = [
+    {"title": "Blinding Lights", "artist": "The Weeknd", "plays": 3200},
+    {"title": "Levitating", "artist": "Dua Lipa", "plays": 2800},
+    {"title": "Butter", "artist": "BTS", "plays": 5200},
+]
+top = sorted(playlist, key=lambda s: s["plays"], reverse=True)
+print("🎵 Top Songs:")
+for i, s in enumerate(top, 1):
+    print(f"  {i}. {s['title']} — {s['artist']} ({s['plays']:,} plays)")
+print(f"\n📊 Total: {sum(s['plays'] for s in playlist):,} plays")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out-spotify">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 7: LINKEDIN -->
+<section id="linkedin" class="fade-in">
+  <div class="section-label">// module 07 — career</div>
+  <h2 class="section-title">LinkedIn Builder <span class="blue">= Career + Python</span></h2>
+  <div class="module">
+    <div class="module-header"><div class="module-icon" style="background:var(--glow-b)">💼</div><div><h3>Your Developer Identity</h3><p>Profile + recruiter matching algorithm</p></div><span class="module-badge" style="background:rgba(0,119,181,.08);color:#0077b5;border:1px solid rgba(0,119,181,.2)">Career</span></div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div class="concept-visual">
+            <div class="li-mock"><div class="li-banner"></div><div class="li-avatar-wrap"><div class="li-avatar">👨‍💻</div></div><div class="li-name" id="li-name">Your Name</div><div class="li-headline" id="li-headline">B.Tech IT @ Dr. MGR</div><div class="li-skills" id="li-skills"><span class="li-skill">Python</span></div></div>
+          </div>
+          <div>
+            <div class="concept-label">// build your profile</div>
+            <input id="li-name-input" type="text" placeholder="Your name" style="width:100%;padding:5px 8px;font-size:11px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);margin-bottom:4px" oninput="updateLinkedIn()">
+            <input id="li-headline-input" type="text" placeholder="Your headline" style="width:100%;padding:5px 8px;font-size:11px;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text);margin-bottom:6px" oninput="updateLinkedIn()">
+            <div style="display:flex;gap:3px;flex-wrap:wrap" id="skill-selector"></div>
+            <div style="font-size:11px;color:var(--accent5);margin-top:6px;font-family:'JetBrains Mono'" id="li-score">Profile: 0%</div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">linkedin.py</span><button class="editor-run" onclick="runCode('code-linkedin','out-linkedin')">▶ Run</button></div>
+        <textarea class="code-input" id="code-linkedin">class LinkedInProfile:
+    def __init__(self, name, skills):
+        self.name = name
+        self.skills = skills
+    
+    def match_job(self, job_skills):
+        matched = [s for s in self.skills if s in job_skills]
+        return len(matched)/len(job_skills)*100, matched
+
+me = LinkedInProfile("Riya", ["Python","Git","OOP","SQL"])
+job = ["Python","SQL","Git","Django","REST API"]
+pct, matched = me.match_job(job)
+print(f"🎯 Job Match: {pct:.0f}%")
+print(f"✓ Have: {', '.join(matched)}")
+print(f"✗ Need: {', '.join(s for s in job if s not in matched)}")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out-linkedin">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULE 8: AGENTIC AI -->
+<section id="agentic" class="fade-in">
+  <div class="section-label">// module 08 — the future</div>
+  <h2 class="section-title">Agentic AI <span class="gold">= The Future</span></h2>
+  <p class="section-desc">AI that doesn't just answer — it takes actions. Python is its language.</p>
+  <div class="module">
+    <div class="module-header"><div class="module-icon" style="background:var(--glow-y)">🧠</div><div><h3>AI Agents = Functions That Think</h3><p>Sense → Think → Act loop</p></div><span class="module-badge" style="background:var(--glow-y);color:var(--accent4);border:1px solid rgba(245,201,92,.2)">Future</span></div>
+    <div class="module-body">
+      <div class="explainer">
+        <div class="concept-row">
+          <div style="flex:1">
+            <div class="concept-label">// simulate an AI agent</div>
+            <div class="agent-flow" id="agent-flow">
+              <div class="agent-step" id="agent-1"><div class="agent-icon" style="background:var(--glow-y)">👂</div><div><div class="agent-label">Perceive</div><div class="agent-desc">"Book a table for 2 tonight"</div></div></div>
+              <div class="agent-step" id="agent-2"><div class="agent-icon" style="background:var(--glow-p)">🧠</div><div><div class="agent-label">Think</div><div class="agent-desc">Parse: people=2, time=tonight</div></div></div>
+              <div class="agent-step" id="agent-3"><div class="agent-icon" style="background:var(--glow-g)">🔧</div><div><div class="agent-label">Use Tools</div><div class="agent-desc">Call restaurant API</div></div></div>
+              <div class="agent-step" id="agent-4"><div class="agent-icon" style="background:var(--glow-r)">✅</div><div><div class="agent-label">Act</div><div class="agent-desc">Confirm booking!</div></div></div>
+            </div>
+            <button class="loop-btn" onclick="animateAgent()" id="agent-btn">▶ Simulate Agent</button>
+            <div style="font-size:11px;color:var(--accent4);margin-top:6px;font-family:'JetBrains Mono'" id="agent-status">Click to see agent work...</div>
+          </div>
+        </div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">ai_agent.py</span><button class="editor-run" onclick="runCode('code-agent','out-agent')">▶ Run</button></div>
+        <textarea class="code-input" id="code-agent" style="min-height:180px">class AIAgent:
+    def __init__(self, name):
+        self.name = name
+        self.memory = []
+    
+    def perceive(self, msg):
+        self.memory.append(msg)
+        print(f"👂 Heard: '{msg}'")
+    
+    def think(self, msg):
+        if "book" in msg: return "book_restaurant"
+        return "chat"
+    
+    def act(self, action):
+        if action == "book_restaurant":
+            print("🔧 Calling API... ✅ Booked!")
+
+agent = AIAgent("BookBot")
+agent.perceive("Book a table for 2")
+action = agent.think("book a table")
+agent.act(action)
+print(f"\n🔮 Traditional AI: answers")
+print(f"🤖 Agentic AI: DOES things!")</textarea>
+        <div class="output-label">OUTPUT</div><div class="output-box" id="out-agent">// press ▶ Run</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT -->
+<section id="project" class="fade-in">
+  <div class="section-label">// final project</div>
+  <h2 class="section-title">Build: Social App <span class="pink">All Combined</span></h2>
+  <div class="project-card">
+    <div class="project-title">🚀 Mini Social App</div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="f-icon">👤</div><div class="f-label">Feature 1</div><div class="f-name">Registration</div><div class="f-desc">Variables + OOP</div></div>
+      <div class="feature-card"><div class="f-icon">📝</div><div class="f-label">Feature 2</div><div class="f-name">Timeline</div><div class="f-desc">Lists + Loops</div></div>
+      <div class="feature-card"><div class="f-icon">🔐</div><div class="f-label">Feature 3</div><div class="f-name">Password</div><div class="f-desc">Strings</div></div>
+      <div class="feature-card"><div class="f-icon">🤖</div><div class="f-label">Feature 4</div><div class="f-name">Chatbot</div><div class="f-desc">Functions</div></div>
+      <div class="feature-card"><div class="f-icon">🎵</div><div class="f-label">Feature 5</div><div class="f-name">Playlist</div><div class="f-desc">Dicts</div></div>
+      <div class="feature-card"><div class="f-icon">💼</div><div class="f-label">Feature 6</div><div class="f-name">LinkedIn</div><div class="f-desc">Export</div></div>
+    </div>
+    <div class="editor-wrap" style="margin:0"><div class="editor-topbar"><div class="dot" style="background:#ff5f56"></div><div class="dot" style="background:#ffbd2e"></div><div class="dot" style="background:#27c93f"></div><span class="editor-filename">mini_social_app.py</span><button class="editor-run" onclick="runCode('code-project','out-project')">▶ Run</button></div>
+    <textarea class="code-input" id="code-project" style="min-height:200px">class User:
+    def __init__(self, name, pwd):
+        self.name = name
+        self.pwd = pwd
+        self.posts = []
+        self.skills = ["Python"]
+    
+    def post(self, content):
+        self.posts.append(content)
+        return f"✓ @{self.name} posted"
+
+alice = User("alice_codes", "Alice@123")
+bob = User("bob_dev", "Bob#456")
+
+print("=== PYBOOK ===")
+print(alice.post("Finished Python workshop!"))
+print(bob.post("Variables → Loops → OOP 🔥"))
+print(f"\nLinkedIn: @{alice.name} | Skills: {', '.join(alice.skills)}")
+print("✓ Push to GitHub → Add to LinkedIn!")</textarea>
+    <div class="output-label">OUTPUT</div><div class="output-box" id="out-project">// press ▶ Run</div></div>
+  </div>
+</section>
+
+<!-- GITHUB -->
+<section id="github" class="fade-in">
+  <div class="section-label">// push to github</div>
+  <h2 class="section-title">Share Your Work <span class="green">Git + GitHub</span></h2>
+  <div class="project-card">
+    <div class="project-title">Code → GitHub → LinkedIn</div>
+    <div class="git-flow">
+      <div class="git-step"><div class="git-icon" style="background:var(--glow-g)">📁</div><div><div class="git-cmd">git init</div><div class="git-desc">Start tracking</div></div></div>
+      <div class="git-step"><div class="git-icon" style="background:var(--glow-p)">➕</div><div><div class="git-cmd">git add . && git commit -m "python app 🐍"</div><div class="git-desc">Save checkpoint</div></div></div>
+      <div class="git-step"><div class="git-icon" style="background:var(--glow-r)">🌐</div><div><div class="git-cmd">git push -u origin main</div><div class="git-desc">Upload to GitHub</div></div></div>
+      <div class="git-step"><div class="git-icon" style="background:var(--glow-b)">💼</div><div><div class="git-cmd">LinkedIn → Add Project → paste GitHub link</div><div class="git-desc">Recruiters will see it!</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="fade-in">
+  <div class="section-label">// your future</div>
+  <h2 class="section-title">2-Year Roadmap <span class="gold">→ Job Ready</span></h2>
+  <div class="project-card">
+    <div class="roadmap">
+      <div class="roadmap-item"><div class="roadmap-dot"></div><div class="roadmap-sem">Semester 3 (Now)</div><div class="roadmap-title">Python Foundations ← You are here</div><div class="roadmap-desc">Variables, loops, functions, OOP, Git, GitHub, LinkedIn</div><div class="roadmap-tags"><span class="roadmap-tag">Python</span><span class="roadmap-tag">Git</span><span class="roadmap-tag">OOP</span></div></div>
+      <div class="roadmap-item"><div class="roadmap-dot"></div><div class="roadmap-sem">Semester 4</div><div class="roadmap-title">Web Dev + APIs</div><div class="roadmap-desc">Flask/Django, REST APIs, databases, deploy apps online</div><div class="roadmap-tags"><span class="roadmap-tag">Flask</span><span class="roadmap-tag">SQL</span><span class="roadmap-tag">API</span></div></div>
+      <div class="roadmap-item"><div class="roadmap-dot"></div><div class="roadmap-sem">Semester 5-6</div><div class="roadmap-title">AI/ML + Agentic AI</div><div class="roadmap-desc">ML with scikit-learn, LLM APIs, AI agents, pandas</div><div class="roadmap-tags"><span class="roadmap-tag">ML</span><span class="roadmap-tag">LLMs</span><span class="roadmap-tag">Agents</span></div></div>
+      <div class="roadmap-item"><div class="roadmap-dot"></div><div class="roadmap-sem">Semester 7-8</div><div class="roadmap-title">Job-Ready</div><div class="roadmap-desc">5+ GitHub projects, internships, LeetCode, portfolio</div><div class="roadmap-tags"><span class="roadmap-tag">Portfolio</span><span class="roadmap-tag">Jobs</span></div></div>
+    </div>
+  </div>
+  <div class="project-card">
+    <div class="project-title">💰 Python Developer Salaries (India 2026)</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">
+      <div style="background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border);text-align:center"><div style="font-size:9px;color:var(--accent3);font-family:'JetBrains Mono';font-weight:700">FRESHER</div><div style="font-size:1.2rem;font-weight:800;margin:3px 0">₹4-8L</div><div style="font-size:10px;color:var(--muted)">Developer</div></div>
+      <div style="background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border);text-align:center"><div style="font-size:9px;color:var(--accent4);font-family:'JetBrains Mono';font-weight:700">2-3 YRS</div><div style="font-size:1.2rem;font-weight:800;margin:3px 0">₹8-15L</div><div style="font-size:10px;color:var(--muted)">Full Stack</div></div>
+      <div style="background:var(--surface);border-radius:10px;padding:12px;border:1px solid var(--border);text-align:center"><div style="font-size:9px;color:var(--accent2);font-family:'JetBrains Mono';font-weight:700">AI ENGINEER</div><div style="font-size:1.2rem;font-weight:800;margin:3px 0">₹15-30L</div><div style="font-size:10px;color:var(--muted)">AI/ML</div></div>
+    </div>
+  </div>
+  <div class="cert-banner" style="margin-top:1.5rem;margin-bottom:3rem">
+    <span class="cert-emoji">🏆</span>
+    <h3 style="font-size:1.2rem;font-weight:800">Workshop Complete!</h3>
+    <p style="color:var(--muted);font-size:13px;line-height:1.7;max-width:460px;margin:0 auto">From Python syntax to building apps, understanding Agentic AI, and planning your career. You're ahead of 90% of graduates.</p>
+    <div class="cert-skills">
+      <span class="skill-tag">variables</span><span class="skill-tag">loops</span><span class="skill-tag">functions</span><span class="skill-tag">strings</span><span class="skill-tag">OOP</span><span class="skill-tag">dicts</span><span class="skill-tag">git</span><span class="skill-tag">linkedin</span><span class="skill-tag">agentic ai</span>
+    </div>
+    <div style="margin-top:1.2rem;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+      <button class="btn-primary" onclick="window.open('https://github.com/signup')">GitHub Account</button>
+      <button class="btn-ghost" onclick="window.open('https://linkedin.com')">Setup LinkedIn</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Python Workshop 2026 · Dr. M.G.R. Educational & Research Institute · EBCS22ET2</p>
+  <p style="margin-top:3px;font-size:10px;font-family:'JetBrains Mono';color:var(--accent)">// every app starts with one line of code.</p>
+</footer>
+
+<script>
+// ========= CORE SYSTEMS =========
+function navTo(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'});document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));event?.target?.closest('.nav-btn')?.classList.add('active')}
+
+// ========= XP SYSTEM =========
+let totalXP=0;const maxXP=800;let xpLog={};
+function addXP(pts,msg,key){
+  if(key&&xpLog[key])return;
+  if(key)xpLog[key]=true;
+  totalXP+=pts;
+  document.getElementById('score-pts').textContent=totalXP+' XP';
+  document.getElementById('xp-fill').style.width=Math.min(totalXP/maxXP*100,100)+'%';
+  document.getElementById('score-msg').textContent=msg||'+'+pts+' XP!';
+  const ranks=[{min:0,name:'Seedling',icon:'🌱',next:'Coder (100+)'},{min:100,name:'Coder',icon:'💻',next:'Builder (250+)'},{min:250,name:'Builder',icon:'🔨',next:'Hacker (400+)'},{min:400,name:'Hacker',icon:'🔥',next:'Master (600+)'},{min:600,name:'Python Master',icon:'🏆',next:'Complete!'}];
+  let rank=ranks[0];for(const r of ranks)if(totalXP>=r.min)rank=r;
+  document.getElementById('score-level').textContent=rank.name;
+  document.getElementById('rank-icon').textContent=rank.icon;
+  document.getElementById('rank-name').textContent=rank.name;
+  document.getElementById('rank-next').textContent='Next: '+rank.next;
+}
+
+// ========= CONFETTI =========
+function fireConfetti(count=40){
+  const c=document.getElementById('confetti-container');
+  const colors=['#8b7cf7','#f76c8a','#5cf5b5','#f5c95c','#5cb8f5','#fff'];
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');p.className='confetti-piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.width=(4+Math.random()*6)+'px';p.style.height=(4+Math.random()*6)+'px';
+    p.style.animationDuration=(2+Math.random()*2)+'s';
+    p.style.animationDelay=Math.random()*.5+'s';
+    c.appendChild(p);setTimeout(()=>p.remove(),4000);
+  }
+}
+
+// ========= QR QUIZ SYSTEM =========
+const quizData={
+  1:{title:'Unit I: Variables & Data Types',icon:'📸',questions:[
+    {q:'What type is: x = "hello"?',opts:['int','str','bool','list'],ans:1,explain:'Text in quotes = string (str)'},
+    {q:'What is: followers = 15200?',opts:['str','float','int','bool'],ans:2,explain:'Whole number = integer (int)'},
+    {q:'is_verified = True. What type?',opts:['str','int','bool','list'],ans:2,explain:'True/False = boolean (bool)'},
+    {q:'What does print() do?',opts:['Saves data','Shows output','Gets input','Creates variable'],ans:1,explain:'print() displays output on screen'},
+    {q:'x = 10; x = 20. What is x?',opts:['10','30','20','Error'],ans:2,explain:'Variables get reassigned to latest value'}
+  ]},
+  2:{title:'Unit II: Strings & Operators',icon:'🔐',questions:[
+    {q:'len("Python") returns?',opts:['5','6','7','Error'],ans:1,explain:'"Python" = P,y,t,h,o,n = 6 chars'},
+    {q:'"hello".upper() returns?',opts:['"Hello"','"HELLO"','"hello"','Error'],ans:1,explain:'.upper() converts all to uppercase'},
+    {q:'What does "in" check?',opts:['Data type','Membership','Equality','Length'],ans:1,explain:'"x in y" checks if x exists in y'},
+    {q:'10 > 5 evaluates to?',opts:['10','5','True','False'],ans:2,explain:'Comparison returns True (10 is > 5)'},
+    {q:'What checks password length?',opts:['size()','length()','len()','count()'],ans:2,explain:'len() returns the length of a string'}
+  ]},
+  3:{title:'Unit III: Functions',icon:'🤖',questions:[
+    {q:'Which keyword creates a function?',opts:['function','func','def','create'],ans:2,explain:'def keyword defines functions in Python'},
+    {q:'What does return do?',opts:['Prints output','Sends value back','Stops program','Loops again'],ans:1,explain:'return sends a value back to caller'},
+    {q:'def greet(name): — what is name?',opts:['Variable','Function','Parameter','Class'],ans:2,explain:'Values in parentheses = parameters'},
+    {q:'Can a function call another function?',opts:['Yes','No','Only once','Only in OOP'],ans:0,explain:'Functions can call other functions freely!'},
+    {q:'What is a default parameter?',opts:['Required value','Pre-set value if none given','Error handler','Loop counter'],ans:1,explain:'Default = value used when none provided'}
+  ]},
+  4:{title:'Unit IV: Lists & Loops',icon:'💬',questions:[
+    {q:'contacts = ["A","B"]. What type?',opts:['str','dict','list','tuple'],ans:2,explain:'Square brackets [] = list'},
+    {q:'for x in [1,2,3]: runs how many times?',opts:['1','2','3','Infinite'],ans:2,explain:'for loop runs once per item = 3 times'},
+    {q:'What does .append() do?',opts:['Removes item','Adds to end','Sorts list','Finds item'],ans:1,explain:'.append() adds an item to the end'},
+    {q:'while True: creates what?',opts:['Error','Finite loop','Infinite loop','Nothing'],ans:2,explain:'while True = runs forever until break'},
+    {q:'len([1,2,3,4,5]) returns?',opts:['4','5','6','Error'],ans:1,explain:'5 items in the list'}
+  ]},
+  5:{title:'Unit V: OOP',icon:'🏗️',questions:[
+    {q:'What is a class?',opts:['A variable','A blueprint','A loop','A function'],ans:1,explain:'Class = blueprint/template for objects'},
+    {q:'What is self in a class?',opts:['The class name','The current object','A function','A variable'],ans:1,explain:'self refers to the current object instance'},
+    {q:'__init__ is called when?',opts:['Manually','Object is created','Program ends','Never'],ans:1,explain:'__init__ runs automatically on object creation'},
+    {q:'riya.follow(arjun) — riya is?',opts:['Class','Method','Object','Parameter'],ans:2,explain:'riya is an object (instance of the class)'},
+    {q:'Why use OOP?',opts:['Faster code','Organize code into reusable parts','Required by Python','Makes code shorter'],ans:1,explain:'OOP = organized, reusable, maintainable code'}
+  ]}
+};
+let unitScores={1:null,2:null,3:null,4:null,5:null};
+let currentQuizUnit=null;let quizAnswers={};
+
+function generateQRCode(unit){
+  // Generate a simple QR-like pattern using canvas
+  const size=140;const canvas=document.createElement('canvas');
+  canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,size,size);
+  ctx.fillStyle='#000';
+  // Create deterministic pattern from unit number
+  const seed=unit*17+3;
+  const cellSize=size/15;
+  // Corner markers
+  for(let corner of[[0,0],[0,10],[10,0]]){
+    const[cx,cy]=corner;
+    ctx.fillRect(cx*cellSize,cy*cellSize,5*cellSize,5*cellSize);
+    ctx.fillStyle='#fff';ctx.fillRect((cx+1)*cellSize,(cy+1)*cellSize,3*cellSize,3*cellSize);
+    ctx.fillStyle='#000';ctx.fillRect((cx+2)*cellSize,(cy+2)*cellSize,1*cellSize,1*cellSize);
+  }
+  // Data cells
+  for(let i=0;i<15;i++)for(let j=0;j<15;j++){
+    if((i<5&&j<5)||(i<5&&j>9)||(i>9&&j<5))continue;
+    if(((i*7+j*13+seed)%3===0)){ctx.fillStyle='#000';ctx.fillRect(j*cellSize,i*cellSize,cellSize,cellSize);}
+  }
+  // Unit number in center
+  ctx.fillStyle='#fff';ctx.fillRect(5.5*cellSize,5.5*cellSize,4*cellSize,4*cellSize);
+  ctx.fillStyle='#000';ctx.font='bold '+(cellSize*2.5)+'px Outfit';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('U'+unit,7.5*cellSize,7.8*cellSize);
+  return canvas.toDataURL();
+}
+
+function openQRQuiz(unit){
+  if(unitScores[unit]!==null){
+    // Already completed — show results
+    showQuizResult(unit);return;
+  }
+  currentQuizUnit=unit;quizAnswers={};
+  const data=quizData[unit];
+  const qrImg=generateQRCode(unit);
+  let html=`<div style="text-align:center"><span style="font-size:2rem">${data.icon}</span></div>`;
+  html+=`<h3 style="text-align:center;margin-top:6px">${data.title}</h3>`;
+  html+=`<div class="qr-modal-sub" style="text-align:center">Scan QR or answer below • 5 questions • 100 points max</div>`;
+  html+=`<div class="qr-canvas"><img src="${qrImg}" style="width:100%;height:100%;image-rendering:pixelated;border-radius:6px"></div>`;
+  html+=`<div class="quiz-in-modal" id="quiz-questions">`;
+  data.questions.forEach((q,i)=>{
+    html+=`<div class="q-item" id="qi-${unit}-${i}"><div class="q-text">${i+1}. ${q.q}</div><div class="q-opts">`;
+    q.opts.forEach((o,j)=>{
+      html+=`<div class="q-opt" onclick="selectQuizAnswer(${unit},${i},${j})" id="qo-${unit}-${i}-${j}">${o}</div>`;
+    });
+    html+=`</div><div class="q-feedback" id="qfb-${unit}-${i}"></div></div>`;
+  });
+  html+=`</div>`;
+  html+=`<div class="quiz-submit-wrap"><button class="btn-primary" onclick="submitQuiz(${unit})" id="quiz-submit-btn" style="margin-top:8px">Submit Quiz →</button></div>`;
+  document.getElementById('qr-modal-content').innerHTML=html;
+  document.getElementById('qr-modal-overlay').classList.add('show');
+}
+
+function selectQuizAnswer(unit,qIdx,optIdx){
+  const q=quizData[unit].questions[qIdx];
+  // Remove previous selection
+  q.opts.forEach((_,j)=>{document.getElementById(`qo-${unit}-${qIdx}-${j}`).style.borderColor='var(--border)';document.getElementById(`qo-${unit}-${qIdx}-${j}`).style.color='';document.getElementById(`qo-${unit}-${qIdx}-${j}`).style.background='';});
+  // Highlight selected
+  document.getElementById(`qo-${unit}-${qIdx}-${optIdx}`).style.borderColor='var(--accent)';
+  document.getElementById(`qo-${unit}-${qIdx}-${optIdx}`).style.color='var(--accent)';
+  document.getElementById(`qo-${unit}-${qIdx}-${optIdx}`).style.background='var(--glow-p)';
+  quizAnswers[qIdx]=optIdx;
+}
+
+function submitQuiz(unit){
+  const data=quizData[unit];let correct=0;
+  data.questions.forEach((q,i)=>{
+    const selected=quizAnswers[i];
+    const fb=document.getElementById(`qfb-${unit}-${i}`);
+    // Disable all options
+    q.opts.forEach((_,j)=>{
+      const el=document.getElementById(`qo-${unit}-${i}-${j}`);
+      el.classList.add('disabled');
+      if(j===q.ans)el.classList.add('correct');
+      else if(j===selected&&j!==q.ans)el.classList.add('wrong');
+    });
+    if(selected===q.ans){correct++;fb.textContent='✓ '+q.explain;fb.style.color='var(--accent3)';}
+    else{fb.textContent='✗ '+q.explain;fb.style.color='var(--accent2)';}
+  });
+  const score=correct*20;
+  unitScores[unit]=score;
+  document.getElementById('quiz-submit-btn').style.display='none';
+  // Show result at top
+  const resultHTML=`<div class="quiz-result"><div style="font-size:2rem;margin-bottom:4px">${score>=80?'🎉':score>=60?'👍':'📚'}</div><div class="big-score ${score===100?'perfect':''}">${score}/100</div><div style="color:var(--muted);font-size:13px">${correct}/5 correct${score===100?' — PERFECT SCORE!':''}</div></div>`;
+  document.getElementById('quiz-questions').insertAdjacentHTML('beforebegin',resultHTML);
+  // Update dashboard
+  updateDashboard();
+  addXP(score/2,'Quiz '+unit+': '+score+'/100! +'+score/2+' XP','quiz-'+unit);
+  if(score===100)fireConfetti(60);
+  else if(score>=60)fireConfetti(20);
+  // Update QR card
+  document.getElementById('qr-card-'+unit).classList.add('completed');
+  document.getElementById('qr-score-'+unit).textContent=score+'/100';
+}
+
+function showQuizResult(unit){
+  const score=unitScores[unit];
+  let html=`<div class="quiz-result"><span style="font-size:2.5rem">${score===100?'🏆':score>=60?'✅':'📝'}</span><h3>Unit ${unit} — Already Completed</h3><div class="big-score ${score===100?'perfect':''}">${score}/100</div><p style="color:var(--muted);font-size:13px;margin-top:6px">You've already taken this quiz!</p></div>`;
+  document.getElementById('qr-modal-content').innerHTML=html;
+  document.getElementById('qr-modal-overlay').classList.add('show');
+}
+
+function closeQRModal(){document.getElementById('qr-modal-overlay').classList.remove('show')}
+document.getElementById('qr-modal-overlay').addEventListener('click',function(e){if(e.target===this)closeQRModal()});
+
+function updateDashboard(){
+  let total=0;let completed=0;
+  for(let u=1;u<=5;u++){
+    const score=unitScores[u];
+    if(score!==null){
+      total+=score;completed++;
+      document.getElementById('du-score-'+u).textContent=score;
+      document.getElementById('du-fill-'+u).style.width=score+'%';
+      document.querySelector(`.dash-unit[data-unit="${u}"]`).classList.add('active');
+    }
+  }
+  document.getElementById('dash-total').textContent=total+' / 500';
+  document.getElementById('dash-progress-fill').style.width=(total/500*100)+'%';
+  // Update countdown
+  document.getElementById('countdown-fill').style.width=(completed/5*100)+'%';
+}
+
+// ========= EXPECTED OUTPUTS =========
+const expectedOutputs={
+  code1:`=== Instagram Profile ===\nUsername: your_name\nFollowers: 15200\nVerified: True`,
+  code2:`=== Sending Broadcast ===\n  ✓ Riya — Sent!\n  ✓ Arjun — Sent!\n  ✓ Priya — Sent!\n  ✗ Dev — Blocked\n  ✓ Sneha — Sent!\n\nTotal: 4/5`,
+  code3:`You: hello\nBot: Hey! 👋 I'm PythonBot!\n\nYou: python\nBot: Python = Instagram + ChatGPT 🐍\n\nYou: my college\nBot: I don't know 'my college' yet!`,
+  code4:`'abc' → 🔴 WEAK\n'abc12345' → 🟡 MEDIUM\n'Abc@12345' → 🟢 VERY STRONG`,
+  code5:`@riya_codes posted: 'My first Python app!'\n@arjun_dev followed @riya_codes\n\n@riya_codes: 15,201 followers`,
+  'code-spotify':`🎵 Top Songs:\n  1. Butter — BTS (5,200 plays)\n  2. Blinding Lights — The Weeknd (3,200 plays)\n  3. Levitating — Dua Lipa (2,800 plays)\n\n📊 Total: 11,200 plays`,
+  'code-linkedin':`🎯 Job Match: 60%\n✓ Have: Python, SQL, Git\n✗ Need: Django, REST API`,
+  'code-agent':`👂 Heard: 'Book a table for 2'\n🔧 Calling API... ✅ Booked!\n\n🔮 Traditional AI: answers\n🤖 Agentic AI: DOES things!`,
+  'code-project':`=== PYBOOK ===\n✓ @alice_codes posted\n✓ @bob_dev posted\n\nLinkedIn: @alice_codes | Skills: Python\n✓ Push to GitHub → Add to LinkedIn!`
+};
+let codeRunCount={};
+function runCode(id,outId){
+  const out=document.getElementById(outId);out.textContent='// running...';
+  setTimeout(()=>{out.textContent=expectedOutputs[id]||'(output)';if(!codeRunCount[id]){codeRunCount[id]=true;addXP(20,'Code executed! +20 XP','run-'+id);}},350);
+}
+
+// ========= INTERACTIVE ELEMENTS =========
+// Loop animator
+let loopRunning=false;
+function animateLoop(){if(loopRunning)return;loopRunning=true;const items=document.querySelectorAll('.loop-item');const names=['Riya','Arjun','Priya','Dev','Sneha'];items.forEach(i=>i.className='loop-item');let idx=0;document.getElementById('loop-status').textContent='Starting...';const iv=setInterval(()=>{if(idx>0)items[idx-1].classList.add('sent');if(idx<items.length){items[idx].classList.add('active');document.getElementById('loop-status').textContent=`for "${names[idx]}" → sending...`;idx++;}else{clearInterval(iv);document.getElementById('loop-status').textContent='✓ All sent!';loopRunning=false;addXP(15,'Loop animated! +15 XP','loop');}},550);}
+
+// Chatbot
+function liveChatbot(){const input=document.getElementById('chat-input').value.toLowerCase();const r={'hello':'Hey! 👋','hi':'Hi!','python':'Python = Instagram + ChatGPT!','college':'Dr. MGR University! 🎓','help':'Try: hello, python, agent, bye','agent':'AI that acts, not just answers!','bye':'Keep coding 🚀'};let reply=null;for(const k in r)if(input.includes(k)){reply=r[k];break;}document.getElementById('chat-reply').textContent='Bot: '+(reply||`I don't know "${input}" yet!`);document.getElementById('chat-input').value='';addXP(10,'Chatbot! +10 XP','chat-'+input.slice(0,4));}
+
+// Password checker
+function checkPassword(pwd){const segs=['seg1','seg2','seg3','seg4'];const checks=[{pass:pwd.length>=8,msg:'✓ 8+ chars'},{pass:/[A-Z]/.test(pwd),msg:'✓ uppercase'},{pass:/[0-9]/.test(pwd),msg:'✓ number'},{pass:/[!@#$%^&*]/.test(pwd),msg:'✓ special'}];const score=checks.filter(c=>c.pass).length;const colors=['','#E24B4A','#f5c95c','#5cb8f5','#5cf5b5'];segs.forEach((s,i)=>document.getElementById(s).style.background=i<score?colors[score]:'var(--surface)');const strengths=['','Weak 🔴','Medium 🟡','Strong 🟠','Very Strong 🟢'];document.getElementById('pwd-strength').textContent=pwd?strengths[score]||'':'type a password...';document.getElementById('pwd-checks').textContent=pwd?checks.map(c=>(c.pass?c.msg:c.msg.replace('✓','✗'))).join('  '):'';if(score===4&&pwd)addXP(15,'Strong password! +15 XP','pwd');}
+
+// Followers slider
+document.getElementById('followers-slider').addEventListener('input',function(){const v=parseInt(this.value);const verified=v>10000;document.getElementById('followers-val').textContent=v.toLocaleString()+' followers → is_verified = '+verified;document.getElementById('ig-verified-display').textContent=verified?'✓ Verified':'Not verified';document.getElementById('ig-verified-display').style.color=verified?'#4a9eff':'#888';});
+
+// Drag and drop
+function dragStart(e){e.dataTransfer.setData('text/plain',e.target.dataset.type);e.dataTransfer.setData('text/html',e.target.outerHTML);e.target.style.opacity='.4';setTimeout(()=>e.target.style.opacity='1',0);}
+function dragOver(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function dragLeave(e){e.currentTarget.classList.remove('drag-over');}
+function dropItem(e){e.preventDefault();e.currentTarget.classList.remove('drag-over');const type=e.dataTransfer.getData('text/plain');const accepted=e.currentTarget.dataset.accept.split(',');const fb=document.getElementById('drag-feedback');if(accepted.includes(type)){const html=e.dataTransfer.getData('text/html');const tmp=document.createElement('div');tmp.innerHTML=html;const el=tmp.firstChild;el.removeAttribute('draggable');el.style.cursor='default';e.currentTarget.appendChild(el);fb.textContent='✓ Correct! '+type;fb.style.color='var(--accent3)';addXP(8,'Sorted! +8 XP','drag-'+type+Math.random());}else{fb.textContent='✗ Wrong! That\'s '+type;fb.style.color='var(--accent2)';}}
+
+// Typing challenge
+const typingTargets={1:'username = "riya_codes"'};let typingDone={};
+function checkTyping(id){const target=typingTargets[id];const input=document.getElementById('typing-input-'+id).value;const status=document.getElementById('typing-status-'+id);if(input===target){status.textContent='✓ Perfect match!';status.style.color='var(--accent3)';if(!typingDone[id]){typingDone[id]=true;addXP(20,'Typing challenge! +20 XP','typing-'+id);}
+}else if(target.startsWith(input)){status.textContent=`${input.length}/${target.length} chars...`;status.style.color='var(--accent)';}else{status.textContent='✗ Check your typing!';status.style.color='var(--accent2)';}}
+
+// Spotify player
+const tracks=[{title:'Blinding Lights',artist:'The Weeknd'},{title:'Levitating',artist:'Dua Lipa'},{title:'Butter',artist:'BTS'},{title:'Stay',artist:'Kid LAROI'},{title:'Peaches',artist:'Justin Bieber'}];
+let currentTrack=0;
+function renderPlaylist(){const c=document.getElementById('playlist-items');c.innerHTML='';tracks.forEach((t,i)=>{const d=document.createElement('div');d.style.cssText=`padding:4px 8px;border-radius:5px;font-size:10px;cursor:pointer;display:flex;justify-content:space-between;border:1px solid ${i===currentTrack?'var(--accent3)':'var(--border)'};background:${i===currentTrack?'var(--glow-g)':'var(--surface)'};font-family:'JetBrains Mono';font-weight:600;transition:.2s`;d.innerHTML=`<span>${i===currentTrack?'▶':'♪'} ${t.title}</span><span style="color:var(--muted);font-size:9px">${t.artist}</span>`;d.onclick=()=>{currentTrack=i;updateTrack();};c.appendChild(d);});}
+function updateTrack(){document.getElementById('sp-track').textContent=tracks[currentTrack].title;document.getElementById('sp-artist').textContent=tracks[currentTrack].artist;renderPlaylist();}
+function nextTrack(){currentTrack=(currentTrack+1)%tracks.length;updateTrack();}
+function prevTrack(){currentTrack=(currentTrack-1+tracks.length)%tracks.length;updateTrack();}
+renderPlaylist();
+
+// LinkedIn builder
+const allSkills=['Python','Git','OOP','HTML','CSS','JavaScript','SQL','Flask','Django','React','ML','Data Science'];
+let selectedSkills=new Set();
+function renderSkillSelector(){const c=document.getElementById('skill-selector');c.innerHTML='';allSkills.forEach(s=>{const btn=document.createElement('button');btn.textContent=s;const sel=selectedSkills.has(s);btn.style.cssText=`font-size:9px;padding:2px 8px;border-radius:99px;cursor:pointer;font-family:'JetBrains Mono';font-weight:600;border:1px solid ${sel?'rgba(0,119,181,.4)':'var(--border)'};background:${sel?'rgba(0,119,181,.12)':'transparent'};color:${sel?'#0077b5':'var(--muted)'};transition:.2s`;btn.onclick=()=>{sel?selectedSkills.delete(s):selectedSkills.add(s);updateLinkedIn();renderSkillSelector();};c.appendChild(btn);});}
+function updateLinkedIn(){const n=document.getElementById('li-name-input')?.value||'';const h=document.getElementById('li-headline-input')?.value||'';document.getElementById('li-name').textContent=n||'Your Name';document.getElementById('li-headline').textContent=h||'B.Tech IT @ Dr. MGR';const sc=document.getElementById('li-skills');sc.innerHTML='';selectedSkills.forEach(s=>sc.innerHTML+=`<span class="li-skill">${s}</span>`);let str=0;if(n)str+=25;if(h)str+=25;if(selectedSkills.size>=3)str+=25;if(selectedSkills.size>=5)str+=25;document.getElementById('li-score').textContent='Profile: '+str+'%';if(str===100)addXP(25,'LinkedIn complete! +25 XP','linkedin');}
+renderSkillSelector();
+
+// Agent animator
+let agentRunning=false;
+function animateAgent(){if(agentRunning)return;agentRunning=true;const steps=[1,2,3,4];const msgs=['👂 Listening...','🧠 Processing...','🔧 Calling API...','✅ Done!'];document.getElementById('agent-btn').disabled=true;let idx=0;steps.forEach(s=>document.getElementById('agent-'+s).className='agent-step');const iv=setInterval(()=>{if(idx>0)document.getElementById('agent-'+steps[idx-1]).classList.add('done-agent');if(idx<steps.length){document.getElementById('agent-'+steps[idx]).classList.add('active-agent');document.getElementById('agent-status').textContent=msgs[idx];idx++;}else{clearInterval(iv);document.getElementById('agent-status').textContent='✓ Agent completed!';document.getElementById('agent-btn').disabled=false;agentRunning=false;addXP(20,'Agent simulated! +20 XP','agent');}},800);}
+
+// Particles
+(function(){const c=document.getElementById('particles');const colors=['var(--accent)','var(--accent2)','var(--accent3)','var(--accent4)'];for(let i=0;i<15;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.background=colors[i%4];p.style.animationDuration=(8+Math.random()*12)+'s';p.style.animationDelay=Math.random()*8+'s';p.style.width=p.style.height=(2+Math.random()*3)+'px';c.appendChild(p);}})();
+
+// Intersection observer
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.08});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
