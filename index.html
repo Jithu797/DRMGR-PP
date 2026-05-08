@@ -1230,10 +1230,10 @@ function go(n){
   document.querySelectorAll('.ntab').forEach((t,i)=>{t.classList.remove('on');if(i===n)t.classList.add('on');});
   if(n>0)done.add(n);
   document.querySelectorAll('.ntab').forEach((t,i)=>{if(done.has(i)&&i!==n)t.classList.add('done');else if(i!==n)t.classList.remove('done');});
-  document.getElementById('prog').textContent=done.size+'/7 done';
+  document.getElementById('prog').textContent=done.size+'/8 done';
   window.scrollTo({top:0,behavior:'smooth'});
   if(n===6)renderProj(0);
-  if(n===8){document.getElementById('quiz-entry').style.display='flex';document.getElementById('quiz-arena').style.display='none';document.getElementById('quiz-dashboard').style.display='none';}
+  if(n===8){const ql=document.getElementById('quiz-login');const qa=document.getElementById('quiz-arena');const qd=document.getElementById('quiz-dashboard');if(ql)ql.style.display='flex';if(qa)qa.style.display='none';if(qd)qd.style.display='none';}
 }
 
 // ─── INSTAGRAM DEMO ───
@@ -1431,665 +1431,813 @@ function showProj(i,btn){
 // INIT
 updIG();renderProj(0);
 </script>
+
 <!-- ═══ QUIZ MODULE STYLES ═══ -->
 <style>
-/* QUIZ PAGE */
-#pg8 .wrap{max-width:860px;}
-.quiz-entry{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 54px);text-align:center;padding:40px 20px;position:relative;}
-.qe-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(124,58,237,.08),transparent);}
-.entry-card{background:#ffffff;border:2px solid var(--b1);box-shadow:0 4px 32px rgba(124,58,237,.08);border-radius:20px;padding:40px 36px;width:100%;max-width:480px;position:relative;z-index:1;}
-.entry-card h2{font-size:26px;font-weight:800;letter-spacing:-.8px;margin-bottom:8px;}
-.entry-card p{font-size:13px;color:var(--t2);margin-bottom:28px;line-height:1.6;}
-.ef{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;text-align:left;}
-.ef label{font-size:11px;color:var(--t3);font-family:var(--mono);margin-bottom:4px;display:block;}
-.ef .inp{font-size:14px;}
-.quiz-meta{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
-.qm-badge{font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--b2);color:var(--t2);}
-.qm-badge span{color:var(--p2);font-weight:700;}
+/* ── QUIZ COLORS (light theme) ── */
+:root{--qbg:#f7f7ff;--qcard:#ffffff;--qborder:#e0e0f0;--qtext:#111122;--qt2:#555577;--qt3:#9999bb;}
 
-/* QUIZ ARENA */
+/* ── SUPABASE SETUP NOTICE ── */
+.setup-notice{background:#fffbeb;border:2px solid #f59e0b;border-radius:14px;padding:20px 24px;margin-bottom:20px;display:none;}
+.setup-notice h3{color:#b45309;font-size:14px;margin-bottom:8px;}
+.setup-notice code{background:#fef3c7;padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:12px;color:#92400e;white-space:pre-wrap;display:block;margin:8px 0;line-height:1.8;}
+
+/* ── LOGIN / ENTRY ── */
+.quiz-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 54px);padding:30px 20px;}
+.login-card{background:#fff;border:2px solid var(--qborder);border-radius:20px;padding:40px 36px;width:100%;max-width:460px;box-shadow:0 8px 40px rgba(124,58,237,.1);}
+.login-card .lc-top{text-align:center;margin-bottom:28px;}
+.login-card .lc-icon{font-size:48px;margin-bottom:12px;}
+.login-card h2{font-size:24px;font-weight:800;letter-spacing:-.6px;color:var(--qtext);margin-bottom:6px;}
+.login-card p{font-size:13px;color:var(--qt2);line-height:1.6;}
+.lf{display:flex;flex-direction:column;gap:14px;margin-bottom:24px;}
+.lf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:480px){.lf-row{grid-template-columns:1fr;}}
+.lf-group{display:flex;flex-direction:column;gap:5px;}
+.lf-group label{font-size:11px;font-weight:600;color:var(--qt3);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono);}
+.lf-group .inp{font-size:14px;padding:11px 14px;border:2px solid var(--qborder);}
+.lf-group .inp:focus{border-color:var(--p2);}
+.lf-group .inp.err{border-color:var(--red);}
+.lf-err{font-size:11px;color:var(--red);margin-top:2px;display:none;}
+.start-quiz-btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;font-size:16px;font-weight:800;padding:14px;border-radius:12px;cursor:pointer;font-family:inherit;transition:all .2s;letter-spacing:-.2px;}
+.start-quiz-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.4);}
+.start-quiz-btn:disabled{opacity:.5;transform:none;cursor:not-allowed;}
+.quiz-info-pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:18px;}
+.qi-pill{font-size:11px;padding:4px 12px;border-radius:20px;background:#f4f4ff;border:1px solid var(--qborder);color:var(--qt2);}
+
+/* ── ARENA ── */
 .quiz-arena{display:none;}
-.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
-.qt-info{display:flex;align-items:center;gap:14px;}
-.qt-name{font-size:13px;font-weight:600;}
-.qt-count{font-size:11px;font-family:var(--mono);color:var(--t2);}
-.timer-ring{position:relative;width:58px;height:58px;flex-shrink:0;}
+.arena-header{display:flex;align-items:center;justify-content:space-between;background:#fff;border:2px solid var(--qborder);border-radius:14px;padding:14px 20px;margin-bottom:16px;gap:12px;flex-wrap:wrap;}
+.ah-student{display:flex;align-items:center;gap:12px;}
+.ah-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ah-name{font-size:14px;font-weight:700;color:var(--qtext);}
+.ah-reg{font-size:11px;color:var(--qt2);font-family:var(--mono);}
+.ah-center{display:flex;align-items:center;gap:16px;}
+.q-counter{font-size:13px;font-weight:700;color:var(--qt2);font-family:var(--mono);}
+.q-score-live{font-size:13px;font-weight:800;color:var(--green);font-family:var(--mono);}
+/* Timer ring */
+.timer-ring{position:relative;width:56px;height:56px;flex-shrink:0;}
 .timer-ring svg{transform:rotate(-90deg);}
-.timer-ring circle{fill:none;stroke-width:4;}
-.tr-bg{stroke:var(--b1);}
-.tr-fg{stroke:var(--cyan);stroke-dasharray:163;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .5s;}
-.tr-fg.warn{stroke:var(--yellow);}
+.timer-ring circle{fill:none;stroke-width:5;}
+.tr-bg{stroke:#e8e8f4;}
+.tr-fg{stroke:var(--cyan);stroke-dasharray:157;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .4s;}
+.tr-fg.warn{stroke:var(--orange);}
 .tr-fg.danger{stroke:var(--red);}
-.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-family:var(--mono);}
-.progress-strip{display:flex;gap:3px;margin-bottom:20px;flex-wrap:wrap;}
-.ps-dot{width:24px;height:6px;border-radius:3px;background:var(--b1);transition:background .3s;}
-.ps-dot.answered{background:var(--p2);}
-.ps-dot.correct{background:var(--green);}
-.ps-dot.wrong{background:var(--red);}
-.ps-dot.current{background:var(--cyan);animation:psb .8s ease infinite alternate;}
-@keyframes psb{from{opacity:1}to{opacity:.4}}
-
-/* Q CARD */
-.q-card{background:#ffffff;border:2px solid var(--b1);box-shadow:0 2px 16px rgba(0,0,0,.06);border-radius:16px;padding:28px;margin-bottom:16px;}
-.q-num{font-size:10px;font-family:var(--mono);color:var(--t3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.1em;}
-.q-unit{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 9px;border-radius:5px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--p2);margin-left:8px;}
-.q-text{font-size:17px;font-weight:600;line-height:1.55;margin-bottom:22px;}
-.q-code{background:#0d1117;border:1px solid #1e2430;border-radius:9px;padding:12px 16px;font-family:var(--mono);font-size:13px;color:#a5d6ff;margin-bottom:20px;white-space:pre;}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-family:var(--mono);color:var(--qtext);}
+/* Progress dots */
+.prog-dots{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;}
+.pd{width:22px;height:6px;border-radius:3px;background:#e8e8f4;transition:background .3s;}
+.pd.curr{background:var(--cyan);animation:pdpulse .9s ease infinite alternate;}
+.pd.ok{background:var(--green);}
+.pd.ng{background:var(--red);}
+@keyframes pdpulse{from{opacity:1}to{opacity:.4}}
+/* Question card */
+.q-card{background:#fff;border:2px solid var(--qborder);border-radius:16px;padding:28px;margin-bottom:14px;box-shadow:0 2px 12px rgba(0,0,0,.04);}
+.q-meta{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.q-num-badge{font-size:10px;font-family:var(--mono);color:var(--qt3);letter-spacing:.1em;}
+.q-unit-badge{font-size:10px;font-family:var(--mono);padding:2px 9px;border-radius:5px;background:#f0f0ff;border:1px solid #d8d8ff;color:var(--p2);font-weight:600;}
+.q-text{font-size:18px;font-weight:700;color:var(--qtext);line-height:1.5;margin-bottom:20px;}
+.q-code{background:#1a1a2e;border-radius:10px;padding:14px 18px;font-family:var(--mono);font-size:13px;color:#a5d6ff;margin-bottom:18px;white-space:pre;overflow-x:auto;line-height:1.7;}
 .q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-@media(max-width:560px){.q-opts{grid-template-columns:1fr;}}
-.q-opt{background:#f8f8ff;border:2px solid var(--b1);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--t2);cursor:pointer;transition:all .2s;text-align:left;font-family:inherit;display:flex;align-items:center;gap:10px;line-height:1.4;}
-.q-opt:hover:not(:disabled){border-color:var(--p2);color:var(--text);background:rgba(168,85,247,.1);}
+@media(max-width:540px){.q-opts{grid-template-columns:1fr;}}
+.q-opt{background:#f8f8ff;border:2px solid var(--qborder);border-radius:12px;padding:14px 18px;font-size:13.5px;color:var(--qt2);cursor:pointer;transition:all .2s;text-align:left;font-family:inherit;display:flex;align-items:center;gap:12px;line-height:1.4;}
+.q-opt:hover:not(:disabled){border-color:var(--p2);color:var(--qtext);background:#f0f0ff;}
 .q-opt:disabled{cursor:default;}
-.q-opt.selected{border-color:var(--p2);color:var(--text);background:rgba(168,85,247,.09);}
-.q-opt.correct{border-color:var(--green);background:rgba(16,185,129,.1);color:var(--green);}
-.q-opt.wrong{border-color:var(--red);background:rgba(239,68,68,.08);color:var(--red);}
-.opt-letter{width:26px;height:26px;border-radius:7px;background:var(--b1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
-.q-opt.correct .opt-letter{background:var(--green);color:#07070f;}
-.q-opt.wrong .opt-letter{background:var(--red);color:#fff;}
-.q-opt.selected .opt-letter{background:var(--p2);color:#fff;}
+.q-opt.sel{border-color:var(--p2);background:#f0f0ff;color:var(--qtext);}
+.q-opt.correct{border-color:var(--green);background:#f0fff8;color:#065f46;}
+.q-opt.wrong{border-color:var(--red);background:#fff5f5;color:#991b1b;}
+.opt-key{width:28px;height:28px;border-radius:8px;background:#e8e8f8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);transition:all .2s;}
+.q-opt.correct .opt-key{background:var(--green);color:#fff;}
+.q-opt.wrong .opt-key{background:var(--red);color:#fff;}
+.q-opt.sel .opt-key{background:var(--p2);color:#fff;}
+.q-fb{margin-top:14px;padding:14px 18px;border-radius:10px;font-size:13px;line-height:1.65;display:none;}
+.q-fb.ok{background:#f0fff8;border:1px solid #86efac;color:#065f46;display:block;}
+.q-fb.ng{background:#fff5f5;border:1px solid #fca5a5;color:#991b1b;display:block;}
+.q-nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+.skip-btn{font-size:12px;color:var(--qt3);background:none;border:1px solid var(--qborder);border-radius:8px;padding:8px 16px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.skip-btn:hover{color:var(--qt2);border-color:var(--qt2);}
+.next-btn{background:linear-gradient(135deg,var(--purple),var(--p2));color:#fff;border:none;font-size:14px;font-weight:700;padding:11px 28px;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.next-btn:disabled{opacity:.3;cursor:default;}
+/* Submitting overlay */
+.submitting{display:none;position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+.submitting.on{display:flex;}
+.sub-spinner{width:48px;height:48px;border:4px solid #e8e8f8;border-top-color:var(--purple);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sub-text{font-size:15px;font-weight:600;color:var(--qt2);}
 
-.q-feedback{margin-top:14px;padding:14px 18px;border-radius:10px;font-size:13px;line-height:1.65;display:none;}
-.q-feedback.ok{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#6ee7b7;display:block;}
-.q-feedback.ng{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);color:#fca5a5;display:block;}
-
-.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
-.skip-btn{font-size:11px;color:var(--t3);background:none;border:none;cursor:pointer;font-family:inherit;padding:8px;}
-.skip-btn:hover{color:var(--t2);}
-.next-btn{background:linear-gradient(135deg,var(--purple),var(--p2));color:#fff;border:none;font-size:13px;font-weight:700;padding:11px 24px;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;}
-.next-btn:hover{opacity:.9;}
-.next-btn:disabled{opacity:.4;cursor:default;}
-
-/* DASHBOARD */
-.dashboard{display:none;}
-.dash-hero{text-align:center;padding:36px 20px;background:var(--card);border:1px solid var(--b1);border-radius:18px;margin-bottom:22px;position:relative;overflow:hidden;}
-.dash-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(124,58,237,.1),transparent);pointer-events:none;}
-.dash-hero h2{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
-.dash-hero .score-big{font-size:72px;font-weight:800;letter-spacing:-3px;line-height:1;margin:20px 0 10px;}
-.dash-hero .score-label{font-size:14px;color:var(--t2);}
-.dash-hero .grade-badge{display:inline-block;font-size:13px;font-weight:700;padding:6px 20px;border-radius:20px;margin-top:14px;}
-.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
-@media(max-width:600px){.dash-stats{grid-template-columns:1fr 1fr;}}
-.ds{background:#ffffff;border:2px solid var(--b1);border-radius:12px;padding:18px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.04);}
-.ds-n{font-size:28px;font-weight:800;margin-bottom:4px;}
-.ds-l{font-size:11px;color:var(--t2);}
-.unit-breakdown{background:#ffffff;border:1px solid var(--b1);border-radius:14px;overflow:hidden;margin-bottom:16px;}
-.ub-head{padding:12px 18px;border-bottom:1px solid var(--b1);font-size:11px;color:var(--t2);font-weight:600;letter-spacing:.05em;}
-.ub-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--b1);}
-.ub-row:first-of-type{border-top:none;}
-.ub-name{font-size:12px;font-weight:600;min-width:120px;}
-.ub-bar-wrap{flex:1;background:var(--b1);border-radius:4px;height:8px;overflow:hidden;}
-.ub-bar{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1);}
-.ub-pct{font-size:11px;font-family:var(--mono);color:var(--t2);min-width:36px;text-align:right;}
-.q-review{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
-.qr-item{background:#fafafa;border:1px solid var(--b1);border-radius:10px;padding:14px 16px;}
-.qr-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
-.qr-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
-.qr-q{font-size:12.5px;font-weight:600;flex:1;line-height:1.45;}
-.qr-ans{font-size:11.5px;color:var(--t2);margin-top:4px;}
-.qr-ans span{font-family:var(--mono);}
-.qr-ans.ok span{color:var(--green);}
-.qr-ans.ng span{color:var(--red);}
-.retry-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;font-size:15px;font-weight:700;padding:13px 30px;border-radius:11px;cursor:pointer;transition:all .2s;font-family:inherit;}
-.retry-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.38);}
-.timed-out{text-align:center;padding:20px;color:var(--red);font-size:14px;font-weight:600;}
+/* ── DASHBOARD ── */
+.quiz-dashboard{display:none;}
+.dash-hero-card{background:linear-gradient(135deg,var(--purple),var(--pink));border-radius:20px;padding:32px 28px;color:#fff;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+.dhc-bg{position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+.dhc-name{font-size:14px;opacity:.85;margin-bottom:6px;}
+.dhc-reg{font-size:12px;opacity:.65;font-family:var(--mono);margin-bottom:20px;}
+.dhc-score{font-size:72px;font-weight:900;letter-spacing:-3px;line-height:1;}
+.dhc-of{font-size:24px;opacity:.75;font-weight:400;}
+.dhc-grade{display:inline-block;font-size:14px;font-weight:700;padding:6px 20px;background:rgba(255,255,255,.2);border-radius:20px;margin-top:12px;}
+.dhc-msg{font-size:13px;opacity:.8;margin-top:8px;}
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr;}}
+.stat-card{background:#fff;border:2px solid var(--qborder);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+.sc-num{font-size:30px;font-weight:900;letter-spacing:-1px;margin-bottom:4px;}
+.sc-lbl{font-size:11px;color:var(--qt2);}
+/* Charts */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+@media(max-width:680px){.charts-grid{grid-template-columns:1fr;}}
+.chart-card{background:#fff;border:2px solid var(--qborder);border-radius:14px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,.04);}
+.cc-title{font-size:12px;font-weight:700;color:var(--qt2);margin-bottom:16px;text-transform:uppercase;letter-spacing:.06em;}
+/* Bar chart (unit breakdown) */
+.unit-bars{display:flex;flex-direction:column;gap:10px;}
+.ub-item{display:flex;align-items:center;gap:10px;}
+.ub-label{font-size:11px;font-weight:600;min-width:60px;color:var(--qtext);}
+.ub-track{flex:1;background:#f0f0f8;border-radius:4px;height:24px;overflow:hidden;position:relative;}
+.ub-fill{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;padding-left:8px;}
+.ub-fill span{font-size:11px;font-weight:700;color:#fff;white-space:nowrap;}
+.ub-pct{font-size:11px;font-family:var(--mono);color:var(--qt2);min-width:34px;text-align:right;}
+/* Donut chart */
+.donut-wrap{display:flex;align-items:center;gap:20px;}
+.donut-svg{flex-shrink:0;}
+.donut-legend{display:flex;flex-direction:column;gap:8px;}
+.dl-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--qt2);}
+.dl-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+/* Q review */
+.qr-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.qr-item{background:#fff;border:2px solid var(--qborder);border-radius:10px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.qr-icon{font-size:18px;flex-shrink:0;}
+.qr-body{flex:1;}
+.qr-q{font-size:12.5px;font-weight:600;color:var(--qtext);margin-bottom:5px;line-height:1.45;}
+.qr-unit{font-size:10px;font-family:var(--mono);color:var(--qt3);margin-bottom:4px;}
+.qr-ans{font-size:12px;color:var(--qt2);}
+.qr-ans b{font-family:var(--mono);}
+.qr-ans.ok b{color:var(--green);}
+.qr-ans.ng b{color:var(--red);}
 
 /* ── LEADERBOARD ── */
-.lb-wrap{background:#ffffff;border:2px solid var(--b1);border-radius:16px;overflow:hidden;margin-bottom:20px;box-shadow:0 2px 16px rgba(0,0,0,.06);}
-.lb-head{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
-.lb-head h3{font-size:15px;font-weight:700;letter-spacing:-.3px;}
-.lb-head span{font-size:11px;opacity:.8;font-family:var(--mono);}
-.lb-filter{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-.lb-row{display:grid;grid-template-columns:44px 1fr 70px 70px 70px;align-items:center;padding:12px 18px;border-top:1px solid var(--b1);gap:8px;transition:background .2s;}
-.lb-row:hover{background:#f8f8ff;}
-.lb-row.lb-me{background:rgba(168,85,247,.07);border-left:3px solid var(--p2);}
-.lb-row.lb-top1{background:rgba(251,191,36,.06);border-left:3px solid var(--yellow);}
-.lb-row.lb-top2{background:rgba(226,232,240,.1);}
-.lb-row.lb-top3{background:rgba(249,115,22,.05);}
-.lb-rank{font-size:18px;font-weight:800;text-align:center;font-family:var(--mono);}
-.lb-info .lb-name{font-size:13px;font-weight:700;color:#111122;}
-.lb-info .lb-roll{font-size:11px;color:var(--t2);font-family:var(--mono);}
-.lb-score{text-align:center;font-size:16px;font-weight:800;color:var(--purple);}
-.lb-score small{display:block;font-size:10px;color:var(--t2);font-weight:400;}
-.lb-time{text-align:center;font-size:12px;color:var(--t2);font-family:var(--mono);}
-.lb-time strong{display:block;font-size:13px;color:#111122;font-weight:700;}
-.lb-grade{text-align:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;}
-.lb-empty{padding:40px;text-align:center;color:var(--t3);font-size:13px;}
-.lb-col-h{display:grid;grid-template-columns:44px 1fr 70px 70px 70px;padding:8px 18px;gap:8px;background:#f5f5ff;border-bottom:1px solid var(--b1);}
-.lb-col-h span{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;}
-.lb-col-h span:not(:nth-child(2)){text-align:center;}
-.clear-lb-btn{font-size:11px;color:var(--red);background:none;border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;transition:all .2s;}
-.clear-lb-btn:hover{background:rgba(239,68,68,.07);}
+.lb-card{background:#fff;border:2px solid var(--qborder);border-radius:16px;overflow:hidden;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.05);}
+.lb-header{background:linear-gradient(135deg,#1a1a2e,#2d1b5e);color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;}
+.lbh-left h3{font-size:16px;font-weight:800;}
+.lbh-left p{font-size:11px;opacity:.65;margin-top:2px;}
+.lbh-right{display:flex;align-items:center;gap:10px;}
+.lb-live-dot{width:8px;height:8px;border-radius:50%;background:#10b981;animation:livepulse 1.5s ease infinite;}
+@keyframes livepulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.lb-student-count{font-size:12px;opacity:.75;font-family:var(--mono);}
+.refresh-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:7px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.refresh-btn:hover{background:rgba(255,255,255,.25);}
+.lb-filters{padding:12px 18px;border-bottom:1px solid var(--qborder);display:flex;gap:6px;flex-wrap:wrap;}
+.lb-col-head{display:grid;grid-template-columns:48px 1fr 80px 80px 60px;padding:8px 18px;background:#f8f8ff;border-bottom:1px solid var(--qborder);gap:8px;}
+.lb-col-head span{font-size:10px;font-weight:700;color:var(--qt3);text-transform:uppercase;letter-spacing:.08em;}
+.lb-col-head span:not(:nth-child(2)){text-align:center;}
+.lb-row{display:grid;grid-template-columns:48px 1fr 80px 80px 60px;align-items:center;padding:13px 18px;border-top:1px solid var(--qborder);gap:8px;transition:background .15s;}
+.lb-row:hover{background:#fafafe;}
+.lb-row.me{background:#f5f0ff;border-left:3px solid var(--p2);}
+.lb-row.gold{background:#fffbeb;border-left:3px solid var(--yellow);}
+.lb-row.silver{background:#f8fafc;border-left:3px solid #94a3b8;}
+.lb-row.bronze{background:#fff8f5;border-left:3px solid #f97316;}
+.lb-rank-cell{text-align:center;font-size:20px;}
+.lb-info .lbi-name{font-size:13px;font-weight:700;color:var(--qtext);}
+.lb-info .lbi-reg{font-size:11px;color:var(--qt2);font-family:var(--mono);}
+.lb-info .lbi-time{font-size:10px;color:var(--qt3);}
+.lb-score-cell{text-align:center;}
+.lb-score-cell .lbs-n{font-size:18px;font-weight:900;color:var(--purple);}
+.lb-score-cell .lbs-of{font-size:10px;color:var(--qt3);}
+.lb-time-cell{text-align:center;font-family:var(--mono);font-size:12px;color:var(--qt2);}
+.lb-time-cell strong{display:block;font-size:13px;color:var(--qtext);}
+.lb-grade-cell{text-align:center;}
+.lb-grade-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;display:inline-block;}
+.lb-empty{padding:50px;text-align:center;color:var(--qt3);}
+.lb-loading{padding:40px;text-align:center;}
+.lb-spinner{width:30px;height:30px;border:3px solid var(--qborder);border-top-color:var(--purple);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px;}
+.lb-you-rank{padding:12px 18px;text-align:center;font-size:12px;color:var(--qt2);border-top:1px solid var(--qborder);background:#f8f8ff;}
 
+/* action buttons */
+.dash-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;}
+.retry-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;font-size:14px;font-weight:700;padding:12px 28px;border-radius:11px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.retry-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.38);}
+.secondary-btn{display:inline-flex;align-items:center;gap:8px;background:#f8f8ff;color:var(--qt2);border:2px solid var(--qborder);font-size:14px;font-weight:600;padding:12px 24px;border-radius:11px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.secondary-btn:hover{border-color:var(--p2);color:var(--p2);}
+.clear-btn{display:inline-flex;align-items:center;gap:6px;background:#fff5f5;color:var(--red);border:2px solid #fecaca;font-size:13px;font-weight:600;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.clear-btn:hover{background:#fee2e2;}
 </style>
 
 <!-- ═══ PAGE 8: QUIZ MODULE ═══ -->
 <div class="pg" id="pg8">
-<div class="wrap">
+<div class="wrap" style="max-width:900px;">
 
-<!-- ENTRY SCREEN -->
-<div class="quiz-entry" id="quiz-entry">
-  <div class="qe-glow"></div>
-  <div class="entry-card">
-    <div style="font-size:44px;margin-bottom:12px;">🧠</div>
-    <h2>Workshop Quiz</h2>
-    <p>30 questions across all 5 Python units. Each question has a 60-second timer. Score = correct answers × 1 mark. Leaderboard ranks by score then speed!. Enter your name to begin and see your score on the dashboard!</p>
-    <div class="ef">
-      <div>
-        <label>First Name *</label>
-        <input class="inp" type="text" id="q-fname" placeholder="e.g. Riya" autocomplete="given-name">
+<!-- SETUP NOTICE (hidden by default, shown if DB not configured) -->
+<div class="setup-notice" id="setup-notice">
+  <h3>⚠️ One-time Supabase Setup Required</h3>
+  <p>Run this SQL in your <strong>Supabase SQL Editor</strong> (supabase.co → your project → SQL Editor):</p>
+  <code id="setup-sql"></code>
+</div>
+
+<!-- ── LOGIN SCREEN ── -->
+<div class="quiz-login" id="quiz-login">
+  <div class="login-card">
+    <div class="lc-top">
+      <div class="lc-icon">🧠</div>
+      <h2>Python Workshop Quiz</h2>
+      <p>30 random questions · 60 seconds each · 1 mark per question<br>Your score is saved to the live leaderboard!</p>
+    </div>
+    <div class="lf">
+      <div class="lf-row">
+        <div class="lf-group">
+          <label>First Name *</label>
+          <input class="inp" id="lf-fname" type="text" placeholder="e.g. Riya" autocomplete="given-name">
+          <div class="lf-err" id="err-fname">Required</div>
+        </div>
+        <div class="lf-group">
+          <label>Last Name *</label>
+          <input class="inp" id="lf-lname" type="text" placeholder="e.g. Sharma" autocomplete="family-name">
+          <div class="lf-err" id="err-lname">Required</div>
+        </div>
       </div>
-      <div>
-        <label>Last Name *</label>
-        <input class="inp" type="text" id="q-lname" placeholder="e.g. Sharma" autocomplete="family-name">
-      </div>
-      <div>
-        <label>Roll Number (optional)</label>
-        <input class="inp" type="text" id="q-roll" placeholder="e.g. 22IT001">
+      <div class="lf-group">
+        <label>Registration Number *</label>
+        <input class="inp" id="lf-reg" type="text" placeholder="e.g. 22IT001" autocomplete="off" style="text-transform:uppercase;">
+        <div class="lf-err" id="err-reg">Required</div>
       </div>
     </div>
-    <button class="cta" onclick="startQuiz()" style="width:100%;justify-content:center;">Start Quiz →</button>
-    <div class="quiz-meta">
-      <div class="qm-badge">⏱ <span>60s</span> per question</div>
-      <div class="qm-badge">📝 <span>30</span> questions</div>
-      <div class="qm-badge">🏆 Score: <span>out of 30</span></div>
-      <div class="qm-badge">📊 Unit breakdown included</div>
+    <button class="start-quiz-btn" id="start-btn" onclick="startQuiz()">Start Quiz →</button>
+    <div class="quiz-info-pills">
+      <span class="qi-pill">📝 30 random questions</span>
+      <span class="qi-pill">⏱ 60s per question</span>
+      <span class="qi-pill">🏆 1 mark each</span>
+      <span class="qi-pill">💾 Saved to cloud</span>
     </div>
   </div>
 </div>
 
-<!-- QUIZ ARENA -->
+<!-- ── QUIZ ARENA ── -->
 <div class="quiz-arena" id="quiz-arena">
-  <div class="quiz-top">
-    <div class="qt-info">
+  <div class="arena-header">
+    <div class="ah-student">
+      <div class="ah-avatar" id="ah-av">?</div>
       <div>
-        <div class="qt-name" id="qt-name">Student</div>
-        <div class="qt-count" id="qt-count">Q 1 / 30</div>
+        <div class="ah-name" id="ah-name">Student</div>
+        <div class="ah-reg" id="ah-reg">REG#</div>
       </div>
     </div>
-    <div class="timer-ring" id="timer-ring">
-      <svg width="58" height="58" viewBox="0 0 58 58">
-        <circle class="tr-bg" cx="29" cy="29" r="26"/>
-        <circle class="tr-fg" id="tr-circle" cx="29" cy="29" r="26" stroke-dasharray="163" stroke-dashoffset="0"/>
+    <div class="ah-center">
+      <div>
+        <div class="q-counter" id="q-counter">Q 1 / 30</div>
+        <div class="q-score-live" id="q-score-live">Score: 0</div>
+      </div>
+    </div>
+    <div class="timer-ring">
+      <svg width="56" height="56" viewBox="0 0 56 56">
+        <circle class="tr-bg" cx="28" cy="28" r="25"/>
+        <circle class="tr-fg" id="tr-circle" cx="28" cy="28" r="25" stroke-dasharray="157" stroke-dashoffset="0"/>
       </svg>
-      <div class="timer-num" id="timer-num">30</div>
+      <div class="timer-num" id="timer-num">60</div>
     </div>
   </div>
-  <div class="progress-strip" id="progress-strip"></div>
-  <div class="q-card" id="q-card">
-    <div style="text-align:center;padding:40px;color:var(--t3);">Loading...</div>
-  </div>
-  <div class="q-nav">
-    <button class="skip-btn" onclick="skipQ()">Skip →</button>
-    <button class="next-btn" id="next-btn" onclick="nextQ()" disabled>Next →</button>
+  <div class="prog-dots" id="prog-dots"></div>
+  <div id="q-card-wrap"></div>
+  <div class="q-nav-row">
+    <button class="skip-btn" onclick="skipQuestion()">Skip this question →</button>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()" disabled>Next Question →</button>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div class="dashboard" id="quiz-dashboard">
-  <div class="dash-hero" id="dash-hero"></div>
-  <div class="dash-stats" id="dash-stats"></div>
-  <div class="unit-breakdown" id="unit-breakdown"></div>
-  <div class="st">📋 Question Review</div>
-  <div class="q-review" id="q-review"></div>
-  <!-- LEADERBOARD -->
-  <div class="st" style="margin-top:28px;">🏆 Leaderboard</div>
-  <div class="lb-filter">
-    <button class="chip on" onclick="lbFilter('all',this)">All Attempts</button>
-    <button class="chip" onclick="lbFilter('unit1',this)">Unit I Stars</button>
-    <button class="chip" onclick="lbFilter('top10',this)">Top 10</button>
+<!-- SUBMITTING OVERLAY -->
+<div class="submitting" id="submitting-overlay">
+  <div class="sub-spinner"></div>
+  <div class="sub-text">Saving your score to the leaderboard...</div>
+</div>
+
+<!-- ── DASHBOARD ── -->
+<div class="quiz-dashboard" id="quiz-dashboard">
+
+  <!-- Hero -->
+  <div class="dash-hero-card" id="dash-hero">
+    <div class="dhc-bg"></div>
   </div>
-  <div class="lb-wrap" id="lb-wrap">
-    <div class="lb-head">
-      <h3>🏆 Workshop Leaderboard</h3>
-      <span id="lb-count">0 students</span>
+
+  <!-- Stats row -->
+  <div class="stats-row" id="stats-row"></div>
+
+  <!-- Charts -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="cc-title">Performance by Unit</div>
+      <div class="unit-bars" id="unit-bars"></div>
     </div>
-    <div class="lb-col-h">
+    <div class="chart-card">
+      <div class="cc-title">Answer Breakdown</div>
+      <div class="donut-wrap" id="donut-wrap"></div>
+    </div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div class="st">🏆 Live Leaderboard</div>
+  <div class="lb-card" id="lb-card">
+    <div class="lb-header">
+      <div class="lbh-left">
+        <h3>🏆 Workshop Leaderboard</h3>
+        <p id="lb-sub-text">All students · Ranked by score then speed</p>
+      </div>
+      <div class="lbh-right">
+        <div class="lb-live-dot"></div>
+        <span class="lb-student-count" id="lb-count">Loading...</span>
+        <button class="refresh-btn" onclick="loadLeaderboard()">↻ Refresh</button>
+      </div>
+    </div>
+    <div class="lb-filters">
+      <button class="chip on" onclick="lbFilter('all',this)">All Students</button>
+      <button class="chip" onclick="lbFilter('top10',this)">Top 10</button>
+    </div>
+    <div class="lb-col-head">
       <span>Rank</span><span>Student</span><span>Score</span><span>Time</span><span>Grade</span>
     </div>
-    <div id="lb-list"><div class="lb-empty">No attempts yet. You're the first! 🚀</div></div>
+    <div id="lb-list"><div class="lb-loading"><div class="lb-spinner"></div><div style="color:var(--qt3);font-size:13px;">Loading leaderboard...</div></div></div>
   </div>
-  <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;">
-    <button class="retry-btn" onclick="retryQuiz()">🔄 Try Again</button>
-    <button style="display:inline-flex;align-items:center;gap:8px;background:#f0f0f8;color:#111122;border:2px solid var(--b1);font-size:14px;font-weight:700;padding:13px 24px;border-radius:11px;cursor:pointer;font-family:inherit;" onclick="clearLB()">🗑️ Clear Board</button>
-  </div>
-</div>
 
-</div>
-</div>
+  <!-- Q Review -->
+  <div class="st">📋 Your Question Review</div>
+  <div class="qr-list" id="qr-list"></div>
+
+  <!-- Actions -->
+  <div class="dash-actions">
+    <button class="retry-btn" onclick="retryQuiz()">🔄 Try Again</button>
+    <button class="secondary-btn" onclick="go(0)">🏠 Back to Workshop</button>
+    <button class="clear-btn" onclick="clearLeaderboard()">🗑️ Clear Board (Faculty)</button>
+  </div>
+
+</div><!-- end dashboard -->
+</div><!-- end wrap -->
+</div><!-- end pg8 -->
 
 <script>
-// ══════════════════════════════════════════
-//  QUIZ ENGINE — 30 QUESTIONS
-// ══════════════════════════════════════════
-const QUIZ_QUESTIONS = [
-  // ── UNIT I ──
-  {unit:"Unit I",topic:"Variables",q:"What is a variable in Python?",
-   opts:["A fixed value that never changes","A named container that stores a value in memory","A type of loop","A special Python keyword"],
-   ans:1,exp:"A variable is a named container in memory. Think of it as a labelled box — you name it and store a value inside it."},
+// ══════════════════════════════════════════════════
+//  SUPABASE CONFIG
+// ══════════════════════════════════════════════════
+const SB_URL = 'https://wgaehzxcmexybzwskznd.supabase.co';
+const SB_KEY = 'sb_publishable_VFIJ0_y-585VVEaMq0lkUQ__8zZ1yRj';
+const TABLE  = 'quiz_results';
 
-  {unit:"Unit I",topic:"Data Types",q:"Instagram stores your username as which data type?",
-   opts:["int","bool","str","float"],
-   ans:2,exp:"Usernames are text — that's str (string). Any value wrapped in quotes is a string: 'riya_codes', 'hello', etc."},
+// SQL for setup notice
+document.getElementById('setup-sql').textContent =
+`CREATE TABLE IF NOT EXISTS quiz_results (
+  id            BIGSERIAL PRIMARY KEY,
+  first_name    TEXT NOT NULL,
+  last_name     TEXT NOT NULL,
+  reg_no        TEXT NOT NULL,
+  score         INTEGER NOT NULL,
+  total_q       INTEGER NOT NULL DEFAULT 30,
+  time_seconds  INTEGER NOT NULL,
+  accuracy      NUMERIC(5,2),
+  grade         TEXT,
+  unit_scores   JSONB,
+  submitted_at  TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE quiz_results ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "read all"   ON quiz_results FOR SELECT USING (true);
+CREATE POLICY "insert all" ON quiz_results FOR INSERT WITH CHECK (true);
+CREATE POLICY "delete all" ON quiz_results FOR DELETE USING (true);`;
 
-  {unit:"Unit I",topic:"Data Types",q:"Which data type stores True or False?",
-   opts:["int","str","float","bool"],
-   ans:3,exp:"bool (Boolean) stores only True or False. is_verified, is_private, dark_mode — all booleans."},
+// ── Supabase REST helpers ──
+async function sbSelect(query=''){
+  const r = await fetch(`${SB_URL}/rest/v1/${TABLE}?${query}`,{
+    headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json'}
+  });
+  if(!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function sbInsert(row){
+  const r = await fetch(`${SB_URL}/rest/v1/${TABLE}`,{
+    method:'POST',
+    headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body: JSON.stringify(row)
+  });
+  if(!r.ok) throw new Error(await r.text());
+  return true;
+}
+async function sbDelete(filter){
+  const r = await fetch(`${SB_URL}/rest/v1/${TABLE}?${filter}`,{
+    method:'DELETE',
+    headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json'}
+  });
+  return r.ok;
+}
 
-  {unit:"Unit I",topic:"Syntax",q:"Which line correctly creates a string variable?",code:"A) name = riya\nB) name = 'riya'\nC) str name = 'riya'\nD) 'name' = riya",
-   opts:["A — no quotes needed","B — strings use quotes","C — declare type first","D — name goes in quotes"],
-   ans:1,exp:"B is correct. Strings must be wrapped in quotes (single or double). Without quotes Python looks for a variable named riya which doesn't exist."},
-
-  {unit:"Unit I",topic:"print/input",q:"What does input() do in Python?",
-   opts:["Displays text on screen","Takes user data from keyboard during runtime","Creates a variable automatically","Opens a file"],
-   ans:1,exp:"input() pauses the program and waits for the user to type something — like Instagram's 'Enter your username' field."},
-
-  {unit:"Unit I",topic:"f-strings",q:"What does this print?\nname = 'Riya'\nprint(f'Hello {name}!')",
-   opts:["Hello {name}!","Hello name!","Hello Riya!","Error — invalid syntax"],
-   ans:2,exp:"f-strings evaluate expressions inside {}. So {name} is replaced by the value 'Riya', giving 'Hello Riya!'."},
-
-  // ── UNIT II ──
-  {unit:"Unit II",topic:"Operators",q:"What does the % operator return?",code:"9 % 4",
-   opts:["2.25 (division result)","36 (multiplication)","1 (remainder)","4 (quotient)"],
-   ans:2,exp:"% is the modulo operator — it returns the REMAINDER after division. 9 ÷ 4 = 2 with remainder 1, so 9%4 = 1."},
-
-  {unit:"Unit II",topic:"Operators",q:"What does ** do in Python?",code:"2 ** 10",
-   opts:["Multiply by 2","Raise to the power of","Bitwise XOR","Floor divide"],
-   ans:1,exp:"** is the exponent/power operator. 2**10 = 2×2×2×2×2×2×2×2×2×2 = 1024. Used in hash functions, algorithms, etc."},
-
-  {unit:"Unit II",topic:"Comparison",q:"Instagram checks: user must be 13+ AND must have email. Which is correct?",
-   opts:["if age > 13 or has_email:","if age >= 13 and has_email:","if age >= 13 not has_email:","if age, has_email >= 13:"],
-   ans:1,exp:"Both conditions must be true simultaneously — use 'and'. 'or' would allow a 12-year-old with email to sign up, which is wrong."},
-
-  {unit:"Unit II",topic:"Control Flow",q:"How many times does this loop run?\nfor i in range(5): print(i)",
-   opts:["4 times (1 to 4)","6 times (0 to 5)","5 times — prints 0,1,2,3,4","Infinite times"],
-   ans:2,exp:"range(5) generates 0,1,2,3,4 — exactly 5 values. range(n) always starts at 0 and goes up to n-1 (not including n)."},
-
-  {unit:"Unit II",topic:"String Methods",q:"What does 'Python'.upper() return?",
-   opts:["'python'","'Python'","'PYTHON'","Error"],
-   ans:2,exp:".upper() converts all characters to uppercase. So 'Python'.upper() = 'PYTHON'. Used to compare usernames without case sensitivity."},
-
-  {unit:"Unit II",topic:"Control Flow",q:"What keyword exits a loop immediately?",code:"while True:\n    msg = input('You: ')\n    if msg == 'bye': ___",
-   opts:["exit","stop","return","break"],
-   ans:3,exp:"break immediately exits the current loop. Without break, a while True loop would run forever — break is the emergency exit."},
-
-  // ── UNIT III ──
-  {unit:"Unit III",topic:"Functions",q:"What keyword defines a function in Python?",
-   opts:["function","func","def","define"],
-   ans:2,exp:"'def' (short for define) is Python's keyword to create a function. Every function starts with def followed by its name and parentheses."},
-
-  {unit:"Unit III",topic:"Functions",q:"What does 'return' do inside a function?",
-   opts:["Prints the result to screen","Sends a value back to the caller","Ends the entire program","Jumps to the start of the function"],
-   ans:1,exp:"return sends a value back to wherever the function was called from. Without return, a function gives back None by default."},
-
-  {unit:"Unit III",topic:"Functions",q:"What is wrong with this code?",code:"def greet(name):\nprint('Hello ' + name)",
-   opts:["Nothing — it's fine","'def' keyword is wrong","print must be indented inside def","Strings can't use +"],
-   ans:2,exp:"Python uses indentation to define code blocks. The print statement must be indented (4 spaces) inside the def block — unlike languages that use {}."},
-
-  {unit:"Unit III",topic:"Lambda",q:"Which is equivalent to: lambda x: x * 2",
-   opts:["A loop that repeats twice","def f(x): return x * 2","x = x + 2","A variable storing 2"],
-   ans:1,exp:"Lambda creates a compact one-line anonymous function. lambda x: x*2 is exactly the same as def f(x): return x*2 — just shorter syntax."},
-
-  {unit:"Unit III",topic:"Scope",q:"A variable created inside a function is:",
-   opts:["Global — accessible everywhere","Local — only accessible inside that function","Permanent — stays after function ends","Public — accessible by other files"],
-   ans:1,exp:"Variables inside a function are LOCAL — they only exist within that function's scope. Once the function ends, they disappear from memory."},
-
-  {unit:"Unit III",topic:"Default Args",q:"What prints when you call: like_post(101)\ndef like_post(post_id, reaction='❤️'):\n    print(f'{reaction} on {post_id}')",
-   opts:["Error — reaction not provided","❤️ on 101","None on 101","101"],
-   ans:1,exp:"reaction='❤️' is a default argument — it's used automatically when no value is passed. So like_post(101) prints '❤️ on 101'."},
-
-  // ── UNIT IV ──
-  {unit:"Unit IV",topic:"Lists",q:"contacts = ['Riya','Arjun','Dev','Priya']\nWhat does contacts[1:3] return?",
-   opts:["['Riya','Arjun','Dev']","['Arjun','Dev']","['Dev','Priya']","['Arjun','Dev','Priya']"],
-   ans:1,exp:"Slicing [1:3] returns index 1 up to (NOT including) index 3. That's 'Arjun' (index 1) and 'Dev' (index 2). The end is always exclusive."},
-
-  {unit:"Unit IV",topic:"Lists",q:"Which method adds an item to the END of a list?",
-   opts:["list.add()","list.insert()","list.append()","list.push()"],
-   ans:2,exp:"append() adds a single item to the end of a list. It's the most commonly used list method — WhatsApp adds new messages to a chat list using append."},
-
-  {unit:"Unit IV",topic:"Dictionaries",q:"How do you access a value in a dictionary?",code:"profile = {'username': 'riya', 'followers': 45000}\nGet the username:",
-   opts:["profile.username","profile[0]","profile['username']","profile.get[username]"],
-   ans:2,exp:"Dictionary values are accessed using their key in square brackets: dict['key']. You can also use dict.get('key') which returns None if not found instead of an error."},
-
-  {unit:"Unit IV",topic:"Tuples",q:"Which statement about tuples is TRUE?",
-   opts:["Tuples use [] square brackets","Tuples can be modified after creation","Tuples are immutable — cannot be changed after creation","Tuples are always faster than lists for all operations"],
-   ans:2,exp:"Tuples are immutable — once created, their contents cannot be changed. They use () parentheses. Great for GPS coordinates, RGB colours, database records."},
-
-  {unit:"Unit IV",topic:"List Comprehension",q:"What does this return?\n[x**2 for x in range(4)]",
-   opts:["[1, 4, 9, 16]","[0, 1, 4, 9]","[0, 2, 4, 6]","[2, 4, 8, 16]"],
-   ans:1,exp:"range(4) generates 0,1,2,3. Squaring each: 0²=0, 1²=1, 2²=4, 3²=9. Result: [0,1,4,9]. List comprehension is Python's compact way to build lists."},
-
-  {unit:"Unit IV",topic:"Dictionaries",q:"Which dictionary method returns all key-value pairs as tuples?",
-   opts:["dict.keys()","dict.values()","dict.pairs()","dict.items()"],
-   ans:3,exp:"dict.items() returns all key-value pairs as tuples — great for looping: for name, phone in contacts.items(). keys() returns only keys, values() returns only values."},
-
-  // ── UNIT V ──
-  {unit:"Unit V",topic:"OOP",q:"In OOP, a CLASS is best described as:",
-   opts:["A specific object with data","A blueprint or template for creating objects","A list of functions","A type of variable"],
-   ans:1,exp:"A class is a BLUEPRINT. InstagramUser is a class — it defines the structure. When you create riya = InstagramUser(), riya is the OBJECT made from that blueprint."},
-
-  {unit:"Unit V",topic:"OOP",q:"What does 'self' refer to inside a class method?",
-   opts:["The class itself (the blueprint)","The parent class","The specific object instance that called the method","A required but unused placeholder"],
-   ans:2,exp:"self refers to the particular object that called the method. When riya.post() is called, inside that method self IS riya. This lets each object access its own data."},
-
-  {unit:"Unit V",topic:"OOP",q:"What is __init__ in a Python class?",
-   opts:["A private variable","A method to delete objects","The constructor — runs automatically when a new object is created","An inherited method from parent"],
-   ans:2,exp:"__init__ is the CONSTRUCTOR. Python calls it automatically when you create a new object: riya = InstagramUser('riya','Riya S'). It sets up all the initial attributes."},
-
-  {unit:"Unit V",topic:"Inheritance",q:"BusinessUser inherits from InstagramUser. BusinessUser gets:",
-   opts:["Only its own new methods","Only the parent's methods, not its own","All of InstagramUser's features PLUS its own additional features","A copy of the parent class that's completely separate"],
-   ans:2,exp:"Inheritance means the child (BusinessUser) gets ALL features of the parent (InstagramUser) — every attribute and method — plus it adds its own new ones like run_ad()."},
-
-  {unit:"Unit V",topic:"Data Hiding",q:"In Python, a private attribute is created by:",
-   opts:["Using the private keyword","Writing it in ALL CAPS","Starting the name with __ (double underscore)","Putting it outside the class"],
-   ans:2,exp:"Double underscore prefix (__password) makes an attribute private — name-mangled so it can't be accessed directly from outside the class. This is data hiding / encapsulation."},
-
-  {unit:"Unit V",topic:"OOP",q:"Which OOP pillar means 'hide complex details and show only what's necessary'?",
-   opts:["Inheritance","Encapsulation","Polymorphism","Abstraction"],
-   ans:3,exp:"Abstraction hides complexity. When you tap 'like' on Instagram, you don't see the 47 database operations. The complexity is abstracted — you only see the simple interface."},
+// ══════════════════════════════════════════════════
+//  QUESTION POOL (40 questions, random 30 per quiz)
+// ══════════════════════════════════════════════════
+const POOL = [
+  {unit:"Unit I",q:"What symbol assigns a value to a variable?",opts:["==","=>","=",":="],ans:2,exp:"= is assignment. x = 5 stores 5 into x. Double == is for comparison."},
+  {unit:"Unit I",q:"What will this print?\nname = 'Riya'\nprint(name)",opts:["'Riya'","name","Riya","Error"],ans:2,exp:"print() shows the VALUE stored in the variable, not the name itself."},
+  {unit:"Unit I",q:"Which stores whole numbers like 45000?",opts:["str","float","bool","int"],ans:3,exp:"int stores whole numbers. Follower count, likes, age — all integers."},
+  {unit:"Unit I",q:"What type is True or False?",opts:["int","str","bool","float"],ans:2,exp:"bool (Boolean) holds only True or False. is_verified, dark_mode are booleans."},
+  {unit:"Unit I",q:"What is 'riya_codes' data type?",opts:["int","str","bool","list"],ans:1,exp:"Any text in quotes is a str (string). Usernames, bios, captions are all strings."},
+  {unit:"Unit I",q:"What does input() do?",opts:["Prints to screen","Takes keyboard input from user","Creates a new variable","Reads a file"],ans:1,exp:"input() pauses the program and waits for the user to type — like a form field in any app."},
+  {unit:"Unit I",q:"Which stores a decimal number correctly?",opts:["rate = '4.7'","rate = 4.7","rate = int(4.7)","rate = True"],ans:1,exp:"4.7 without quotes is a float. With quotes it would be a string you can't do math on."},
+  {unit:"Unit I",q:"What does this print?\nx = 10\nprint(f'Score: {x}')",opts:["Score: {x}","Score: x","Score: 10","Error"],ans:2,exp:"f-strings replace {variable} with its value. {x} becomes 10."},
+  {unit:"Unit I",q:"How do you find a variable's data type?",opts:["datatype(x)","typeof(x)","type(x)","kind(x)"],ans:2,exp:"type() returns the data type. type('hi') → str, type(5) → int."},
+  {unit:"Unit I",q:"Which variable name is INVALID?",opts:["user_name","_score","2ndUser","myAge"],ans:2,exp:"Variable names cannot start with a digit. 2ndUser is invalid."},
+  {unit:"Unit I",q:"x = 3; y = x; x = 10; print(y) — what prints?",opts:["10","3","None","Error"],ans:1,exp:"y = x copies the VALUE (3) at that moment. Changing x later doesn't affect y."},
+  {unit:"Unit I",q:"Which correctly stores follower count?",opts:["followers = '45000'","followers = 45000","followers = True","followers = 45000.0"],ans:1,exp:"followers = 45000 stores it as int. With quotes it becomes a string, useless for calculations."},
+  {unit:"Unit II",q:"What does 10 % 3 return?",opts:["3","1","0","3.33"],ans:1,exp:"% is modulo — the remainder. 10 ÷ 3 = 3 remainder 1. So 10 % 3 = 1."},
+  {unit:"Unit II",q:"Which operator checks if two values are EQUAL?",opts:["=","=>","==","!="],ans:2,exp:"== compares two values. Single = is assignment, not comparison."},
+  {unit:"Unit II",q:"What does 2 ** 8 return?",opts:["16","256","64","28"],ans:1,exp:"** is the power operator. 2**8 = 256. Used in algorithms and encryption."},
+  {unit:"Unit II",q:"age = 20. Which prints 'Adult'?",opts:["if age < 18: print('Adult')","if age >= 18: print('Adult')","if age == 18: print('Adult')","if age > 20: print('Adult')"],ans:1,exp:"20 >= 18 is True, so 'Adult' prints."},
+  {unit:"Unit II",q:"How many times does this run?\nfor i in range(4): print(i)",opts:["3 times","5 times","4 times — prints 0,1,2,3","Infinite"],ans:2,exp:"range(4) generates 0,1,2,3 — exactly 4 values."},
+  {unit:"Unit II",q:"Which keyword immediately exits a loop?",opts:["exit","stop","end","break"],ans:3,exp:"break exits the current loop immediately."},
+  {unit:"Unit II",q:"What does 'not True' evaluate to?",opts:["True","1","False","None"],ans:2,exp:"not reverses a boolean. not True = False."},
+  {unit:"Unit II",q:"What does 'True and False' evaluate to?",opts:["True","False","None","Error"],ans:1,exp:"and requires BOTH to be True. One is False, so result is False."},
+  {unit:"Unit II",q:"What keyword skips to the next loop iteration?",opts:["skip","pass","next","continue"],ans:3,exp:"continue skips the rest of current iteration and jumps to the next."},
+  {unit:"Unit II",q:"What does 'Hello'.lower() return?",opts:["HELLO","Hello","hello","Error"],ans:2,exp:".lower() converts all characters to lowercase."},
+  {unit:"Unit III",q:"Which keyword defines a function?",opts:["function","fn","define","def"],ans:3,exp:"'def' (define) starts a function. Every function in Python begins with def."},
+  {unit:"Unit III",q:"What does return do inside a function?",opts:["Prints the value","Ends the program","Sends a value back to the caller","Repeats the function"],ans:2,exp:"return passes a value back to wherever the function was called from."},
+  {unit:"Unit III",q:"What is wrong?\ndef greet(name):\nprint('Hi ' + name)",opts:["'def' is wrong","Nothing is wrong","print must be indented inside def","Strings can't use +"],ans:2,exp:"Python uses indentation to define code blocks. print must be indented inside def."},
+  {unit:"Unit III",q:"lambda x: x * 2 creates:",opts:["A loop that repeats twice","A one-line function returning x × 2","A variable storing 2","An error"],ans:1,exp:"Lambda creates a compact anonymous function equivalent to def f(x): return x*2."},
+  {unit:"Unit III",q:"A variable created INSIDE a function is:",opts:["Global","Permanent","Local — only inside that function","Shared everywhere"],ans:2,exp:"Local variables exist only inside their function. They disappear when the function ends."},
+  {unit:"Unit III",q:"def add(a, b=10): return a + b\nprint(add(5)) — what prints?",opts:["5","Error","10","15"],ans:3,exp:"b=10 is a default. add(5) means a=5, b=10. So 5+10 = 15."},
+  {unit:"Unit IV",q:"How do you add an item to the END of a list?",opts:["list.add(x)","list.insert(0,x)","list.append(x)","list.push(x)"],ans:2,exp:"append() adds one item to the end of a list."},
+  {unit:"Unit IV",q:"contacts = ['Riya','Arjun','Dev']\nWhat is contacts[0]?",opts:["'Arjun'","'Dev'","1","'Riya'"],ans:3,exp:"List indexing starts at 0. Index 0 is the first item: 'Riya'."},
+  {unit:"Unit IV",q:"Which collection is IMMUTABLE (cannot be changed)?",opts:["List","Dictionary","Set","Tuple"],ans:3,exp:"Tuples use () and cannot be modified. Great for fixed data like GPS coordinates."},
+  {unit:"Unit IV",q:"profile = {'username': 'riya'}\nHow to get 'riya'?",opts:["profile.username","profile(0)","profile['username']","profile->username"],ans:2,exp:"Dictionary values are accessed with their key in square brackets: dict['key']."},
+  {unit:"Unit IV",q:"What does [x*2 for x in range(3)] return?",opts:["[1,2,3]","[0,2,4]","[2,4,6]","[0,1,2]"],ans:1,exp:"range(3) = 0,1,2. Multiplying each by 2: [0,2,4]."},
+  {unit:"Unit IV",q:"Which returns ALL key-value pairs from a dict?",opts:["dict.keys()","dict.values()","dict.all()","dict.items()"],ans:3,exp:"dict.items() returns all (key,value) pairs as tuples."},
+  {unit:"Unit IV",q:"len(['a','b','c','d']) returns:",opts:["3","5","4","0"],ans:2,exp:"len() counts items. The list has 4 items, so len() returns 4."},
+  {unit:"Unit V",q:"What is a CLASS in Python?",opts:["A list of variables","A type of loop","A blueprint for creating objects","A special function"],ans:2,exp:"A class is a blueprint. InstagramUser defines the structure; each account is an object made from it."},
+  {unit:"Unit V",q:"What does 'self' refer to in a class method?",opts:["The class blueprint","The parent class","The specific object that called the method","All objects"],ans:2,exp:"self refers to the particular instance calling the method."},
+  {unit:"Unit V",q:"What is __init__?",opts:["A private variable","A destructor","The constructor — runs when object is created","An inherited method"],ans:2,exp:"__init__ is the constructor — runs automatically when you create a new object."},
+  {unit:"Unit V",q:"BusinessUser inherits from InstagramUser. It gets:",opts:["Only its own methods","Nothing from parent","All parent features PLUS its own","A completely separate copy"],ans:2,exp:"Child class gets ALL parent features plus its own additions."},
+  {unit:"Unit V",q:"How to make an attribute PRIVATE in Python?",opts:["private keyword","Writing in CAPS","Starting with __ (double underscore)","Putting it outside the class"],ans:2,exp:"Double underscore like __password makes an attribute private — inaccessible from outside."},
 ];
 
-// ══════ QUIZ STATE ══════
-let qStudent={fname:'',lname:'',roll:''};
-let qState={current:0,answers:[],timerInterval:null,timeLeft:60,startTime:Date.now(),shuffled:[]};
-
-// ══════ SHUFFLE ══════
-function shuffleArr(arr){
-  const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;
+function buildQuizSet(){
+  const p=[...POOL];
+  for(let i=p.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];}
+  return p.slice(0,30);
 }
 
-// ══════ START QUIZ ══════
+// ══════════════════════════════════════════════════
+//  QUIZ STATE
+// ══════════════════════════════════════════════════
+let student = {fname:'',lname:'',reg:''};
+let qz = {idx:0, qs:[], answers:[], timeLeft:60, timerInt:null, startMs:0, liveScore:0};
+let _lbFilter = 'all';
+let _lbCache  = [];
+
+// ══════════════════════════════════════════════════
+//  START QUIZ
+// ══════════════════════════════════════════════════
 function startQuiz(){
-  const fn=document.getElementById('q-fname').value.trim();
-  const ln=document.getElementById('q-lname').value.trim();
-  if(!fn||!ln){
-    document.getElementById('q-fname').style.borderColor=fn?'var(--b1)':'var(--red)';
-    document.getElementById('q-lname').style.borderColor=ln?'var(--b1)':'var(--red)';
-    return;
-  }
-  qStudent={fname:fn,lname:ln,roll:document.getElementById('q-roll').value.trim()};
-  qState={current:0,answers:[],timerInterval:null,timeLeft:30,shuffled:shuffleArr(QUIZ_QUESTIONS)};
-  document.getElementById('quiz-entry').style.display='none';
+  const fn = document.getElementById('lf-fname').value.trim();
+  const ln = document.getElementById('lf-lname').value.trim();
+  const rg = document.getElementById('lf-reg').value.trim().toUpperCase();
+  let ok = true;
+  [['lf-fname','err-fname',fn],['lf-lname','err-lname',ln],['lf-reg','err-reg',rg]].forEach(([id,eid,val])=>{
+    document.getElementById(id).classList.toggle('err',!val);
+    document.getElementById(eid).style.display = val?'none':'block';
+    if(!val) ok=false;
+  });
+  if(!ok) return;
+  student = {fname:fn, lname:ln, reg:rg};
+  qz = {idx:0, qs:buildQuizSet(), answers:[], timeLeft:60, timerInt:null, startMs:Date.now(), liveScore:0};
+  document.getElementById('quiz-login').style.display='none';
   document.getElementById('quiz-arena').style.display='block';
   document.getElementById('quiz-dashboard').style.display='none';
-  buildProgressStrip();
-  loadQuestion(0);
+  // Set header info
+  document.getElementById('ah-av').textContent = fn[0].toUpperCase();
+  document.getElementById('ah-name').textContent = fn+' '+ln;
+  document.getElementById('ah-reg').textContent = rg;
+  buildDots();
+  loadQuestion();
 }
 
-// ══════ PROGRESS STRIP ══════
-function buildProgressStrip(){
-  const strip=document.getElementById('progress-strip');
-  strip.innerHTML=qState.shuffled.map((_,i)=>`<div class="ps-dot${i===0?' current':''}" id="pd${i}"></div>`).join('');
+// ══════════════════════════════════════════════════
+//  PROGRESS DOTS
+// ══════════════════════════════════════════════════
+function buildDots(){
+  document.getElementById('prog-dots').innerHTML = qz.qs.map((_,i)=>
+    `<div class="pd${i===0?' curr':''}" id="pd${i}"></div>`).join('');
 }
-function updateStrip(i,state){
-  const d=document.getElementById('pd'+i);if(!d)return;
-  d.className='ps-dot '+state;
+function updateDot(i,state){
+  const d=document.getElementById('pd'+i);if(d){d.className='pd '+state;}
 }
 
-// ══════ LOAD QUESTION ══════
-function loadQuestion(idx){
-  const q=qState.shuffled[idx];
-  const total=qState.shuffled.length;
-  document.getElementById('qt-name').textContent=`${qStudent.fname} ${qStudent.lname}`+(qStudent.roll?` · ${qStudent.roll}`:'');
-  document.getElementById('qt-count').textContent=`Q ${idx+1} / ${total}`;
-  updateStrip(idx,'current');
-
-  let html=`<div class="q-num">Question ${idx+1} of ${total}<span class="q-unit">${q.unit} — ${q.topic}</span></div>`;
-  html+=`<div class="q-text">${q.q}</div>`;
-  if(q.code)html+=`<div class="q-code">${q.code}</div>`;
-  html+=`<div class="q-opts">`;
+// ══════════════════════════════════════════════════
+//  LOAD QUESTION
+// ══════════════════════════════════════════════════
+function loadQuestion(){
+  const q = qz.qs[qz.idx];
+  document.getElementById('q-counter').textContent = `Q ${qz.idx+1} / ${qz.qs.length}`;
+  document.getElementById('q-score-live').textContent = `Score: ${qz.liveScore}`;
+  updateDot(qz.idx,'curr');
   const letters=['A','B','C','D'];
-  q.opts.forEach((o,i)=>{
-    html+=`<button class="q-opt" onclick="selectOpt(${i})" id="qopt${i}"><span class="opt-letter">${letters[i]}</span>${o}</button>`;
-  });
-  html+=`</div><div class="q-feedback" id="q-feedback"></div>`;
-  document.getElementById('q-card').innerHTML=html;
-  document.getElementById('next-btn').disabled=true;
+  let html = `<div class="q-card">
+    <div class="q-meta">
+      <span class="q-num-badge">QUESTION ${qz.idx+1} OF ${qz.qs.length}</span>
+      <span class="q-unit-badge">${q.unit}</span>
+    </div>
+    <div class="q-text">${q.q.replace(/\n/g,'<br>')}</div>`;
+  if(q.code) html += `<div class="q-code">${q.code}</div>`;
+  html += `<div class="q-opts">`;
+  q.opts.forEach((o,i)=>{ html += `<button class="q-opt" onclick="selectOpt(${i})" id="qo${i}"><span class="opt-key">${letters[i]}</span>${o}</button>`; });
+  html += `</div><div class="q-fb" id="q-fb"></div></div>`;
+  document.getElementById('q-card-wrap').innerHTML = html;
+  document.getElementById('next-btn').disabled = true;
   startTimer();
 }
 
-// ══════ TIMER ══════
+// ══════════════════════════════════════════════════
+//  TIMER
+// ══════════════════════════════════════════════════
 function startTimer(){
-  clearInterval(qState.timerInterval);
-  qState.timeLeft=60;
-  updateTimer();
-  qState.timerInterval=setInterval(()=>{
-    qState.timeLeft--;
-    updateTimer();
-    if(qState.timeLeft<=0){clearInterval(qState.timerInterval);timeOut();}
+  clearInterval(qz.timerInt);
+  qz.timeLeft = 60;
+  renderTimer();
+  qz.timerInt = setInterval(()=>{
+    qz.timeLeft--;
+    renderTimer();
+    if(qz.timeLeft<=0){ clearInterval(qz.timerInt); autoTimeout(); }
   },1000);
 }
-function updateTimer(){
-  const t=qState.timeLeft;const el=document.getElementById('timer-num');const circle=document.getElementById('tr-circle');
-  el.textContent=t;
-  const pct=t/60;const offset=163-(163*pct);
-  circle.style.strokeDashoffset=offset;
-  el.style.color=t<=8?'var(--red)':t<=15?'var(--orange)':'#111122';
-  circle.className='tr-fg'+(t<=8?' danger':t<=15?' warn':'');
+function renderTimer(){
+  const t = qz.timeLeft;
+  const el = document.getElementById('timer-num');
+  const circle = document.getElementById('tr-circle');
+  if(!el||!circle) return;
+  el.textContent = t;
+  el.style.color = t<=8?'var(--red)':t<=15?'var(--orange)':'var(--qtext)';
+  circle.style.strokeDashoffset = 157 - (157*(t/60));
+  circle.className = 'tr-fg'+(t<=8?' danger':t<=15?' warn':'');
 }
-function timeOut(){
-  // Auto-mark as wrong (skipped)
-  qState.answers.push({q:qState.shuffled[qState.current],chosen:-1,correct:false,timedOut:true,timeUsed:60});
-  updateStrip(qState.current,'wrong');
-  // Disable all opts, show correct
-  document.querySelectorAll('.q-opt').forEach((b,i)=>{
-    b.disabled=true;
-    if(i===qState.shuffled[qState.current].ans)b.classList.add('correct');
-  });
-  const fb=document.getElementById('q-feedback');
-  if(fb){fb.className='q-feedback ng';fb.innerHTML=`⏰ Time's up! The correct answer was: <strong>${qState.shuffled[qState.current].opts[qState.shuffled[qState.current].ans]}</strong><br><span style="color:var(--t2)">${qState.shuffled[qState.current].exp}</span>`;}
-  document.getElementById('next-btn').disabled=false;
+function autoTimeout(){
+  const q = qz.qs[qz.idx];
+  qz.answers.push({q, chosen:-1, correct:false, timedOut:true, timeUsed:60});
+  updateDot(qz.idx,'ng');
+  document.querySelectorAll('.q-opt').forEach((b,i)=>{b.disabled=true;if(i===q.ans)b.classList.add('correct');});
+  const fb = document.getElementById('q-fb');
+  if(fb){ fb.className='q-fb ng'; fb.innerHTML=`⏰ <strong>Time's up!</strong> Correct answer: <strong>${q.opts[q.ans]}</strong><br><span style="opacity:.8">${q.exp}</span>`; }
+  document.getElementById('next-btn').disabled = false;
 }
 
-// ══════ SELECT OPTION ══════
+// ══════════════════════════════════════════════════
+//  SELECT OPTION
+// ══════════════════════════════════════════════════
 function selectOpt(chosen){
-  clearInterval(qState.timerInterval);
-  const q=qState.shuffled[qState.current];
-  const isCorrect=chosen===q.ans;
-  qState.answers.push({q,chosen,correct:isCorrect,timedOut:false,timeUsed:60-qState.timeLeft});
+  clearInterval(qz.timerInt);
+  const q = qz.qs[qz.idx];
+  const correct = chosen === q.ans;
+  const timeUsed = 60 - qz.timeLeft;
+  qz.answers.push({q, chosen, correct, timedOut:false, timeUsed});
+  if(correct) qz.liveScore++;
+  document.getElementById('q-score-live').textContent = `Score: ${qz.liveScore}`;
   document.querySelectorAll('.q-opt').forEach((b,i)=>{
     b.disabled=true;
-    if(i===q.ans)b.classList.add('correct');
-    else if(i===chosen&&!isCorrect)b.classList.add('wrong');
+    if(i===q.ans) b.classList.add('correct');
+    else if(i===chosen&&!correct) b.classList.add('wrong');
   });
-  updateStrip(qState.current,isCorrect?'correct':'wrong');
-  const fb=document.getElementById('q-feedback');
+  updateDot(qz.idx, correct?'ok':'ng');
+  const fb = document.getElementById('q-fb');
   if(fb){
-    fb.className='q-feedback '+(isCorrect?'ok':'ng');
-    fb.innerHTML=isCorrect?`✅ <strong>Correct!</strong> ${q.exp}`:`❌ <strong>Incorrect.</strong> The answer is <strong>${q.opts[q.ans]}</strong>.<br><span style="color:var(--t2)">${q.exp}</span>`;
+    fb.className = 'q-fb '+(correct?'ok':'ng');
+    fb.innerHTML = correct
+      ? `✅ <strong>Correct!</strong> ${q.exp}`
+      : `❌ <strong>Incorrect.</strong> Answer: <strong>${q.opts[q.ans]}</strong><br><span style="opacity:.85">${q.exp}</span>`;
   }
-  document.getElementById('next-btn').disabled=false;
+  document.getElementById('next-btn').disabled = false;
 }
 
-// ══════ SKIP ══════
-function skipQ(){
-  clearInterval(qState.timerInterval);
-  qState.answers.push({q:qState.shuffled[qState.current],chosen:-1,correct:false,timedOut:false,skipped:true,timeUsed:60-qState.timeLeft});
-  updateStrip(qState.current,'wrong');
-  nextQ();
+function skipQuestion(){
+  clearInterval(qz.timerInt);
+  const q = qz.qs[qz.idx];
+  qz.answers.push({q, chosen:-1, correct:false, timedOut:false, timeUsed:60-qz.timeLeft, skipped:true});
+  updateDot(qz.idx,'ng');
+  nextQuestion();
 }
 
-// ══════ NEXT ══════
-function nextQ(){
-  clearInterval(qState.timerInterval);
-  const next=qState.current+1;
-  if(next>=qState.shuffled.length){showDashboard();return;}
-  qState.current=next;
-  loadQuestion(next);
+function nextQuestion(){
+  clearInterval(qz.timerInt);
+  if(qz.idx+1 >= qz.qs.length){ finishQuiz(); return; }
+  qz.idx++;
+  loadQuestion();
 }
 
-// ══════ DASHBOARD ══════
-function showDashboard(){
+// ══════════════════════════════════════════════════
+//  FINISH — SAVE TO SUPABASE
+// ══════════════════════════════════════════════════
+async function finishQuiz(){
+  const overlay = document.getElementById('submitting-overlay');
+  overlay.classList.add('on');
   document.getElementById('quiz-arena').style.display='none';
-  document.getElementById('quiz-dashboard').style.display='block';
-  const answers=qState.answers;
-  const total=answers.length;
-  const correct=answers.filter(a=>a.correct).length;
-  const wrong=answers.filter(a=>!a.correct&&!a.timedOut&&!a.skipped).length;
-  const timedOut=answers.filter(a=>a.timedOut).length;
-  const skipped=answers.filter(a=>a.skipped).length;
-  const pct=Math.round((correct/total)*100);
-  const totalTimeMs=Date.now()-qState.startTime; const totalTimeSec=Math.round(totalTimeMs/1000); const avgTime=Math.round(answers.reduce((s,a)=>s+(a.timeUsed||0),0)/answers.length);
 
-  // Grade
-  let grade,gradeColor,gradeMsg;
-  if(pct>=90){grade='A+';gradeColor='var(--green)';gradeMsg='Outstanding! 🏆';}
-  else if(pct>=80){grade='A';gradeColor='var(--green)';gradeMsg='Excellent! 🌟';}
-  else if(pct>=70){grade='B';gradeColor='var(--cyan)';gradeMsg='Great work! 💪';}
-  else if(pct>=60){grade='B-';gradeColor='var(--cyan)';gradeMsg='Good job! 📈';}
-  else if(pct>=50){grade='C';gradeColor='var(--yellow)';gradeMsg='Keep practicing! 📚';}
-  else{grade='D';gradeColor='var(--red)';gradeMsg='Revise and retry! 🔄';}
+  const answers = qz.answers;
+  const correct = answers.filter(a=>a.correct).length;
+  const total = answers.length;
+  const pct = Math.round((correct/total)*100);
+  const totalSec = Math.round((Date.now()-qz.startMs)/1000);
+
+  // Unit scores
+  const units = ['Unit I','Unit II','Unit III','Unit IV','Unit V'];
+  const unitScores = {};
+  units.forEach(u=>{
+    const uA = answers.filter(a=>a.q.unit===u);
+    unitScores[u] = {correct:uA.filter(a=>a.correct).length, total:uA.length};
+  });
+
+  const grade = pct>=90?'A+':pct>=80?'A':pct>=70?'B':pct>=60?'B-':pct>=50?'C':'D';
+
+  // Save to Supabase
+  const row = {
+    first_name: student.fname,
+    last_name: student.lname,
+    reg_no: student.reg,
+    score: correct,
+    total_q: total,
+    time_seconds: totalSec,
+    accuracy: pct,
+    grade: grade,
+    unit_scores: unitScores,
+  };
+  try{ await sbInsert(row); } catch(e){ console.warn('Save failed:',e.message); document.getElementById('setup-notice').style.display='block'; }
+
+  overlay.classList.remove('on');
+  showDashboard(answers, correct, total, pct, totalSec, grade, unitScores);
+}
+
+// ══════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════
+function gradeColor(g){ return g==='A+'||g==='A'?'#10b981':g==='B'||g==='B-'?'#06b6d4':g==='C'?'#f59e0b':'#ef4444'; }
+function fmtTime(s){ const m=Math.floor(s/60),sec=s%60; return m>0?`${m}m ${sec}s`:`${sec}s`; }
+
+function showDashboard(answers, correct, total, pct, totalSec, grade, unitScores){
+  document.getElementById('quiz-dashboard').style.display='block';
+  const name = student.fname+' '+student.lname;
+  const msgs = {A:'Outstanding! 🏆','A+':'Outstanding! 🏆',B:'Great work! 💪','B-':'Good job! 📈',C:'Keep practicing! 📚',D:'Revise and retry! 🔄'};
+  const gc = gradeColor(grade);
+  const wrong = answers.filter(a=>!a.correct&&!a.timedOut&&!a.skipped).length;
+  const timedOut = answers.filter(a=>a.timedOut).length;
+  const skipped = answers.filter(a=>a.skipped).length;
 
   // Hero
-  document.getElementById('dash-hero').innerHTML=`
-    <div style="font-size:13px;font-family:var(--mono);color:var(--t3);margin-bottom:8px;">WORKSHOP QUIZ · DR. M.G.R. INSTITUTE</div>
-    <h2>${qStudent.fname} ${qStudent.lname}${qStudent.roll?' · '+qStudent.roll:''}</h2>
-    <div class="score-big" style="background:linear-gradient(130deg,var(--p2),var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${correct}<span style="font-size:36px;letter-spacing:-1px;"> marks</span></div>
-    <div class="score-label">${pct}% score · ${gradeMsg}</div>
-    <div class="grade-badge" style="background:${gradeColor}22;border:1px solid ${gradeColor}44;color:${gradeColor}">Grade: ${grade}</div>
-  `;
+  document.getElementById('dash-hero').innerHTML = `
+    <div class="dhc-bg"></div>
+    <div class="dhc-name">${name}</div>
+    <div class="dhc-reg">${student.reg}</div>
+    <div class="dhc-score">${correct}<span class="dhc-of"> / ${total}</span></div>
+    <div class="dhc-grade">Grade ${grade} · ${msgs[grade]||''}</div>
+    <div class="dhc-msg">${pct}% accuracy · Completed in ${fmtTime(totalSec)}</div>`;
 
   // Stats
-  document.getElementById('dash-stats').innerHTML=`
-    <div class="ds"><div class="ds-n" style="color:var(--green)">${correct}<span style="font-size:16px;color:var(--t2)"> / 30</span></div><div class="ds-l">Marks Scored</div></div>
-    <div class="ds"><div class="ds-n" style="color:var(--red)">${wrong}</div><div class="ds-l">Wrong</div></div>
-    <div class="ds"><div class="ds-n" style="color:var(--yellow)">${timedOut+skipped}</div><div class="ds-l">Skipped / Timeout</div></div>
-    <div class="ds"><div class="ds-n" style="color:var(--cyan)">${totalTimeSec}s</div><div class="ds-l">Total Time Used</div></div>
-  `;
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card"><div class="sc-num" style="color:var(--green)">${correct}</div><div class="sc-lbl">Marks Scored</div></div>
+    <div class="stat-card"><div class="sc-num" style="color:var(--red)">${wrong}</div><div class="sc-lbl">Wrong</div></div>
+    <div class="stat-card"><div class="sc-num" style="color:var(--yellow)">${timedOut+skipped}</div><div class="sc-lbl">Skipped / Timeout</div></div>
+    <div class="stat-card"><div class="sc-num" style="color:var(--cyan)">${fmtTime(totalSec)}</div><div class="sc-lbl">Total Time</div></div>`;
 
-  // Unit breakdown
-  const units=['Unit I','Unit II','Unit III','Unit IV','Unit V'];
-  const uColors=['var(--pink)','var(--cyan)','var(--p2)','var(--green)','var(--yellow)'];
-  let ubHTML='<div class="ub-head">PERFORMANCE BY UNIT</div>';
-  units.forEach((u,ui)=>{
-    const uAns=answers.filter(a=>a.q.unit===u);
-    const uCorrect=uAns.filter(a=>a.correct).length;
-    const uTotal=uAns.length;
-    const uPct=uTotal?Math.round((uCorrect/uTotal)*100):0;
-    ubHTML+=`<div class="ub-row">
-      <div class="ub-name" style="color:${uColors[ui]}">${u}</div>
-      <div class="ub-bar-wrap"><div class="ub-bar" style="width:${uPct}%;background:${uColors[ui]}" data-w="${uPct}"></div></div>
-      <div class="ub-pct">${uCorrect}/${uTotal}</div>
+  // Unit bars
+  const uColors = {'Unit I':'#ec4899','Unit II':'#06b6d4','Unit III':'#a855f7','Unit IV':'#10b981','Unit V':'#f59e0b'};
+  document.getElementById('unit-bars').innerHTML = Object.entries(unitScores).map(([u,s])=>{
+    const p = s.total?Math.round((s.correct/s.total)*100):0;
+    return `<div class="ub-item">
+      <div class="ub-label" style="color:${uColors[u]}">${u}</div>
+      <div class="ub-track"><div class="ub-fill" style="width:${p}%;background:${uColors[u]}" data-w="${p}"><span>${s.correct}/${s.total}</span></div></div>
+      <div class="ub-pct">${p}%</div>
     </div>`;
-  });
-  document.getElementById('unit-breakdown').innerHTML=ubHTML;
-  setTimeout(()=>document.querySelectorAll('.ub-bar').forEach(b=>b.style.width=b.dataset.w+'%'),100);
+  }).join('');
+  setTimeout(()=>document.querySelectorAll('.ub-fill').forEach(b=>b.style.width=b.dataset.w+'%'),100);
+
+  // Donut
+  const cSize = 120, cx=60, cy=60, r=48, circ=2*Math.PI*r;
+  const segments = [
+    {val:correct, color:'#10b981', label:'Correct'},
+    {val:wrong,   color:'#ef4444', label:'Wrong'},
+    {val:timedOut+skipped, color:'#f59e0b', label:'Skipped'},
+  ].filter(s=>s.val>0);
+  let offset=0;
+  const paths = segments.map(s=>{
+    const dash = (s.val/total)*circ;
+    const p = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.color}" stroke-width="20" stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${cx} ${cy})"/>`;
+    offset += dash; return p;
+  }).join('');
+  document.getElementById('donut-wrap').innerHTML = `
+    <svg class="donut-svg" width="${cSize}" height="${cSize}" viewBox="0 0 ${cSize} ${cSize}">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#e8e8f4" stroke-width="20"/>
+      ${paths}
+      <text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="18" font-weight="800" fill="#111122">${correct}</text>
+      <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="10" fill="#888899">/ ${total}</text>
+    </svg>
+    <div class="donut-legend">${segments.map(s=>`<div class="dl-item"><div class="dl-dot" style="background:${s.color}"></div>${s.label}: <strong>${s.val}</strong></div>`).join('')}</div>`;
 
   // Q Review
-  let rvHTML='';
-  answers.forEach((a,i)=>{
-    const icon=a.correct?'✅':a.timedOut?'⏰':a.skipped?'⏭️':'❌';
-    const chosen=a.chosen>=0?a.q.opts[a.chosen]:'(not answered)';
-    const correct_ans=a.q.opts[a.q.ans];
-    rvHTML+=`<div class="qr-item">
-      <div class="qr-top"><div class="qr-icon">${icon}</div><div class="qr-q"><span style="color:var(--t3);font-size:10px;font-family:var(--mono)">${a.q.unit} · </span>${a.q.q}</div></div>
-      <div class="qr-ans ${a.correct?'ok':'ng'}">Your answer: <span>${chosen}</span></div>
-      ${!a.correct?`<div class="qr-ans ok">Correct: <span>${correct_ans}</span></div>`:''}
+  document.getElementById('qr-list').innerHTML = answers.map((a,i)=>{
+    const icon = a.correct?'✅':a.timedOut?'⏰':a.skipped?'⏭️':'❌';
+    return `<div class="qr-item">
+      <div class="qr-icon">${icon}</div>
+      <div class="qr-body">
+        <div class="qr-unit">${a.q.unit}</div>
+        <div class="qr-q">Q${i+1}. ${a.q.q.replace(/\n/g,' ')}</div>
+        <div class="qr-ans ${a.correct?'ok':'ng'}">Your answer: <b>${a.chosen>=0?a.q.opts[a.chosen]:'Not answered'}</b></div>
+        ${!a.correct?`<div class="qr-ans ok">Correct: <b>${a.q.opts[a.q.ans]}</b></div>`:''}
+      </div>
     </div>`;
-  });
-  document.getElementById('q-review').innerHTML=rvHTML;
-  // ── Save to leaderboard ──
-  const lbEntry = {
-    name: qStudent.fname + ' ' + qStudent.lname,
-    roll: qStudent.roll,
-    score: correct,
-    totalTime: totalTimeSec,
-    pct: pct,
-    grade: grade,
-    ts: Date.now()
-  };
-  addToLB(lbEntry);
-  renderLB('all');
+  }).join('');
 
+  // Leaderboard
+  loadLeaderboard();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-
-
-// ══════════════════════════════════════════
-//  LEADERBOARD ENGINE
-// ══════════════════════════════════════════
-const LB_KEY = 'pyworkshop_leaderboard_v1';
-
-function getLB(){
-  try{ return JSON.parse(localStorage.getItem(LB_KEY))||[]; }
-  catch(e){ return []; }
-}
-function saveLB(data){
-  try{ localStorage.setItem(LB_KEY, JSON.stringify(data)); }catch(e){}
-}
-
-function addToLB(entry){
-  // entry: {name, roll, score, totalTime, pct, grade, unitScores, ts}
-  let lb = getLB();
-  lb.push(entry);
-  // Sort: score DESC, then totalTime ASC (faster wins ties)
-  lb.sort((a,b)=> b.score-a.score || a.totalTime-b.totalTime);
-  saveLB(lb);
-  return lb;
+// ══════════════════════════════════════════════════
+//  LEADERBOARD
+// ══════════════════════════════════════════════════
+async function loadLeaderboard(){
+  const listEl = document.getElementById('lb-list');
+  if(!listEl) return;
+  listEl.innerHTML = '<div class="lb-loading"><div class="lb-spinner"></div><div style="color:var(--qt3);font-size:13px;margin-top:4px;">Loading...</div></div>';
+  try{
+    // Fetch all, ordered by score desc then time asc
+    const data = await sbSelect('select=*&order=score.desc,time_seconds.asc&limit=200');
+    _lbCache = data;
+    renderLbRows();
+  } catch(e){
+    listEl.innerHTML = `<div class="lb-empty">⚠️ Could not load leaderboard.<br><small style="font-size:11px;">${e.message}</small></div>`;
+    document.getElementById('setup-notice').style.display='block';
+  }
 }
 
-function gradeFor(pct){
-  if(pct>=90)return{g:'A+',c:'#10b981'};
-  if(pct>=80)return{g:'A', c:'#10b981'};
-  if(pct>=70)return{g:'B', c:'#06b6d4'};
-  if(pct>=60)return{g:'B-',c:'#06b6d4'};
-  if(pct>=50)return{g:'C', c:'#f59e0b'};
-  return{g:'D',c:'#ef4444'};
-}
+function renderLbRows(){
+  const listEl = document.getElementById('lb-list');
+  let rows = [..._lbCache];
+  if(_lbFilter==='top10') rows = rows.slice(0,10);
 
-function renderLB(filter='all'){
-  let lb = getLB();
-  if(filter==='top10') lb = lb.slice(0,10);
-  document.getElementById('lb-count').textContent = lb.length + ' student' + (lb.length!==1?'s':'');
-  const myName = qStudent.fname + ' ' + qStudent.lname;
+  document.getElementById('lb-count').textContent = _lbCache.length+' student'+(_lbCache.length!==1?'s':'');
   const medals = ['🥇','🥈','🥉'];
-  const rowClass = i => i===0?'lb-top1':i===1?'lb-top2':i===2?'lb-top3':'';
-  if(!lb.length){
-    document.getElementById('lb-list').innerHTML='<div class="lb-empty">No attempts yet!</div>';
-    return;
-  }
-  document.getElementById('lb-list').innerHTML = lb.map((e,i)=>{
-    const gd = gradeFor(e.pct);
-    const isMe = e.name === myName;
-    const mins = Math.floor(e.totalTime/60);
-    const secs = e.totalTime%60;
-    const timeStr = mins>0 ? `${mins}m ${secs}s` : `${secs}s`;
-    return `<div class="lb-row ${rowClass(i)} ${isMe?'lb-me':''}">
-      <div class="lb-rank">${i<3?medals[i]:`<span style="font-size:13px;color:var(--t2)">#${i+1}</span>`}</div>
+  const myKey = (student.fname+' '+student.lname+student.reg).toLowerCase();
+  const myIdxFull = _lbCache.findIndex(e=>(e.first_name+' '+e.last_name+e.reg_no).toLowerCase()===myKey);
+
+  if(!rows.length){ listEl.innerHTML='<div class="lb-empty">No entries yet — be the first! 🚀</div>'; return; }
+
+  listEl.innerHTML = rows.map((e,i)=>{
+    const gc = gradeColor(e.grade||'D');
+    const isMe = (e.first_name+' '+e.last_name+e.reg_no).toLowerCase()===myKey;
+    const rowCls = isMe?'me':i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const mins=Math.floor(e.time_seconds/60), secs=e.time_seconds%60;
+    const timeStr=mins>0?`${mins}m ${secs}s`:`${secs}s`;
+    const subTime = e.submitted_at ? new Date(e.submitted_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '';
+    return `<div class="lb-row ${rowCls}">
+      <div class="lb-rank-cell">${i<3?medals[i]:`<span style="font-size:13px;font-family:var(--mono);color:var(--qt2)">#${i+1}</span>`}</div>
       <div class="lb-info">
-        <div class="lb-name">${e.name}${isMe?' <span style="font-size:10px;color:var(--p2);font-weight:700">(You)</span>':''}</div>
-        <div class="lb-roll">${e.roll||'—'}</div>
+        <div class="lbi-name">${e.first_name} ${e.last_name}${isMe?' <span style="font-size:10px;color:var(--p2);font-weight:700">(You)</span>':''}</div>
+        <div class="lbi-reg">${e.reg_no}</div>
+        <div class="lbi-time">${subTime}</div>
       </div>
-      <div class="lb-score">${e.score}<small>/ 30 marks</small></div>
-      <div class="lb-time"><strong>${timeStr}</strong><span style="font-size:10px;display:block">${e.pct}% acc</span></div>
-      <div class="lb-grade" style="background:${gd.c}22;color:${gd.c};border:1px solid ${gd.c}44">${gd.g}</div>
+      <div class="lb-score-cell"><div class="lbs-n">${e.score}</div><div class="lbs-of">/ ${e.total_q} marks</div></div>
+      <div class="lb-time-cell"><strong>${timeStr}</strong>${e.accuracy}%</div>
+      <div class="lb-grade-cell"><span class="lb-grade-badge" style="background:${gc}18;color:${gc};border:1px solid ${gc}33">${e.grade}</span></div>
     </div>`;
-  }).join('');
+  }).join('') +
+  (_lbFilter==='top10'&&myIdxFull>=10?`<div class="lb-you-rank">Your rank: <strong style="color:var(--p2)">#${myIdxFull+1}</strong> out of ${_lbCache.length} students</div>`:'');
 }
 
-function lbFilter(f, btn){
-  document.querySelectorAll('.lb-filter .chip').forEach(b=>b.classList.remove('on'));
+function lbFilter(f,btn){
+  _lbFilter=f;
+  document.querySelectorAll('.lb-filters .chip').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  renderLB(f);
+  renderLbRows();
 }
 
-function clearLB(){
-  if(confirm('Clear the entire leaderboard? This cannot be undone.')){
-    localStorage.removeItem(LB_KEY);
-    renderLB();
-  }
+async function clearLeaderboard(){
+  const pw = prompt('Enter faculty password to clear leaderboard:');
+  if(pw!=='mgr2024') return pw!==null&&alert('Wrong password.');
+  if(!confirm('Delete ALL student scores? This cannot be undone.')) return;
+  try{
+    await sbDelete('id=gte.0');
+    _lbCache=[];
+    renderLbRows();
+    alert('Leaderboard cleared.');
+  }catch(e){ alert('Error: '+e.message); }
 }
 
-// ══════ RETRY ══════
+// ══════════════════════════════════════════════════
+//  RETRY
+// ══════════════════════════════════════════════════
 function retryQuiz(){
   document.getElementById('quiz-dashboard').style.display='none';
-  document.getElementById('quiz-entry').style.display='flex';
-  document.getElementById('q-fname').value=qStudent.fname;
-  document.getElementById('q-lname').value=qStudent.lname;
-  document.getElementById('q-roll').value=qStudent.roll;
+  document.getElementById('quiz-login').style.display='flex';
+  document.getElementById('lf-fname').value=student.fname;
+  document.getElementById('lf-lname').value=student.lname;
+  document.getElementById('lf-reg').value=student.reg;
 }
 
-// Quiz tab is already in the nav HTML
+// Auto-refresh leaderboard every 20s when dashboard is visible
+setInterval(()=>{
+  if(document.getElementById('quiz-dashboard').style.display!=='none') loadLeaderboard();
+}, 20000);
+
+// Add quiz tab to nav if not already there (safety)
+(function(){
+  const tabs=document.getElementById('ntabs');
+  if(tabs&&!tabs.querySelector('[onclick="go(8)"]')){
+    const b=document.createElement('button');
+    b.className='ntab';b.textContent='🧠 Quiz';b.onclick=()=>go(8);
+    tabs.appendChild(b);
+  }
+})();
 </script>
 </body>
 </html>
