@@ -6,21 +6,21 @@
 <title>Python Workshop — Gen Z Edition | Dr. M.G.R.</title>
 <style>
 :root{
-  --bg:#07070f;--bg2:#0e0e1c;--bg3:#131325;--card:#0f0f1e;
-  --b1:#1c1c32;--b2:#28284a;--b3:#3a3a60;
+  --bg:#ffffff;--bg2:#f8f8fc;--bg3:#f0f0f8;--card:#ffffff;
+  --b1:#e0e0f0;--b2:#c8c8e8;--b3:#a0a0c8;
   --purple:#7c3aed;--p2:#a855f7;--p3:#c084fc;
   --pink:#ec4899;--cyan:#06b6d4;--green:#10b981;--g2:#34d399;
   --yellow:#f59e0b;--red:#ef4444;--orange:#f97316;
-  --text:#eeeeff;--t2:#9090b8;--t3:#505070;
+  --text:#111122;--t2:#444466;--t3:#888899;
   --mono:'Courier New',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
 ::-webkit-scrollbar{width:5px;height:5px;}
-::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-track{background:#f0f0f8;}
 ::-webkit-scrollbar-thumb{background:var(--b3);border-radius:3px;}
 /* NAV */
-#nav{position:fixed;top:0;left:0;right:0;z-index:900;height:54px;background:rgba(7,7,15,0.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 16px;gap:12px;}
+#nav{position:fixed;top:0;left:0;right:0;z-index:900;height:54px;background:rgba(255,255,255,0.96);backdrop-filter:blur(18px);box-shadow:0 1px 0 var(--b1);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 16px;gap:12px;}
 .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;white-space:nowrap;}
 .logo-sq{width:30px;height:30px;background:linear-gradient(135deg,var(--purple),var(--pink));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px;}
 .ntabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none;}
@@ -38,7 +38,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px;}
 /* HERO */
 .hero{min-height:calc(100vh - 54px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative;}
-.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 50% 45%,rgba(124,58,237,.13),transparent),radial-gradient(ellipse 35% 28% at 75% 65%,rgba(236,72,153,.08),transparent),radial-gradient(ellipse 35% 28% at 25% 60%,rgba(6,182,212,.07),transparent);}
+.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 55% 45% at 50% 45%,rgba(124,58,237,.07),transparent),radial-gradient(ellipse 35% 28% at 75% 65%,rgba(236,72,153,.04),transparent),radial-gradient(ellipse 35% 28% at 25% 60%,rgba(6,182,212,.04),transparent);}
 .eyebrow{font-size:10px;font-family:var(--mono);letter-spacing:.16em;color:var(--p2);text-transform:uppercase;margin-bottom:14px;}
 .big-title{font-size:clamp(38px,6.5vw,78px);font-weight:800;line-height:1.05;letter-spacing:-2px;margin-bottom:18px;}
 .grad{background:linear-gradient(130deg,var(--p2),var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -50,7 +50,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pl.g{border-color:rgba(16,185,129,.4);color:var(--green);background:rgba(16,185,129,.07);}
 .pl.y{border-color:rgba(245,158,11,.4);color:var(--yellow);background:rgba(245,158,11,.07);}
 .unit-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:100%;max-width:880px;margin-bottom:32px;}
-.uc{background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:left;overflow:hidden;position:relative;}
+.uc{background:#ffffff;border:2px solid var(--b1);border-radius:12px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:left;overflow:hidden;position:relative;}
 .uc:hover{transform:translateY(-3px);border-color:var(--b2);}
 .uc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .uc.u1::before{background:var(--pink);}
@@ -65,7 +65,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cta{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;font-size:15px;font-weight:700;padding:13px 30px;border-radius:11px;cursor:pointer;transition:all .2s;font-family:inherit;}
 .cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.38);}
 /* PAGE HEADER */
-.ph{background:var(--card);border:1px solid var(--b1);border-radius:16px;padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden;}
+.ph{background:#ffffff;border:1px solid var(--b1);box-shadow:0 2px 12px rgba(0,0,0,.05);border-radius:16px;padding:24px 28px;margin-bottom:24px;position:relative;overflow:hidden;}
 .ph::after{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;filter:blur(45px);pointer-events:none;}
 .ph.c1::after{background:rgba(236,72,153,.14);}
 .ph.c2::after{background:rgba(6,182,212,.14);}
@@ -85,7 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @media(max-width:750px){.g2,.g3,.g4,.unit-grid{grid-template-columns:1fr;}}
 @media(max-width:550px){.unit-grid{grid-template-columns:1fr 1fr;}}
 /* CARD */
-.bx{background:var(--card);border:1px solid var(--b1);border-radius:14px;overflow:hidden;margin-bottom:14px;}
+.bx{background:#ffffff;border:1px solid var(--b1);border-radius:14px;overflow:hidden;margin-bottom:14px;}
 .bx-h{padding:11px 16px;border-bottom:1px solid var(--b1);font-size:11px;font-weight:600;color:var(--t2);display:flex;align-items:center;gap:7px;letter-spacing:.04em;}
 .bx-b{padding:16px;}
 .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
@@ -107,8 +107,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .cl.or{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);}
 .cl.or strong{color:var(--orange);}
 /* CODE EDITOR */
-.ed{background:#0d1117;border:1px solid #1e2430;border-radius:12px;overflow:hidden;margin:10px 0;}
-.ed-bar{background:#13171f;border-bottom:1px solid #1e2430;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;}
+.ed{background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;overflow:hidden;margin:10px 0;}
+.ed-bar{background:#12121e;border-bottom:1px solid #2a2a4a;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;}
 .ed-dots{display:flex;gap:5px;}
 .ed-dots s{width:11px;height:11px;border-radius:50%;text-decoration:none;}
 .dr{background:#ff5f57;}.dy{background:#febc2e;}.dg{background:#28c840;}
@@ -120,42 +120,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nm{color:#f2cc60;}.cm{color:#586372;font-style:italic;}.bl{color:#79c0ff;}
 .vr{color:#e6edf3;}.op{color:#ff7b72;}
 /* OUTPUT */
-.out{background:#0a0e14;border:1px solid #1e2430;border-radius:10px;padding:14px;font-family:var(--mono);font-size:12.5px;min-height:60px;line-height:1.9;margin-top:8px;}
+.out{background:#0d1117;border:1px solid #2a2a4a;border-radius:10px;padding:14px;font-family:var(--mono);font-size:12.5px;min-height:60px;line-height:1.9;margin-top:8px;}
 .og{color:var(--green);}.or2{color:var(--red);}.oy{color:var(--yellow);}
 .oc{color:var(--cyan);}.od{color:var(--t3);}.ow{color:var(--text);}
 /* INPUTS */
-.inp{background:var(--bg3);border:1px solid var(--b1);border-radius:9px;padding:9px 13px;color:var(--text);font-family:inherit;font-size:13px;width:100%;outline:none;transition:border-color .2s;}
+.inp{background:#f8f8ff;border:1px solid var(--b1);border-radius:9px;padding:9px 13px;color:var(--text);font-family:inherit;font-size:13px;width:100%;outline:none;transition:border-color .2s;}
 .inp:focus{border-color:var(--p2);}
 .ilab{font-size:11px;color:var(--t3);margin-bottom:5px;font-family:var(--mono);}
-.sl{-webkit-appearance:none;height:4px;background:var(--b1);border-radius:2px;outline:none;width:100%;}
+.sl{-webkit-appearance:none;height:4px;background:#e0e0f0;border-radius:2px;outline:none;width:100%;}
 .sl::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--p2);cursor:pointer;}
 .sv{font-family:var(--mono);font-size:12px;color:var(--cyan);min-width:60px;text-align:right;}
 /* VAR BOXES */
 .vg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
-.vb{background:var(--bg3);border:1px solid var(--b1);border-radius:9px;padding:9px 13px;font-family:var(--mono);font-size:11.5px;transition:all .3s;min-width:90px;}
+.vb{background:#f4f4ff;border:1px solid var(--b1);border-radius:9px;padding:9px 13px;font-family:var(--mono);font-size:11.5px;transition:all .3s;min-width:90px;}
 .vb.fl{border-color:var(--p2);background:rgba(168,85,247,.1);transform:scale(1.03);}
 .vt{color:var(--p2);font-size:10px;margin-bottom:2px;}
 .vn{color:var(--cyan);margin-bottom:2px;}
 .vv{color:var(--yellow);}
 /* CHAT */
 .clist{display:flex;flex-direction:column;gap:7px;}
-.crow{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--bg3);border:1px solid var(--b1);border-radius:9px;font-size:12.5px;transition:all .4s;}
+.crow{display:flex;align-items:center;gap:10px;padding:9px 13px;background:#f4f4ff;border:1px solid var(--b1);border-radius:9px;font-size:12.5px;transition:all .4s;}
 .crow.act{background:rgba(16,185,129,.09);border-color:var(--green);}
 .crow.blk{background:rgba(239,68,68,.07);border-color:var(--red);}
 .crow.dn{opacity:.45;}
 .cav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
 .cst{margin-left:auto;font-size:10px;font-family:var(--mono);}
-.chat-wrap{background:var(--bg3);border-radius:12px;padding:14px;min-height:180px;max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:7px;}
+.chat-wrap{background:#f4f4fc;border-radius:12px;padding:14px;min-height:180px;max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:7px;}
 .br{display:flex;}.br.me{justify-content:flex-end;}
 .bb{max-width:76%;padding:8px 13px;border-radius:16px;font-size:12.5px;line-height:1.45;animation:bp .28s cubic-bezier(.34,1.56,.64,1);}
 @keyframes bp{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-.bt{background:var(--bg);color:var(--text);border-bottom-left-radius:4px;}
+.bt{background:#e8e8f8;color:var(--text);border-bottom-left-radius:4px;}
 .bm{background:var(--purple);color:#fff;border-bottom-right-radius:4px;}
 /* INSTAGRAM */
-.ig{background:var(--bg3);border:1px solid var(--b1);border-radius:12px;overflow:hidden;max-width:300px;}
+.ig{background:#f4f4ff;border:1px solid var(--b1);border-radius:12px;overflow:hidden;max-width:300px;}
 .ig-h{display:flex;align-items:center;gap:9px;padding:10px 14px;}
 .ig-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:#fff;}
-.ig-img{height:180px;background:linear-gradient(135deg,#0d0d20,#15152e);display:flex;align-items:center;justify-content:center;font-size:56px;}
+.ig-img{height:180px;background:linear-gradient(135deg,#2d1b5e,#1a0f3a);display:flex;align-items:center;justify-content:center;font-size:56px;}
 .ig-ft{padding:10px 14px;}
 .ig-ac{font-size:20px;margin-bottom:6px;display:flex;gap:12px;}
 .ig-lk{font-size:12px;font-weight:600;margin-bottom:3px;}
@@ -173,7 +173,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 @media(max-width:500px){.qopts{grid-template-columns:1fr;}}
 /* PASSWORD */
 .sbars{display:flex;gap:4px;margin:10px 0;}
-.sbar{flex:1;height:5px;border-radius:3px;background:var(--b1);transition:background .4s;}
+.sbar{flex:1;height:5px;border-radius:3px;background:#e0e0f0;transition:background .4s;}
 .pwd-rules{display:flex;flex-direction:column;gap:7px;}
 .pr2{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--t3);transition:color .3s;}
 .pr2.ok{color:var(--green);}
@@ -187,30 +187,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .an{color:var(--cyan);}.av{color:var(--yellow);}
 .mi{font-family:var(--mono);font-size:11.5px;color:var(--pink);padding:3px 0;}
 .obg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
-.obc{background:var(--bg3);border:1px solid var(--b1);border-radius:10px;padding:14px;transition:all .3s;}
-.obc.act{border-color:var(--p2);background:rgba(168,85,247,.07);}
+.obc{background:#f4f4ff;border:1px solid var(--b1);border-radius:10px;padding:14px;transition:all .3s;}
+.obc.act{border-color:var(--p2);background:rgba(168,85,247,.1);}
 .on2{color:var(--p2);font-size:13px;font-weight:700;margin-bottom:7px;font-family:var(--mono);}
 .oa{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;padding:2.5px 0;}
 .ok2{color:var(--cyan);}.ov{color:var(--yellow);}
 /* GIT */
-.gs{display:flex;gap:16px;margin-bottom:24px;padding:20px;background:var(--card);border:1px solid var(--b1);border-radius:14px;position:relative;}
+.gs{display:flex;gap:16px;margin-bottom:24px;padding:20px;background:#fafafa;border:1px solid var(--b1);border-radius:14px;position:relative;}
 .gs::before{content:'';position:absolute;left:43px;bottom:-25px;width:2px;height:25px;background:var(--b2);}
 .gs:last-child::before{display:none;}
 .snum{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
 .sc{flex:1;}
 .sc h3{font-size:14px;font-weight:700;margin-bottom:5px;}
 .sc p{font-size:13px;color:var(--t2);margin-bottom:10px;line-height:1.6;}
-.gc{background:#0d1117;border:1px solid #1e2430;border-radius:9px;padding:12px 16px;font-family:var(--mono);font-size:12.5px;color:#a5d6ff;position:relative;margin-bottom:8px;}
+.gc{background:#0d1117;border:1px solid #2a2a4a;border-radius:9px;padding:12px 16px;font-family:var(--mono);font-size:12.5px;color:#a5d6ff;position:relative;margin-bottom:8px;}
 .gc .gpr{color:var(--green);user-select:none;}
 .cpb{position:absolute;right:10px;top:10px;background:var(--bg3);border:1px solid var(--b1);border-radius:5px;padding:3px 9px;font-size:10px;color:var(--t3);cursor:pointer;transition:all .2s;font-family:inherit;}
 .cpb:hover{color:var(--text);border-color:var(--b2);}
 .gnote{font-size:11px;color:var(--t3);font-style:italic;margin-top:5px;}
 /* CAREER */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
-.stat{background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:18px 14px;text-align:center;}
+.stat{background:#ffffff;border:1px solid var(--b1);border-radius:12px;padding:18px 14px;text-align:center;}
 .stat-n{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:4px;}
 .stat-l{font-size:11px;color:var(--t2);}
-.role-card{background:var(--card);border:1px solid var(--b1);border-radius:12px;padding:16px;transition:all .2s;}
+.role-card{background:#fafafa;border:1px solid var(--b1);border-radius:12px;padding:16px;transition:all .2s;}
 .role-card:hover{border-color:var(--b2);}
 .rc-title{font-size:13px;font-weight:700;margin-bottom:4px;}
 .rc-sal{font-size:12px;font-weight:600;margin-bottom:8px;}
@@ -222,36 +222,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tl-item::before{content:'';position:absolute;left:-21px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--p2);border:2px solid var(--bg);}
 .tl-title{font-size:12.5px;font-weight:700;margin-bottom:3px;}
 .tl-desc{font-size:12px;color:var(--t2);line-height:1.55;}
-.progress-bar-h{background:var(--b1);border-radius:4px;height:8px;overflow:hidden;margin:6px 0;}
+.progress-bar-h{background:#e8e8f4;border-radius:4px;height:8px;overflow:hidden;margin:6px 0;}
 .progress-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.4,0,.2,1);}
 .bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:3px;}
 /* MISC */
-.term{background:#0a0e14;border:1px solid #1e2430;border-radius:9px;padding:13px 16px;font-family:var(--mono);font-size:12px;line-height:1.85;}
-.btn{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--b1);color:var(--t2);font-family:inherit;font-size:13px;font-weight:500;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .18s;}
+.term{background:#0d1117;border:1px solid #2a2a4a;border-radius:9px;padding:13px 16px;font-family:var(--mono);font-size:12px;line-height:1.85;}
+.btn{display:inline-flex;align-items:center;gap:6px;background:#f8f8ff;border:1px solid var(--b1);color:var(--t2);font-family:inherit;font-size:13px;font-weight:500;padding:9px 20px;border-radius:10px;cursor:pointer;transition:all .18s;}
 .btn:hover{border-color:var(--b2);color:var(--text);background:var(--bg3);}
 .btn.pr{background:linear-gradient(135deg,var(--purple),var(--p2));border:none;color:#fff;font-weight:700;}
 .btn.pr:hover{opacity:.9;transform:translateY(-1px);}
 .btn-row{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-top:1px solid var(--b1);margin-top:32px;}
-.chip{font-size:11px;font-family:var(--mono);padding:5px 12px;border-radius:7px;border:1px solid var(--b1);color:var(--t3);background:var(--card);cursor:pointer;transition:all .18s;}
+.chip{font-size:11px;font-family:var(--mono);padding:5px 12px;border-radius:7px;border:1px solid var(--b1);color:var(--t3);background:#f8f8ff;cursor:pointer;transition:all .18s;}
 .chip.on{border-color:var(--p2);color:var(--p2);background:rgba(168,85,247,.09);}
-.def-box{background:var(--bg3);border-left:3px solid var(--p2);border-radius:0 9px 9px 0;padding:12px 16px;margin:10px 0;}
+.def-box{background:#f5f5ff;border-left:3px solid var(--p2);border-radius:0 9px 9px 0;padding:12px 16px;margin:10px 0;}
 .def-box .def-word{font-size:12px;font-family:var(--mono);color:var(--p2);margin-bottom:4px;}
 .def-box .def-text{font-size:13px;color:var(--t2);line-height:1.6;}
 .concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0;}
-.cg-item{background:var(--bg3);border:1px solid var(--b1);border-radius:10px;padding:14px;}
+.cg-item{background:#f8f8ff;border:1px solid var(--b1);border-radius:10px;padding:14px;}
 .cg-icon{font-size:22px;margin-bottom:7px;}
 .cg-title{font-size:12px;font-weight:700;margin-bottom:4px;}
 .cg-desc{font-size:11.5px;color:var(--t2);line-height:1.55;}
 .flow-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;}
-.flow-box{background:var(--bg3);border:1px solid var(--b1);border-radius:8px;padding:8px 14px;font-size:12px;font-family:var(--mono);}
+.flow-box{background:#f4f4ff;border:1px solid var(--b1);border-radius:8px;padding:8px 14px;font-size:12px;font-family:var(--mono);}
 .flow-arrow{color:var(--t3);font-size:14px;}
-.activity-box{background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(236,72,153,.04));border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:16px 18px;margin:12px 0;}
+.activity-box{background:linear-gradient(135deg,rgba(168,85,247,.05),rgba(236,72,153,.02));border:1px solid rgba(168,85,247,.2);border-radius:12px;padding:16px 18px;margin:12px 0;}
 .activity-box h4{font-size:13px;font-weight:700;color:var(--p2);margin-bottom:7px;}
 .activity-box p,.activity-box li{font-size:12.5px;color:var(--t2);line-height:1.65;}
 .activity-box ul{padding-left:18px;}
 .activity-box li{margin-bottom:4px;}
 table.nice{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0;}
-table.nice th{background:var(--b1);padding:8px 12px;text-align:left;font-size:11px;color:var(--t2);font-weight:600;}
+table.nice th{background:#f0f0f8;padding:8px 12px;text-align:left;font-size:11px;color:var(--t2);font-weight:600;}
 table.nice td{padding:8px 12px;border-top:1px solid var(--b1);color:var(--t2);vertical-align:top;}
 table.nice td:first-child{color:var(--text);font-family:var(--mono);font-size:11px;}
 </style>
@@ -268,6 +268,7 @@ table.nice td:first-child{color:var(--text);font-family:var(--mono);font-size:11
     <button class="ntab" onclick="go(5)">🏗️ Unit V</button>
     <button class="ntab" onclick="go(6)">🚀 Git+Project</button>
     <button class="ntab" onclick="go(7)">💼 Career</button>
+    <button class="ntab" onclick="go(8)">🧠 Quiz</button>
   </div>
   <div id="prog">0/7 done</div>
 </div>
@@ -1232,6 +1233,7 @@ function go(n){
   document.getElementById('prog').textContent=done.size+'/7 done';
   window.scrollTo({top:0,behavior:'smooth'});
   if(n===6)renderProj(0);
+  if(n===8){document.getElementById('quiz-entry').style.display='flex';document.getElementById('quiz-arena').style.display='none';document.getElementById('quiz-dashboard').style.display='none';}
 }
 
 // ─── INSTAGRAM DEMO ───
@@ -1428,6 +1430,666 @@ function showProj(i,btn){
 
 // INIT
 updIG();renderProj(0);
+</script>
+<!-- ═══ QUIZ MODULE STYLES ═══ -->
+<style>
+/* QUIZ PAGE */
+#pg8 .wrap{max-width:860px;}
+.quiz-entry{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 54px);text-align:center;padding:40px 20px;position:relative;}
+.qe-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(124,58,237,.08),transparent);}
+.entry-card{background:#ffffff;border:2px solid var(--b1);box-shadow:0 4px 32px rgba(124,58,237,.08);border-radius:20px;padding:40px 36px;width:100%;max-width:480px;position:relative;z-index:1;}
+.entry-card h2{font-size:26px;font-weight:800;letter-spacing:-.8px;margin-bottom:8px;}
+.entry-card p{font-size:13px;color:var(--t2);margin-bottom:28px;line-height:1.6;}
+.ef{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;text-align:left;}
+.ef label{font-size:11px;color:var(--t3);font-family:var(--mono);margin-bottom:4px;display:block;}
+.ef .inp{font-size:14px;}
+.quiz-meta{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
+.qm-badge{font-size:11px;padding:5px 13px;border-radius:20px;border:1px solid var(--b2);color:var(--t2);}
+.qm-badge span{color:var(--p2);font-weight:700;}
+
+/* QUIZ ARENA */
+.quiz-arena{display:none;}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+.qt-info{display:flex;align-items:center;gap:14px;}
+.qt-name{font-size:13px;font-weight:600;}
+.qt-count{font-size:11px;font-family:var(--mono);color:var(--t2);}
+.timer-ring{position:relative;width:58px;height:58px;flex-shrink:0;}
+.timer-ring svg{transform:rotate(-90deg);}
+.timer-ring circle{fill:none;stroke-width:4;}
+.tr-bg{stroke:var(--b1);}
+.tr-fg{stroke:var(--cyan);stroke-dasharray:163;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .5s;}
+.tr-fg.warn{stroke:var(--yellow);}
+.tr-fg.danger{stroke:var(--red);}
+.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;font-family:var(--mono);}
+.progress-strip{display:flex;gap:3px;margin-bottom:20px;flex-wrap:wrap;}
+.ps-dot{width:24px;height:6px;border-radius:3px;background:var(--b1);transition:background .3s;}
+.ps-dot.answered{background:var(--p2);}
+.ps-dot.correct{background:var(--green);}
+.ps-dot.wrong{background:var(--red);}
+.ps-dot.current{background:var(--cyan);animation:psb .8s ease infinite alternate;}
+@keyframes psb{from{opacity:1}to{opacity:.4}}
+
+/* Q CARD */
+.q-card{background:#ffffff;border:2px solid var(--b1);box-shadow:0 2px 16px rgba(0,0,0,.06);border-radius:16px;padding:28px;margin-bottom:16px;}
+.q-num{font-size:10px;font-family:var(--mono);color:var(--t3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.1em;}
+.q-unit{display:inline-block;font-size:10px;font-family:var(--mono);padding:2px 9px;border-radius:5px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:var(--p2);margin-left:8px;}
+.q-text{font-size:17px;font-weight:600;line-height:1.55;margin-bottom:22px;}
+.q-code{background:#0d1117;border:1px solid #1e2430;border-radius:9px;padding:12px 16px;font-family:var(--mono);font-size:13px;color:#a5d6ff;margin-bottom:20px;white-space:pre;}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:560px){.q-opts{grid-template-columns:1fr;}}
+.q-opt{background:#f8f8ff;border:2px solid var(--b1);border-radius:12px;padding:14px 18px;font-size:13px;color:var(--t2);cursor:pointer;transition:all .2s;text-align:left;font-family:inherit;display:flex;align-items:center;gap:10px;line-height:1.4;}
+.q-opt:hover:not(:disabled){border-color:var(--p2);color:var(--text);background:rgba(168,85,247,.1);}
+.q-opt:disabled{cursor:default;}
+.q-opt.selected{border-color:var(--p2);color:var(--text);background:rgba(168,85,247,.09);}
+.q-opt.correct{border-color:var(--green);background:rgba(16,185,129,.1);color:var(--green);}
+.q-opt.wrong{border-color:var(--red);background:rgba(239,68,68,.08);color:var(--red);}
+.opt-letter{width:26px;height:26px;border-radius:7px;background:var(--b1);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--mono);}
+.q-opt.correct .opt-letter{background:var(--green);color:#07070f;}
+.q-opt.wrong .opt-letter{background:var(--red);color:#fff;}
+.q-opt.selected .opt-letter{background:var(--p2);color:#fff;}
+
+.q-feedback{margin-top:14px;padding:14px 18px;border-radius:10px;font-size:13px;line-height:1.65;display:none;}
+.q-feedback.ok{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);color:#6ee7b7;display:block;}
+.q-feedback.ng{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);color:#fca5a5;display:block;}
+
+.q-nav{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+.skip-btn{font-size:11px;color:var(--t3);background:none;border:none;cursor:pointer;font-family:inherit;padding:8px;}
+.skip-btn:hover{color:var(--t2);}
+.next-btn{background:linear-gradient(135deg,var(--purple),var(--p2));color:#fff;border:none;font-size:13px;font-weight:700;padding:11px 24px;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.next-btn:hover{opacity:.9;}
+.next-btn:disabled{opacity:.4;cursor:default;}
+
+/* DASHBOARD */
+.dashboard{display:none;}
+.dash-hero{text-align:center;padding:36px 20px;background:var(--card);border:1px solid var(--b1);border-radius:18px;margin-bottom:22px;position:relative;overflow:hidden;}
+.dash-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(124,58,237,.1),transparent);pointer-events:none;}
+.dash-hero h2{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+.dash-hero .score-big{font-size:72px;font-weight:800;letter-spacing:-3px;line-height:1;margin:20px 0 10px;}
+.dash-hero .score-label{font-size:14px;color:var(--t2);}
+.dash-hero .grade-badge{display:inline-block;font-size:13px;font-weight:700;padding:6px 20px;border-radius:20px;margin-top:14px;}
+.dash-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:600px){.dash-stats{grid-template-columns:1fr 1fr;}}
+.ds{background:#ffffff;border:2px solid var(--b1);border-radius:12px;padding:18px;text-align:center;box-shadow:0 1px 8px rgba(0,0,0,.04);}
+.ds-n{font-size:28px;font-weight:800;margin-bottom:4px;}
+.ds-l{font-size:11px;color:var(--t2);}
+.unit-breakdown{background:#ffffff;border:1px solid var(--b1);border-radius:14px;overflow:hidden;margin-bottom:16px;}
+.ub-head{padding:12px 18px;border-bottom:1px solid var(--b1);font-size:11px;color:var(--t2);font-weight:600;letter-spacing:.05em;}
+.ub-row{display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid var(--b1);}
+.ub-row:first-of-type{border-top:none;}
+.ub-name{font-size:12px;font-weight:600;min-width:120px;}
+.ub-bar-wrap{flex:1;background:var(--b1);border-radius:4px;height:8px;overflow:hidden;}
+.ub-bar{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.ub-pct{font-size:11px;font-family:var(--mono);color:var(--t2);min-width:36px;text-align:right;}
+.q-review{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.qr-item{background:#fafafa;border:1px solid var(--b1);border-radius:10px;padding:14px 16px;}
+.qr-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.qr-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.qr-q{font-size:12.5px;font-weight:600;flex:1;line-height:1.45;}
+.qr-ans{font-size:11.5px;color:var(--t2);margin-top:4px;}
+.qr-ans span{font-family:var(--mono);}
+.qr-ans.ok span{color:var(--green);}
+.qr-ans.ng span{color:var(--red);}
+.retry-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;border:none;font-size:15px;font-weight:700;padding:13px 30px;border-radius:11px;cursor:pointer;transition:all .2s;font-family:inherit;}
+.retry-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,58,237,.38);}
+.timed-out{text-align:center;padding:20px;color:var(--red);font-size:14px;font-weight:600;}
+
+/* ── LEADERBOARD ── */
+.lb-wrap{background:#ffffff;border:2px solid var(--b1);border-radius:16px;overflow:hidden;margin-bottom:20px;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.lb-head{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;}
+.lb-head h3{font-size:15px;font-weight:700;letter-spacing:-.3px;}
+.lb-head span{font-size:11px;opacity:.8;font-family:var(--mono);}
+.lb-filter{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.lb-row{display:grid;grid-template-columns:44px 1fr 70px 70px 70px;align-items:center;padding:12px 18px;border-top:1px solid var(--b1);gap:8px;transition:background .2s;}
+.lb-row:hover{background:#f8f8ff;}
+.lb-row.lb-me{background:rgba(168,85,247,.07);border-left:3px solid var(--p2);}
+.lb-row.lb-top1{background:rgba(251,191,36,.06);border-left:3px solid var(--yellow);}
+.lb-row.lb-top2{background:rgba(226,232,240,.1);}
+.lb-row.lb-top3{background:rgba(249,115,22,.05);}
+.lb-rank{font-size:18px;font-weight:800;text-align:center;font-family:var(--mono);}
+.lb-info .lb-name{font-size:13px;font-weight:700;color:#111122;}
+.lb-info .lb-roll{font-size:11px;color:var(--t2);font-family:var(--mono);}
+.lb-score{text-align:center;font-size:16px;font-weight:800;color:var(--purple);}
+.lb-score small{display:block;font-size:10px;color:var(--t2);font-weight:400;}
+.lb-time{text-align:center;font-size:12px;color:var(--t2);font-family:var(--mono);}
+.lb-time strong{display:block;font-size:13px;color:#111122;font-weight:700;}
+.lb-grade{text-align:center;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;}
+.lb-empty{padding:40px;text-align:center;color:var(--t3);font-size:13px;}
+.lb-col-h{display:grid;grid-template-columns:44px 1fr 70px 70px 70px;padding:8px 18px;gap:8px;background:#f5f5ff;border-bottom:1px solid var(--b1);}
+.lb-col-h span{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.08em;}
+.lb-col-h span:not(:nth-child(2)){text-align:center;}
+.clear-lb-btn{font-size:11px;color:var(--red);background:none;border:1px solid rgba(239,68,68,.3);border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.clear-lb-btn:hover{background:rgba(239,68,68,.07);}
+
+</style>
+
+<!-- ═══ PAGE 8: QUIZ MODULE ═══ -->
+<div class="pg" id="pg8">
+<div class="wrap">
+
+<!-- ENTRY SCREEN -->
+<div class="quiz-entry" id="quiz-entry">
+  <div class="qe-glow"></div>
+  <div class="entry-card">
+    <div style="font-size:44px;margin-bottom:12px;">🧠</div>
+    <h2>Workshop Quiz</h2>
+    <p>30 questions across all 5 Python units. Each question has a 60-second timer. Score = correct answers × 1 mark. Leaderboard ranks by score then speed!. Enter your name to begin and see your score on the dashboard!</p>
+    <div class="ef">
+      <div>
+        <label>First Name *</label>
+        <input class="inp" type="text" id="q-fname" placeholder="e.g. Riya" autocomplete="given-name">
+      </div>
+      <div>
+        <label>Last Name *</label>
+        <input class="inp" type="text" id="q-lname" placeholder="e.g. Sharma" autocomplete="family-name">
+      </div>
+      <div>
+        <label>Roll Number (optional)</label>
+        <input class="inp" type="text" id="q-roll" placeholder="e.g. 22IT001">
+      </div>
+    </div>
+    <button class="cta" onclick="startQuiz()" style="width:100%;justify-content:center;">Start Quiz →</button>
+    <div class="quiz-meta">
+      <div class="qm-badge">⏱ <span>60s</span> per question</div>
+      <div class="qm-badge">📝 <span>30</span> questions</div>
+      <div class="qm-badge">🏆 Score: <span>out of 30</span></div>
+      <div class="qm-badge">📊 Unit breakdown included</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ ARENA -->
+<div class="quiz-arena" id="quiz-arena">
+  <div class="quiz-top">
+    <div class="qt-info">
+      <div>
+        <div class="qt-name" id="qt-name">Student</div>
+        <div class="qt-count" id="qt-count">Q 1 / 30</div>
+      </div>
+    </div>
+    <div class="timer-ring" id="timer-ring">
+      <svg width="58" height="58" viewBox="0 0 58 58">
+        <circle class="tr-bg" cx="29" cy="29" r="26"/>
+        <circle class="tr-fg" id="tr-circle" cx="29" cy="29" r="26" stroke-dasharray="163" stroke-dashoffset="0"/>
+      </svg>
+      <div class="timer-num" id="timer-num">30</div>
+    </div>
+  </div>
+  <div class="progress-strip" id="progress-strip"></div>
+  <div class="q-card" id="q-card">
+    <div style="text-align:center;padding:40px;color:var(--t3);">Loading...</div>
+  </div>
+  <div class="q-nav">
+    <button class="skip-btn" onclick="skipQ()">Skip →</button>
+    <button class="next-btn" id="next-btn" onclick="nextQ()" disabled>Next →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="quiz-dashboard">
+  <div class="dash-hero" id="dash-hero"></div>
+  <div class="dash-stats" id="dash-stats"></div>
+  <div class="unit-breakdown" id="unit-breakdown"></div>
+  <div class="st">📋 Question Review</div>
+  <div class="q-review" id="q-review"></div>
+  <!-- LEADERBOARD -->
+  <div class="st" style="margin-top:28px;">🏆 Leaderboard</div>
+  <div class="lb-filter">
+    <button class="chip on" onclick="lbFilter('all',this)">All Attempts</button>
+    <button class="chip" onclick="lbFilter('unit1',this)">Unit I Stars</button>
+    <button class="chip" onclick="lbFilter('top10',this)">Top 10</button>
+  </div>
+  <div class="lb-wrap" id="lb-wrap">
+    <div class="lb-head">
+      <h3>🏆 Workshop Leaderboard</h3>
+      <span id="lb-count">0 students</span>
+    </div>
+    <div class="lb-col-h">
+      <span>Rank</span><span>Student</span><span>Score</span><span>Time</span><span>Grade</span>
+    </div>
+    <div id="lb-list"><div class="lb-empty">No attempts yet. You're the first! 🚀</div></div>
+  </div>
+  <div style="display:flex;justify-content:center;gap:12px;margin-top:8px;">
+    <button class="retry-btn" onclick="retryQuiz()">🔄 Try Again</button>
+    <button style="display:inline-flex;align-items:center;gap:8px;background:#f0f0f8;color:#111122;border:2px solid var(--b1);font-size:14px;font-weight:700;padding:13px 24px;border-radius:11px;cursor:pointer;font-family:inherit;" onclick="clearLB()">🗑️ Clear Board</button>
+  </div>
+</div>
+
+</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  QUIZ ENGINE — 30 QUESTIONS
+// ══════════════════════════════════════════
+const QUIZ_QUESTIONS = [
+  // ── UNIT I ──
+  {unit:"Unit I",topic:"Variables",q:"What is a variable in Python?",
+   opts:["A fixed value that never changes","A named container that stores a value in memory","A type of loop","A special Python keyword"],
+   ans:1,exp:"A variable is a named container in memory. Think of it as a labelled box — you name it and store a value inside it."},
+
+  {unit:"Unit I",topic:"Data Types",q:"Instagram stores your username as which data type?",
+   opts:["int","bool","str","float"],
+   ans:2,exp:"Usernames are text — that's str (string). Any value wrapped in quotes is a string: 'riya_codes', 'hello', etc."},
+
+  {unit:"Unit I",topic:"Data Types",q:"Which data type stores True or False?",
+   opts:["int","str","float","bool"],
+   ans:3,exp:"bool (Boolean) stores only True or False. is_verified, is_private, dark_mode — all booleans."},
+
+  {unit:"Unit I",topic:"Syntax",q:"Which line correctly creates a string variable?",code:"A) name = riya\nB) name = 'riya'\nC) str name = 'riya'\nD) 'name' = riya",
+   opts:["A — no quotes needed","B — strings use quotes","C — declare type first","D — name goes in quotes"],
+   ans:1,exp:"B is correct. Strings must be wrapped in quotes (single or double). Without quotes Python looks for a variable named riya which doesn't exist."},
+
+  {unit:"Unit I",topic:"print/input",q:"What does input() do in Python?",
+   opts:["Displays text on screen","Takes user data from keyboard during runtime","Creates a variable automatically","Opens a file"],
+   ans:1,exp:"input() pauses the program and waits for the user to type something — like Instagram's 'Enter your username' field."},
+
+  {unit:"Unit I",topic:"f-strings",q:"What does this print?\nname = 'Riya'\nprint(f'Hello {name}!')",
+   opts:["Hello {name}!","Hello name!","Hello Riya!","Error — invalid syntax"],
+   ans:2,exp:"f-strings evaluate expressions inside {}. So {name} is replaced by the value 'Riya', giving 'Hello Riya!'."},
+
+  // ── UNIT II ──
+  {unit:"Unit II",topic:"Operators",q:"What does the % operator return?",code:"9 % 4",
+   opts:["2.25 (division result)","36 (multiplication)","1 (remainder)","4 (quotient)"],
+   ans:2,exp:"% is the modulo operator — it returns the REMAINDER after division. 9 ÷ 4 = 2 with remainder 1, so 9%4 = 1."},
+
+  {unit:"Unit II",topic:"Operators",q:"What does ** do in Python?",code:"2 ** 10",
+   opts:["Multiply by 2","Raise to the power of","Bitwise XOR","Floor divide"],
+   ans:1,exp:"** is the exponent/power operator. 2**10 = 2×2×2×2×2×2×2×2×2×2 = 1024. Used in hash functions, algorithms, etc."},
+
+  {unit:"Unit II",topic:"Comparison",q:"Instagram checks: user must be 13+ AND must have email. Which is correct?",
+   opts:["if age > 13 or has_email:","if age >= 13 and has_email:","if age >= 13 not has_email:","if age, has_email >= 13:"],
+   ans:1,exp:"Both conditions must be true simultaneously — use 'and'. 'or' would allow a 12-year-old with email to sign up, which is wrong."},
+
+  {unit:"Unit II",topic:"Control Flow",q:"How many times does this loop run?\nfor i in range(5): print(i)",
+   opts:["4 times (1 to 4)","6 times (0 to 5)","5 times — prints 0,1,2,3,4","Infinite times"],
+   ans:2,exp:"range(5) generates 0,1,2,3,4 — exactly 5 values. range(n) always starts at 0 and goes up to n-1 (not including n)."},
+
+  {unit:"Unit II",topic:"String Methods",q:"What does 'Python'.upper() return?",
+   opts:["'python'","'Python'","'PYTHON'","Error"],
+   ans:2,exp:".upper() converts all characters to uppercase. So 'Python'.upper() = 'PYTHON'. Used to compare usernames without case sensitivity."},
+
+  {unit:"Unit II",topic:"Control Flow",q:"What keyword exits a loop immediately?",code:"while True:\n    msg = input('You: ')\n    if msg == 'bye': ___",
+   opts:["exit","stop","return","break"],
+   ans:3,exp:"break immediately exits the current loop. Without break, a while True loop would run forever — break is the emergency exit."},
+
+  // ── UNIT III ──
+  {unit:"Unit III",topic:"Functions",q:"What keyword defines a function in Python?",
+   opts:["function","func","def","define"],
+   ans:2,exp:"'def' (short for define) is Python's keyword to create a function. Every function starts with def followed by its name and parentheses."},
+
+  {unit:"Unit III",topic:"Functions",q:"What does 'return' do inside a function?",
+   opts:["Prints the result to screen","Sends a value back to the caller","Ends the entire program","Jumps to the start of the function"],
+   ans:1,exp:"return sends a value back to wherever the function was called from. Without return, a function gives back None by default."},
+
+  {unit:"Unit III",topic:"Functions",q:"What is wrong with this code?",code:"def greet(name):\nprint('Hello ' + name)",
+   opts:["Nothing — it's fine","'def' keyword is wrong","print must be indented inside def","Strings can't use +"],
+   ans:2,exp:"Python uses indentation to define code blocks. The print statement must be indented (4 spaces) inside the def block — unlike languages that use {}."},
+
+  {unit:"Unit III",topic:"Lambda",q:"Which is equivalent to: lambda x: x * 2",
+   opts:["A loop that repeats twice","def f(x): return x * 2","x = x + 2","A variable storing 2"],
+   ans:1,exp:"Lambda creates a compact one-line anonymous function. lambda x: x*2 is exactly the same as def f(x): return x*2 — just shorter syntax."},
+
+  {unit:"Unit III",topic:"Scope",q:"A variable created inside a function is:",
+   opts:["Global — accessible everywhere","Local — only accessible inside that function","Permanent — stays after function ends","Public — accessible by other files"],
+   ans:1,exp:"Variables inside a function are LOCAL — they only exist within that function's scope. Once the function ends, they disappear from memory."},
+
+  {unit:"Unit III",topic:"Default Args",q:"What prints when you call: like_post(101)\ndef like_post(post_id, reaction='❤️'):\n    print(f'{reaction} on {post_id}')",
+   opts:["Error — reaction not provided","❤️ on 101","None on 101","101"],
+   ans:1,exp:"reaction='❤️' is a default argument — it's used automatically when no value is passed. So like_post(101) prints '❤️ on 101'."},
+
+  // ── UNIT IV ──
+  {unit:"Unit IV",topic:"Lists",q:"contacts = ['Riya','Arjun','Dev','Priya']\nWhat does contacts[1:3] return?",
+   opts:["['Riya','Arjun','Dev']","['Arjun','Dev']","['Dev','Priya']","['Arjun','Dev','Priya']"],
+   ans:1,exp:"Slicing [1:3] returns index 1 up to (NOT including) index 3. That's 'Arjun' (index 1) and 'Dev' (index 2). The end is always exclusive."},
+
+  {unit:"Unit IV",topic:"Lists",q:"Which method adds an item to the END of a list?",
+   opts:["list.add()","list.insert()","list.append()","list.push()"],
+   ans:2,exp:"append() adds a single item to the end of a list. It's the most commonly used list method — WhatsApp adds new messages to a chat list using append."},
+
+  {unit:"Unit IV",topic:"Dictionaries",q:"How do you access a value in a dictionary?",code:"profile = {'username': 'riya', 'followers': 45000}\nGet the username:",
+   opts:["profile.username","profile[0]","profile['username']","profile.get[username]"],
+   ans:2,exp:"Dictionary values are accessed using their key in square brackets: dict['key']. You can also use dict.get('key') which returns None if not found instead of an error."},
+
+  {unit:"Unit IV",topic:"Tuples",q:"Which statement about tuples is TRUE?",
+   opts:["Tuples use [] square brackets","Tuples can be modified after creation","Tuples are immutable — cannot be changed after creation","Tuples are always faster than lists for all operations"],
+   ans:2,exp:"Tuples are immutable — once created, their contents cannot be changed. They use () parentheses. Great for GPS coordinates, RGB colours, database records."},
+
+  {unit:"Unit IV",topic:"List Comprehension",q:"What does this return?\n[x**2 for x in range(4)]",
+   opts:["[1, 4, 9, 16]","[0, 1, 4, 9]","[0, 2, 4, 6]","[2, 4, 8, 16]"],
+   ans:1,exp:"range(4) generates 0,1,2,3. Squaring each: 0²=0, 1²=1, 2²=4, 3²=9. Result: [0,1,4,9]. List comprehension is Python's compact way to build lists."},
+
+  {unit:"Unit IV",topic:"Dictionaries",q:"Which dictionary method returns all key-value pairs as tuples?",
+   opts:["dict.keys()","dict.values()","dict.pairs()","dict.items()"],
+   ans:3,exp:"dict.items() returns all key-value pairs as tuples — great for looping: for name, phone in contacts.items(). keys() returns only keys, values() returns only values."},
+
+  // ── UNIT V ──
+  {unit:"Unit V",topic:"OOP",q:"In OOP, a CLASS is best described as:",
+   opts:["A specific object with data","A blueprint or template for creating objects","A list of functions","A type of variable"],
+   ans:1,exp:"A class is a BLUEPRINT. InstagramUser is a class — it defines the structure. When you create riya = InstagramUser(), riya is the OBJECT made from that blueprint."},
+
+  {unit:"Unit V",topic:"OOP",q:"What does 'self' refer to inside a class method?",
+   opts:["The class itself (the blueprint)","The parent class","The specific object instance that called the method","A required but unused placeholder"],
+   ans:2,exp:"self refers to the particular object that called the method. When riya.post() is called, inside that method self IS riya. This lets each object access its own data."},
+
+  {unit:"Unit V",topic:"OOP",q:"What is __init__ in a Python class?",
+   opts:["A private variable","A method to delete objects","The constructor — runs automatically when a new object is created","An inherited method from parent"],
+   ans:2,exp:"__init__ is the CONSTRUCTOR. Python calls it automatically when you create a new object: riya = InstagramUser('riya','Riya S'). It sets up all the initial attributes."},
+
+  {unit:"Unit V",topic:"Inheritance",q:"BusinessUser inherits from InstagramUser. BusinessUser gets:",
+   opts:["Only its own new methods","Only the parent's methods, not its own","All of InstagramUser's features PLUS its own additional features","A copy of the parent class that's completely separate"],
+   ans:2,exp:"Inheritance means the child (BusinessUser) gets ALL features of the parent (InstagramUser) — every attribute and method — plus it adds its own new ones like run_ad()."},
+
+  {unit:"Unit V",topic:"Data Hiding",q:"In Python, a private attribute is created by:",
+   opts:["Using the private keyword","Writing it in ALL CAPS","Starting the name with __ (double underscore)","Putting it outside the class"],
+   ans:2,exp:"Double underscore prefix (__password) makes an attribute private — name-mangled so it can't be accessed directly from outside the class. This is data hiding / encapsulation."},
+
+  {unit:"Unit V",topic:"OOP",q:"Which OOP pillar means 'hide complex details and show only what's necessary'?",
+   opts:["Inheritance","Encapsulation","Polymorphism","Abstraction"],
+   ans:3,exp:"Abstraction hides complexity. When you tap 'like' on Instagram, you don't see the 47 database operations. The complexity is abstracted — you only see the simple interface."},
+];
+
+// ══════ QUIZ STATE ══════
+let qStudent={fname:'',lname:'',roll:''};
+let qState={current:0,answers:[],timerInterval:null,timeLeft:60,startTime:Date.now(),shuffled:[]};
+
+// ══════ SHUFFLE ══════
+function shuffleArr(arr){
+  const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;
+}
+
+// ══════ START QUIZ ══════
+function startQuiz(){
+  const fn=document.getElementById('q-fname').value.trim();
+  const ln=document.getElementById('q-lname').value.trim();
+  if(!fn||!ln){
+    document.getElementById('q-fname').style.borderColor=fn?'var(--b1)':'var(--red)';
+    document.getElementById('q-lname').style.borderColor=ln?'var(--b1)':'var(--red)';
+    return;
+  }
+  qStudent={fname:fn,lname:ln,roll:document.getElementById('q-roll').value.trim()};
+  qState={current:0,answers:[],timerInterval:null,timeLeft:30,shuffled:shuffleArr(QUIZ_QUESTIONS)};
+  document.getElementById('quiz-entry').style.display='none';
+  document.getElementById('quiz-arena').style.display='block';
+  document.getElementById('quiz-dashboard').style.display='none';
+  buildProgressStrip();
+  loadQuestion(0);
+}
+
+// ══════ PROGRESS STRIP ══════
+function buildProgressStrip(){
+  const strip=document.getElementById('progress-strip');
+  strip.innerHTML=qState.shuffled.map((_,i)=>`<div class="ps-dot${i===0?' current':''}" id="pd${i}"></div>`).join('');
+}
+function updateStrip(i,state){
+  const d=document.getElementById('pd'+i);if(!d)return;
+  d.className='ps-dot '+state;
+}
+
+// ══════ LOAD QUESTION ══════
+function loadQuestion(idx){
+  const q=qState.shuffled[idx];
+  const total=qState.shuffled.length;
+  document.getElementById('qt-name').textContent=`${qStudent.fname} ${qStudent.lname}`+(qStudent.roll?` · ${qStudent.roll}`:'');
+  document.getElementById('qt-count').textContent=`Q ${idx+1} / ${total}`;
+  updateStrip(idx,'current');
+
+  let html=`<div class="q-num">Question ${idx+1} of ${total}<span class="q-unit">${q.unit} — ${q.topic}</span></div>`;
+  html+=`<div class="q-text">${q.q}</div>`;
+  if(q.code)html+=`<div class="q-code">${q.code}</div>`;
+  html+=`<div class="q-opts">`;
+  const letters=['A','B','C','D'];
+  q.opts.forEach((o,i)=>{
+    html+=`<button class="q-opt" onclick="selectOpt(${i})" id="qopt${i}"><span class="opt-letter">${letters[i]}</span>${o}</button>`;
+  });
+  html+=`</div><div class="q-feedback" id="q-feedback"></div>`;
+  document.getElementById('q-card').innerHTML=html;
+  document.getElementById('next-btn').disabled=true;
+  startTimer();
+}
+
+// ══════ TIMER ══════
+function startTimer(){
+  clearInterval(qState.timerInterval);
+  qState.timeLeft=60;
+  updateTimer();
+  qState.timerInterval=setInterval(()=>{
+    qState.timeLeft--;
+    updateTimer();
+    if(qState.timeLeft<=0){clearInterval(qState.timerInterval);timeOut();}
+  },1000);
+}
+function updateTimer(){
+  const t=qState.timeLeft;const el=document.getElementById('timer-num');const circle=document.getElementById('tr-circle');
+  el.textContent=t;
+  const pct=t/60;const offset=163-(163*pct);
+  circle.style.strokeDashoffset=offset;
+  el.style.color=t<=8?'var(--red)':t<=15?'var(--orange)':'#111122';
+  circle.className='tr-fg'+(t<=8?' danger':t<=15?' warn':'');
+}
+function timeOut(){
+  // Auto-mark as wrong (skipped)
+  qState.answers.push({q:qState.shuffled[qState.current],chosen:-1,correct:false,timedOut:true,timeUsed:60});
+  updateStrip(qState.current,'wrong');
+  // Disable all opts, show correct
+  document.querySelectorAll('.q-opt').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===qState.shuffled[qState.current].ans)b.classList.add('correct');
+  });
+  const fb=document.getElementById('q-feedback');
+  if(fb){fb.className='q-feedback ng';fb.innerHTML=`⏰ Time's up! The correct answer was: <strong>${qState.shuffled[qState.current].opts[qState.shuffled[qState.current].ans]}</strong><br><span style="color:var(--t2)">${qState.shuffled[qState.current].exp}</span>`;}
+  document.getElementById('next-btn').disabled=false;
+}
+
+// ══════ SELECT OPTION ══════
+function selectOpt(chosen){
+  clearInterval(qState.timerInterval);
+  const q=qState.shuffled[qState.current];
+  const isCorrect=chosen===q.ans;
+  qState.answers.push({q,chosen,correct:isCorrect,timedOut:false,timeUsed:60-qState.timeLeft});
+  document.querySelectorAll('.q-opt').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.ans)b.classList.add('correct');
+    else if(i===chosen&&!isCorrect)b.classList.add('wrong');
+  });
+  updateStrip(qState.current,isCorrect?'correct':'wrong');
+  const fb=document.getElementById('q-feedback');
+  if(fb){
+    fb.className='q-feedback '+(isCorrect?'ok':'ng');
+    fb.innerHTML=isCorrect?`✅ <strong>Correct!</strong> ${q.exp}`:`❌ <strong>Incorrect.</strong> The answer is <strong>${q.opts[q.ans]}</strong>.<br><span style="color:var(--t2)">${q.exp}</span>`;
+  }
+  document.getElementById('next-btn').disabled=false;
+}
+
+// ══════ SKIP ══════
+function skipQ(){
+  clearInterval(qState.timerInterval);
+  qState.answers.push({q:qState.shuffled[qState.current],chosen:-1,correct:false,timedOut:false,skipped:true,timeUsed:60-qState.timeLeft});
+  updateStrip(qState.current,'wrong');
+  nextQ();
+}
+
+// ══════ NEXT ══════
+function nextQ(){
+  clearInterval(qState.timerInterval);
+  const next=qState.current+1;
+  if(next>=qState.shuffled.length){showDashboard();return;}
+  qState.current=next;
+  loadQuestion(next);
+}
+
+// ══════ DASHBOARD ══════
+function showDashboard(){
+  document.getElementById('quiz-arena').style.display='none';
+  document.getElementById('quiz-dashboard').style.display='block';
+  const answers=qState.answers;
+  const total=answers.length;
+  const correct=answers.filter(a=>a.correct).length;
+  const wrong=answers.filter(a=>!a.correct&&!a.timedOut&&!a.skipped).length;
+  const timedOut=answers.filter(a=>a.timedOut).length;
+  const skipped=answers.filter(a=>a.skipped).length;
+  const pct=Math.round((correct/total)*100);
+  const totalTimeMs=Date.now()-qState.startTime; const totalTimeSec=Math.round(totalTimeMs/1000); const avgTime=Math.round(answers.reduce((s,a)=>s+(a.timeUsed||0),0)/answers.length);
+
+  // Grade
+  let grade,gradeColor,gradeMsg;
+  if(pct>=90){grade='A+';gradeColor='var(--green)';gradeMsg='Outstanding! 🏆';}
+  else if(pct>=80){grade='A';gradeColor='var(--green)';gradeMsg='Excellent! 🌟';}
+  else if(pct>=70){grade='B';gradeColor='var(--cyan)';gradeMsg='Great work! 💪';}
+  else if(pct>=60){grade='B-';gradeColor='var(--cyan)';gradeMsg='Good job! 📈';}
+  else if(pct>=50){grade='C';gradeColor='var(--yellow)';gradeMsg='Keep practicing! 📚';}
+  else{grade='D';gradeColor='var(--red)';gradeMsg='Revise and retry! 🔄';}
+
+  // Hero
+  document.getElementById('dash-hero').innerHTML=`
+    <div style="font-size:13px;font-family:var(--mono);color:var(--t3);margin-bottom:8px;">WORKSHOP QUIZ · DR. M.G.R. INSTITUTE</div>
+    <h2>${qStudent.fname} ${qStudent.lname}${qStudent.roll?' · '+qStudent.roll:''}</h2>
+    <div class="score-big" style="background:linear-gradient(130deg,var(--p2),var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${correct}<span style="font-size:36px;letter-spacing:-1px;"> marks</span></div>
+    <div class="score-label">${pct}% score · ${gradeMsg}</div>
+    <div class="grade-badge" style="background:${gradeColor}22;border:1px solid ${gradeColor}44;color:${gradeColor}">Grade: ${grade}</div>
+  `;
+
+  // Stats
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="ds"><div class="ds-n" style="color:var(--green)">${correct}<span style="font-size:16px;color:var(--t2)"> / 30</span></div><div class="ds-l">Marks Scored</div></div>
+    <div class="ds"><div class="ds-n" style="color:var(--red)">${wrong}</div><div class="ds-l">Wrong</div></div>
+    <div class="ds"><div class="ds-n" style="color:var(--yellow)">${timedOut+skipped}</div><div class="ds-l">Skipped / Timeout</div></div>
+    <div class="ds"><div class="ds-n" style="color:var(--cyan)">${totalTimeSec}s</div><div class="ds-l">Total Time Used</div></div>
+  `;
+
+  // Unit breakdown
+  const units=['Unit I','Unit II','Unit III','Unit IV','Unit V'];
+  const uColors=['var(--pink)','var(--cyan)','var(--p2)','var(--green)','var(--yellow)'];
+  let ubHTML='<div class="ub-head">PERFORMANCE BY UNIT</div>';
+  units.forEach((u,ui)=>{
+    const uAns=answers.filter(a=>a.q.unit===u);
+    const uCorrect=uAns.filter(a=>a.correct).length;
+    const uTotal=uAns.length;
+    const uPct=uTotal?Math.round((uCorrect/uTotal)*100):0;
+    ubHTML+=`<div class="ub-row">
+      <div class="ub-name" style="color:${uColors[ui]}">${u}</div>
+      <div class="ub-bar-wrap"><div class="ub-bar" style="width:${uPct}%;background:${uColors[ui]}" data-w="${uPct}"></div></div>
+      <div class="ub-pct">${uCorrect}/${uTotal}</div>
+    </div>`;
+  });
+  document.getElementById('unit-breakdown').innerHTML=ubHTML;
+  setTimeout(()=>document.querySelectorAll('.ub-bar').forEach(b=>b.style.width=b.dataset.w+'%'),100);
+
+  // Q Review
+  let rvHTML='';
+  answers.forEach((a,i)=>{
+    const icon=a.correct?'✅':a.timedOut?'⏰':a.skipped?'⏭️':'❌';
+    const chosen=a.chosen>=0?a.q.opts[a.chosen]:'(not answered)';
+    const correct_ans=a.q.opts[a.q.ans];
+    rvHTML+=`<div class="qr-item">
+      <div class="qr-top"><div class="qr-icon">${icon}</div><div class="qr-q"><span style="color:var(--t3);font-size:10px;font-family:var(--mono)">${a.q.unit} · </span>${a.q.q}</div></div>
+      <div class="qr-ans ${a.correct?'ok':'ng'}">Your answer: <span>${chosen}</span></div>
+      ${!a.correct?`<div class="qr-ans ok">Correct: <span>${correct_ans}</span></div>`:''}
+    </div>`;
+  });
+  document.getElementById('q-review').innerHTML=rvHTML;
+  // ── Save to leaderboard ──
+  const lbEntry = {
+    name: qStudent.fname + ' ' + qStudent.lname,
+    roll: qStudent.roll,
+    score: correct,
+    totalTime: totalTimeSec,
+    pct: pct,
+    grade: grade,
+    ts: Date.now()
+  };
+  addToLB(lbEntry);
+  renderLB('all');
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+
+
+// ══════════════════════════════════════════
+//  LEADERBOARD ENGINE
+// ══════════════════════════════════════════
+const LB_KEY = 'pyworkshop_leaderboard_v1';
+
+function getLB(){
+  try{ return JSON.parse(localStorage.getItem(LB_KEY))||[]; }
+  catch(e){ return []; }
+}
+function saveLB(data){
+  try{ localStorage.setItem(LB_KEY, JSON.stringify(data)); }catch(e){}
+}
+
+function addToLB(entry){
+  // entry: {name, roll, score, totalTime, pct, grade, unitScores, ts}
+  let lb = getLB();
+  lb.push(entry);
+  // Sort: score DESC, then totalTime ASC (faster wins ties)
+  lb.sort((a,b)=> b.score-a.score || a.totalTime-b.totalTime);
+  saveLB(lb);
+  return lb;
+}
+
+function gradeFor(pct){
+  if(pct>=90)return{g:'A+',c:'#10b981'};
+  if(pct>=80)return{g:'A', c:'#10b981'};
+  if(pct>=70)return{g:'B', c:'#06b6d4'};
+  if(pct>=60)return{g:'B-',c:'#06b6d4'};
+  if(pct>=50)return{g:'C', c:'#f59e0b'};
+  return{g:'D',c:'#ef4444'};
+}
+
+function renderLB(filter='all'){
+  let lb = getLB();
+  if(filter==='top10') lb = lb.slice(0,10);
+  document.getElementById('lb-count').textContent = lb.length + ' student' + (lb.length!==1?'s':'');
+  const myName = qStudent.fname + ' ' + qStudent.lname;
+  const medals = ['🥇','🥈','🥉'];
+  const rowClass = i => i===0?'lb-top1':i===1?'lb-top2':i===2?'lb-top3':'';
+  if(!lb.length){
+    document.getElementById('lb-list').innerHTML='<div class="lb-empty">No attempts yet!</div>';
+    return;
+  }
+  document.getElementById('lb-list').innerHTML = lb.map((e,i)=>{
+    const gd = gradeFor(e.pct);
+    const isMe = e.name === myName;
+    const mins = Math.floor(e.totalTime/60);
+    const secs = e.totalTime%60;
+    const timeStr = mins>0 ? `${mins}m ${secs}s` : `${secs}s`;
+    return `<div class="lb-row ${rowClass(i)} ${isMe?'lb-me':''}">
+      <div class="lb-rank">${i<3?medals[i]:`<span style="font-size:13px;color:var(--t2)">#${i+1}</span>`}</div>
+      <div class="lb-info">
+        <div class="lb-name">${e.name}${isMe?' <span style="font-size:10px;color:var(--p2);font-weight:700">(You)</span>':''}</div>
+        <div class="lb-roll">${e.roll||'—'}</div>
+      </div>
+      <div class="lb-score">${e.score}<small>/ 30 marks</small></div>
+      <div class="lb-time"><strong>${timeStr}</strong><span style="font-size:10px;display:block">${e.pct}% acc</span></div>
+      <div class="lb-grade" style="background:${gd.c}22;color:${gd.c};border:1px solid ${gd.c}44">${gd.g}</div>
+    </div>`;
+  }).join('');
+}
+
+function lbFilter(f, btn){
+  document.querySelectorAll('.lb-filter .chip').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderLB(f);
+}
+
+function clearLB(){
+  if(confirm('Clear the entire leaderboard? This cannot be undone.')){
+    localStorage.removeItem(LB_KEY);
+    renderLB();
+  }
+}
+
+// ══════ RETRY ══════
+function retryQuiz(){
+  document.getElementById('quiz-dashboard').style.display='none';
+  document.getElementById('quiz-entry').style.display='flex';
+  document.getElementById('q-fname').value=qStudent.fname;
+  document.getElementById('q-lname').value=qStudent.lname;
+  document.getElementById('q-roll').value=qStudent.roll;
+}
+
+// Quiz tab is already in the nav HTML
 </script>
 </body>
 </html>
